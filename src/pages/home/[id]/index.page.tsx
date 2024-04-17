@@ -1,3 +1,4 @@
+// Dashboard.tsx
 import * as React from 'react'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -24,11 +25,12 @@ const DashboardContent = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', position: 'relative' }}>
         <CssBaseline />
         <AdminAppBar
-          open={open}
           title="ダッシュボード"
+          toggleDrawer={() => setOpen(!open)}
+          open={open}
         />
         <AdminDrawer
           open={open}

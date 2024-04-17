@@ -8,6 +8,8 @@ import Badge from '@mui/material/Badge'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import type { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
+import { Menu } from '@mui/icons-material'
+import theme from '@/components/theme/theme'
 
 const DRAWERWIDTH = 240
 
@@ -18,7 +20,7 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
+  zIndex: theme.zIndex.drawer - 1, // この行を修正
   width: `calc(100% - ${DRAWERWIDTH}px)`,
   marginLeft: DRAWERWIDTH,
   transition: theme.transitions.create(['width', 'margin'], {
@@ -43,17 +45,33 @@ const AppBar = styled(MuiAppBar, {
 }))
 
 interface AdminAppBarProps {
-  open: boolean
   title: string
+  toggleDrawer: () => void
+  open: boolean
 }
 
-export const AdminAppBar: React.FC<AdminAppBarProps> = ({ open, title }) => {
+export const AdminAppBar: React.FC<AdminAppBarProps> = ({
+  title,
+  toggleDrawer,
+  open,
+}) => {
   return (
     <AppBar
       position="absolute"
-      open={open}
+      sx={{ width: '100%' }}
     >
       <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={toggleDrawer}
+          edge="start"
+          sx={{
+            marginRight: 2,
+          }}
+        >
+          <Menu />
+        </IconButton>
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
           <img
             src="/favicon.ico"
