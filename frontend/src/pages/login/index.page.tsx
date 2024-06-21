@@ -12,15 +12,16 @@ import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import type { FormEvent } from 'react'
 import 'firebase/compat/auth'
+import dotenv from 'dotenv'
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
-import type { AppRouter } from 'backend/src/routers'
-import { userSchema } from '@/shemas'
+import type { AppRouter } from '@project_name/backend/routers'
 import router from 'next/router'
+import type { LoginInput } from '@project_name/backend/schemas'
 
+dotenv.config()
 const theme = createTheme()
 const API_HOST = `${process.env.NEXT_PUBLIC_API_HOST}`
 
-// tRPCクライアントの作成
 const trpc = createTRPCProxyClient<AppRouter>({
   links: [
     httpBatchLink({
@@ -28,31 +29,32 @@ const trpc = createTRPCProxyClient<AppRouter>({
       fetch: (url, options) => {
         return fetch(url, {
           ...options,
-          credentials: 'include', //これ設定しないとcookieが送信されてもsetされない。バックエンドもだっけ？
+          credentials: 'include',
         })
       },
     }),
   ],
 })
+
 const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault()
+  //----------formのデータを取り出す
   const formData = new FormData(e.currentTarget)
 
-  const userData = userSchema.parse({
+  const loginData: LoginInput = {
     email: formData.get('email')?.toString() || '',
     password: formData.get('password')?.toString() || '',
-    firstName: formData.get('firstName')?.toString(),
-    lastName: formData.get('lastName')?.toString(),
-  })
+  }
 
+  //--------user情報をserverに送信
   try {
-    const { userUuid } = await trpc.signup.mutate({ userData })
+    const userUuid = await trpc.login.mutate({ loginData })
     router.push(`/home/${userUuid}`)
   } catch (error) {
     console.error(error)
   }
 }
-export default function SignUp() {
+export default function SignIn() {
   return (
     <ThemeProvider theme={theme}>
       <Container
@@ -75,7 +77,7 @@ export default function SignUp() {
             component="h1"
             variant="h5"
           >
-            Sign up
+            Sign in
           </Typography>
           <Box
             component="form"
@@ -87,35 +89,6 @@ export default function SignUp() {
               container
               spacing={2}
             >
-              <Grid
-                item
-                xs={12}
-                sm={6}
-              >
-                <TextField
-                  autoComplete="given-name"
-                  name="lastName"
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="姓"
-                  autoFocus
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-              >
-                <TextField
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="名"
-                  name="firstName"
-                  autoComplete="family-name"
-                />
-              </Grid>
               <Grid
                 item
                 xs={12}
@@ -143,7 +116,6 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-
               <Grid
                 item
                 xs={12}
@@ -166,14 +138,14 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              登録
+              ログイン
             </Button>
             <Grid
               container
               justifyContent="flex-end"
             >
               <Grid item>
-                <a href="/login">既にアカウントをお持ちの方</a>
+                <a href="/signup">まだアカウントをお持ちでない方</a>
               </Grid>
             </Grid>
           </Box>

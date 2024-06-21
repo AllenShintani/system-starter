@@ -6,9 +6,9 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import theme from '@/components/theme/theme'
-import { AdminAppBar } from '@/components/admin/home/AppBar'
-import { AdminDrawer } from '@/components/admin/home/Sidebar'
+import theme from 'frontend/src/components/theme/theme'
+import { AdminAppBar } from 'frontend/src/components/admin/home/AppBar'
+import { AdminDrawer } from 'frontend/src/components/admin/home/Sidebar'
 
 const DashboardContent = () => {
   const [open, setOpen] = React.useState(false)

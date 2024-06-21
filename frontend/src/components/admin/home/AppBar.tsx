@@ -9,7 +9,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import type { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import { Menu } from '@mui/icons-material'
-import theme from '@/components/theme/theme'
+import theme from 'frontend/src/components/theme/theme'
 
 const DRAWERWIDTH = 240
 
