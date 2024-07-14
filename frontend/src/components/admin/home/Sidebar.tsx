@@ -5,7 +5,7 @@ import MuiDrawer from '@mui/material/Drawer'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 import { MenuOpen } from '@mui/icons-material'
-import { Navigator } from 'frontend/src/components/admin/home/listitems'
+import { Navigator } from '@/components/admin/home/listitems'
 import Box from '@mui/material/Box'
 
 const DRAWERWIDTH = 300

@@ -9,7 +9,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import type { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import { Menu } from '@mui/icons-material'
-import theme from 'frontend/src/components/theme/theme'
+import theme from '@/components/theme/theme'
 
 const DRAWERWIDTH = 240
 
@@ -20,7 +20,7 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer - 1, // この行を修正
+  zIndex: theme.zIndex.drawer - 1,
   width: `calc(100% - ${DRAWERWIDTH}px)`,
   marginLeft: DRAWERWIDTH,
   transition: theme.transitions.create(['width', 'margin'], {
