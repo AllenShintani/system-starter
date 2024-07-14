@@ -9,7 +9,7 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'prettier',
   ],
-  plugins: ['@typescript-eslint', 'react'],
+  plugins: ['@typescript-eslint', 'react', 'sonarjs'],
   parser: '@typescript-eslint/parser',
   env: {
     browser: true,
@@ -28,7 +28,7 @@ module.exports = {
     },
   },
   ecmaFeatures: {
-    impliedStrict: true, //常にStrictMode
+    impliedStrict: true, // 常にStrictMode
   },
   rules: {
     'react/prop-types': 'off',
@@ -38,7 +38,39 @@ module.exports = {
     'prefer-template': 'error',
     '@typescript-eslint/consistent-type-imports': 'error',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    "@typescript-eslint/no-var-requires": "off",
-    'no-unreachable': ['error'], //到達できないコードはエラー
+    '@typescript-eslint/no-var-requires': 'off',
+    'no-unreachable': 'error', // 到達できないコードはエラー
+    'no-console': ['error', { allow: ['warn', 'error'] }],
+    'no-dupe-else-if': 'error',
+    'max-lines': ['error', 400],
+    'sonarjs/cognitive-complexity': 'error',
+    'sonarjs/cognitive-complexity': ['error', 5],
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: "VariableDeclaration[kind='let']",
+        message: 'Use const instead of let.',
+      },
+      {
+        selector: "VariableDeclaration[kind='var']",
+        message: 'Use const instead of var.',
+      },
+      {
+        selector: 'WhileStatement',
+        message: 'Use map instead of while.',
+      },
+      {
+        selector: 'ForStatement',
+        message: 'Use map instead of for.',
+      },
+      {
+        selector: 'IfStatement > BlockStatement ~ IfStatement',
+        message: 'Avoid using else if.',
+      },
+      {
+        selector: 'IfStatement > BlockStatement ~ BlockStatement',
+        message: 'Avoid using else.',
+      },
+    ],
   },
 }
