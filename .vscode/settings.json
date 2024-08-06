@@ -11,7 +11,6 @@
   "files.eol": "\n",
   "stylelint.validate": ["css", "less", "postcss", "typescriptreact"],
   "[log]": {
-    // 行の折り返し表示
     "editor.wordWrap": "off",
     "files.insertFinalNewline": true
   }
