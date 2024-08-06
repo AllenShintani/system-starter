@@ -50,11 +50,7 @@ interface AdminAppBarProps {
   open: boolean
 }
 
-export const AdminAppBar: React.FC<AdminAppBarProps> = ({
-  title,
-  toggleDrawer,
-  open,
-}) => {
+export const AdminAppBar: React.FC<AdminAppBarProps> = ({ title, toggleDrawer, open }) => {
   return (
     <AppBar
       position="absolute"
