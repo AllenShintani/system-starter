@@ -1,11 +1,11 @@
-import * as admin from "firebase-admin";
+import * as admin from 'firebase-admin';
 export declare const firebaseConfig: {
-  apiKey: string | undefined;
-  authDomain: string | undefined;
-  projectId: string | undefined;
-  storageBucket: string | undefined;
-  messagingSenderId: string | undefined;
-  appId: string | undefined;
+    apiKey: string | undefined;
+    authDomain: string | undefined;
+    projectId: string | undefined;
+    storageBucket: string | undefined;
+    messagingSenderId: string | undefined;
+    appId: string | undefined;
 };
 declare const auth: import("@firebase/auth").Auth;
 declare const db: import("@firebase/firestore").Firestore;
