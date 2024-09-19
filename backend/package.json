@@ -3,9 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "prisma generate && tsc -p tsconfig.json && npm run generate-types",
     "start": "node dist/src/server.js",
+    "seed": "npx vite-node prisma/seed.ts",
     "dev": "npm run build && npm run start",
+    "generate-types": "tsc --emitDeclarationOnly --project tsconfig.json",
+    "generate-prisma": "npx prisma generate",
     "lint": "lint",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"./backend/**/*.{ts,tsx}\""
