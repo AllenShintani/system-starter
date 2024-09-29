@@ -19,10 +19,9 @@ DB, ORM： MySQL, Prisma
 `git clone git@github.com:AllenShintani/Skalp_AI.git`
 
 
-`npm i`
 
-次は`frontend`ディレクトリに移動しで下記のコマンドを打ち込んでください
 ```
+npm i
 npm install --prefix frontend
 
 cp frontend/.env.local.example frontend/.env.local
@@ -46,7 +45,7 @@ npm run --prefix backend seed
 npm run --prefix backend dev
 ```
 
-起動はそれぞれのディレクトリで`npm run dev`
+起動はfrontend, backendそれぞれのディレクトリで`npm run dev`
 
 
 ## PRを出す時
