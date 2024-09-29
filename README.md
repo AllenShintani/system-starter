@@ -36,13 +36,14 @@ cp backend/.env.example backend/.env
 cp backend/.env.local.example backend/.env.local
 cp backend/projectName-firebase-adminsdk.json.example backend/projectName-firebase-adminsdk.json
 
-docker-compose -f backend/docker-compose.yml up -d
+cd backend
+docker-compose up -d
 
-npx --prefix backend prisma generate
-npx --prefix backend prisma migrate dev
+npx prisma generate
+npx prisma migrate dev
 
-npm run --prefix backend seed
-npm run --prefix backend dev
+npm run seed
+npm run dev
 ```
 
 起動はfrontend, backendそれぞれのディレクトリで`npm run dev`
