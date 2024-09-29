@@ -23,24 +23,27 @@ DB, ORM： MySQL, Prisma
 
 次は`frontend`ディレクトリに移動しで下記のコマンドを打ち込んでください
 ```
-cd frontend
-npm i
-cp .env.local.example .env.local
-cp .env.production.example .env.production
-npm run dev
+npm install --prefix frontend
+
+cp frontend/.env.local.example frontend/.env.local
+cp frontend/.env.production.example frontend/.env.production
+
+npm run --prefix frontend dev
 ```
 
 backendディレクトリでコマンドを打ってください。
 ```
-cd ../backend
-cp .env.example .env
-cp .env.local.example .env.local
-cp skalpai-firebase-adminsdk.json.example skalpai-firebase-adminsdk.json
-docker-compose up -d
-npx prisma generate
-npx prisma migrate dev
-npm run seed
-npm run dev
+cp backend/.env.example backend/.env
+cp backend/.env.local.example backend/.env.local
+cp backend/projectName-firebase-adminsdk.json.example backend/projectName-firebase-adminsdk.json
+
+docker-compose -f backend/docker-compose.yml up -d
+
+npx --prefix backend prisma generate
+npx --prefix backend prisma migrate dev
+
+npm run --prefix backend seed
+npm run --prefix backend dev
 ```
 
 起動はそれぞれのディレクトリで`npm run dev`
