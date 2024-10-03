@@ -33,6 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginRouter = void 0;
+// backend/src/routers/login.ts
 const server_1 = require("@trpc/server");
 const zod_1 = require("zod");
 const userSchemas_1 = require("../schemas/userSchemas");
@@ -48,41 +49,85 @@ const createContext = ({ req, res }) => ({
 const t = server_1.initTRPC.context().create();
 exports.loginRouter = t.router({
     login: t.procedure
-        .input(zod_1.z.object({
-        loginData: userSchemas_1.loginSchema,
-    }))
+        .input(zod_1.z.object({ loginData: userSchemas_1.loginSchema }))
         .mutation((_a) => __awaiter(void 0, [_a], void 0, function* ({ input, ctx }) {
+        if (!process.env.JWT_SECRET) {
+            throw new server_1.TRPCError({
+                code: "INTERNAL_SERVER_ERROR",
+                message: "JWT_SECRET is not set",
+            });
+        }
         const { loginData } = input;
         const { email, password } = loginData;
         try {
             (0, firebase_1.adminInit)();
             if (!email || !password) {
-                throw new Error('Email and password are required');
+                throw new server_1.TRPCError({
+                    code: "BAD_REQUEST",
+                    message: "Email and password are required",
+                });
             }
             const userCredential = yield (0, auth_1.signInWithEmailAndPassword)(firebase_1.auth, email, password);
             const firebaseToken = yield userCredential.user.getIdToken();
-            const firebaseUid = (yield admin.auth().verifyIdToken(firebaseToken))
-                .uid;
+            const decodedToken = yield admin.auth().verifyIdToken(firebaseToken);
+            const firebaseUid = decodedToken.uid;
             const prismaUser = yield client_1.prisma.user.findUnique({
                 where: { firebaseUid },
             });
             if (!prismaUser) {
-                throw new Error('User not found');
+                throw new server_1.TRPCError({
+                    code: "NOT_FOUND",
+                    message: "User not found",
+                });
             }
-            const token = ctx.fastify.jwt.sign({ userId: prismaUser.id });
-            ctx.reply.setCookie('token', token, {
-                httpOnly: false,
-                secure: false,
-                sameSite: 'strict',
-                path: '/',
-                maxAge: 60 * 60 * 24 * 7,
+            const jwtPayload = { userId: prismaUser.id };
+            const token = ctx.fastify.jwt.sign(jwtPayload, {
+                expiresIn: "7d",
+                algorithm: "HS256",
             });
-            const userUuid = prismaUser.id;
-            return userUuid;
+            ctx.reply.setCookie("token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+                path: "/",
+                maxAge: 60 * 60 * 24 * 7, // 7 days
+            });
+            return { success: true, userId: prismaUser.id, redirect: "/" };
         }
         catch (error) {
             console.error(error);
+            if (error instanceof server_1.TRPCError) {
+                throw error;
+            }
+            throw new server_1.TRPCError({
+                code: "INTERNAL_SERVER_ERROR",
+                message: "An unexpected error occurred",
+            });
         }
+    })),
+    checkAuth: t.procedure.query((_a) => __awaiter(void 0, [_a], void 0, function* ({ ctx }) {
+        try {
+            const token = ctx.request.cookies.token;
+            if (!token) {
+                return { authenticated: false, redirect: "/login" };
+            }
+            const decoded = ctx.fastify.jwt.verify(token);
+            const user = yield client_1.prisma.user.findUnique({
+                where: { id: decoded.userId },
+            });
+            if (!user) {
+                return { authenticated: false, redirect: "/login" };
+            }
+            return { authenticated: true, userId: user.id, redirect: null };
+        }
+        catch (error) {
+            console.error(error);
+            return { authenticated: false, redirect: "/login" };
+        }
+    })),
+    logout: t.procedure.mutation((_a) => __awaiter(void 0, [_a], void 0, function* ({ ctx }) {
+        ctx.reply.clearCookie("token", { path: "/" });
+        return { success: true, redirect: "/login" };
     })),
 });
 //# sourceMappingURL=login.js.map

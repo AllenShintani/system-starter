@@ -1,156 +1,132 @@
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import CssBaseline from '@mui/material/CssBaseline'
-import TextField from '@mui/material/TextField'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { trpc } from '@/utils/trpc'
+import {
+  Container,
+  CssBaseline,
+  Box,
+  Avatar,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Link,
+} from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-import type { FormEvent } from 'react'
-import 'firebase/compat/auth'
-import dotenv from 'dotenv'
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
-import type { AppRouter } from '@project_name/backend/routers'
-import router from 'next/router'
-import type { LoginInput } from '@project_name/backend/schemas'
 
-dotenv.config()
-const theme = createTheme()
-const API_HOST = `${process.env.NEXT_PUBLIC_API_HOST}`
-
-const trpc = createTRPCProxyClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: `${API_HOST}/trpc`,
-      fetch: (url, options) => {
-        return fetch(url, {
-          ...options,
-          credentials: 'include',
-        })
-      },
-    }),
-  ],
-})
-
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault()
-  //----------formのデータを取り出す
-  const formData = new FormData(e.currentTarget)
-
-  const loginData: LoginInput = {
-    email: formData.get('email')?.toString() || '',
-    password: formData.get('password')?.toString() || '',
-  }
-
-  //--------user情報をserverに送信
-  try {
-    const userUuid = await trpc.login.mutate({ loginData })
-    router.push(`/home/${userUuid}`)
-  } catch (error) {
-    console.error(error)
-  }
-}
 export default function SignIn() {
-  return (
-    <ThemeProvider theme={theme}>
-      <Container
-        component="main"
-        maxWidth="xs"
-      >
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography
-            component="h1"
-            variant="h5"
-          >
-            Sign in
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
-            <Grid
-              container
-              spacing={2}
-            >
-              <Grid
-                item
-                xs={12}
-              >
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="メールアドレス"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-              >
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="パスワード"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-              >
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value="allowExtraEmails"
-                      color="primary"
-                    />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
-            </Grid>
+  const [error, setError] = useState('')
+  const router = useRouter()
+  const loginMutation = trpc.login.useMutation({
+    onError: (error: any) => {
+      if (error.data?.code === 'UNAUTHORIZED') {
+        setError('パスワードが間違っています')
+      } else if (error.data?.code === 'TOO_MANY_REQUESTS') {
+        setError('パスワードを間違えすぎました。しばらくしてから再試行してください。')
+      } else {
+        setError('ログインに失敗しました。もう一度お試しください。')
+      }
+    },
+  })
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              ログイン
-            </Button>
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get('email')?.toString() || ''
+    const password = formData.get('password')?.toString() || ''
+
+    loginMutation.mutate({ loginData: { email, password } })
+  }
+
+  return (
+    <Container
+      component="main"
+      maxWidth="xs"
+    >
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography
+          component="h1"
+          variant="h5"
+        >
+          ログイン
+        </Typography>
+        {error && (
+          <Typography
+            color="error"
+            variant="body2"
+          >
+            {error}
+          </Typography>
+        )}
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ mt: 1 }}
+        >
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="メールアドレス"
+            name="email"
+            autoComplete="email"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="パスワード"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={loginMutation.isLoading}
+          >
+            {loginMutation.isLoading ? 'ログイン中...' : 'ログイン'}
+          </Button>
+          <Grid container>
             <Grid
-              container
-              justifyContent="flex-end"
+              item
+              xs
             >
-              <Grid item>
-                <a href="/signup">まだアカウントをお持ちでない方</a>
-              </Grid>
+              <Link
+                href="#"
+                variant="body2"
+              >
+                パスワードを忘れましたか？
+              </Link>
             </Grid>
-          </Box>
+            <Grid item>
+              <Link
+                href="/signup"
+                variant="body2"
+              >
+                {'アカウントをお持ちでない方はこちら'}
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Box>
+    </Container>
   )
 }

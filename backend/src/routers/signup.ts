@@ -1,20 +1,21 @@
-import { initTRPC } from '@trpc/server'
-import { userSchema } from '../schemas/userSchemas'
-import { z } from 'zod'
-import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify'
-import { TRPCError } from '@trpc/server'
-import { adminInit, auth } from '../components/lib/firebase/firebase'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { prisma } from '../../prisma/client'
-import * as admin from 'firebase-admin'
+import { initTRPC } from "@trpc/server";
+import { userSchema } from "../schemas/userSchemas";
+import { z } from "zod";
+import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
+import { TRPCError } from "@trpc/server";
+import { adminInit, auth } from "../components/lib/firebase/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { prisma } from "../../prisma/client";
+import * as admin from "firebase-admin";
+import { JwtPayload } from "../types/jwt";
 
 const createContext = ({ req, res }: CreateFastifyContextOptions) => ({
   fastify: req.server,
   request: req,
   reply: res,
-})
+});
 
-const t = initTRPC.context<typeof createContext>().create()
+const t = initTRPC.context<typeof createContext>().create();
 
 export const signupRouter = t.router({
   signup: t.procedure
@@ -24,26 +25,26 @@ export const signupRouter = t.router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { userData } = input
-      const { email, password, firstName, lastName } = userData
+      const { userData } = input;
+      const { email, password, firstName, lastName } = userData;
       const fullName =
-        firstName && lastName ? `${lastName} ${firstName}` : undefined
+        firstName && lastName ? `${lastName} ${firstName}` : undefined;
 
       try {
-        adminInit()
+        adminInit();
 
         if (!email || !password) {
-          throw new Error('Email and password are required')
+          throw new Error("Email and password are required");
         }
 
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
           password
-        )
-        const firebaseToken = await userCredential.user.getIdToken()
+        );
+        const firebaseToken = await userCredential.user.getIdToken();
         const firebaseUid = (await admin.auth().verifyIdToken(firebaseToken))
-          .uid
+          .uid;
 
         const prismaUser = await prisma.user.create({
           data: {
@@ -53,25 +54,25 @@ export const signupRouter = t.router({
             lastName: lastName,
             fullName: fullName,
           },
-        })
-        const token = ctx.fastify.jwt.sign({ userId: prismaUser.id })
-        ctx.reply.setCookie('token', token, {
-          httpOnly:
-            false /*console.logでフロントエンドに表示したりするためにfalseにしている*/,
-          secure: false /*process.env.NODE_ENV !== 'production'*/, //本番環境ではtrueにしなきゃいけない！要確認！！
-          sameSite: 'strict',
-          path: '/',
+        });
+        const jwtPayload: JwtPayload = { userId: prismaUser.id };
+        const token = ctx.fastify.jwt.sign(jwtPayload);
+        ctx.reply.setCookie("token", token, {
+          httpOnly: false,
+          secure: false,
+          sameSite: "strict",
+          path: "/",
           maxAge: 60 * 60 * 24 * 7, // 7日間有効
-        })
+        });
 
-        const userUuid = prismaUser.id
-        return { userUuid }
+        const userUuid = prismaUser.id;
+        return { userUuid };
       } catch (error) {
-        console.error(error)
+        console.error(error);
         throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'An unexpected error occurred, please try again later.',
-        })
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An unexpected error occurred, please try again later.",
+        });
       }
     }),
-})
+});

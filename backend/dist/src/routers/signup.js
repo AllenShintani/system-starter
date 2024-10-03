@@ -59,7 +59,7 @@ exports.signupRouter = t.router({
         try {
             (0, firebase_1.adminInit)();
             if (!email || !password) {
-                throw new Error('Email and password are required');
+                throw new Error("Email and password are required");
             }
             const userCredential = yield (0, auth_1.createUserWithEmailAndPassword)(firebase_1.auth, email, password);
             const firebaseToken = yield userCredential.user.getIdToken();
@@ -74,12 +74,13 @@ exports.signupRouter = t.router({
                     fullName: fullName,
                 },
             });
-            const token = ctx.fastify.jwt.sign({ userId: prismaUser.id });
-            ctx.reply.setCookie('token', token, {
-                httpOnly: false /*console.logでフロントエンドに表示したりするためにfalseにしている*/,
-                secure: false /*process.env.NODE_ENV !== 'production'*/, //本番環境ではtrueにしなきゃいけない！要確認！！
-                sameSite: 'strict',
-                path: '/',
+            const jwtPayload = { userId: prismaUser.id };
+            const token = ctx.fastify.jwt.sign(jwtPayload);
+            ctx.reply.setCookie("token", token, {
+                httpOnly: false,
+                secure: false,
+                sameSite: "strict",
+                path: "/",
                 maxAge: 60 * 60 * 24 * 7, // 7日間有効
             });
             const userUuid = prismaUser.id;
@@ -88,8 +89,8 @@ exports.signupRouter = t.router({
         catch (error) {
             console.error(error);
             throw new server_2.TRPCError({
-                code: 'INTERNAL_SERVER_ERROR',
-                message: 'An unexpected error occurred, please try again later.',
+                code: "INTERNAL_SERVER_ERROR",
+                message: "An unexpected error occurred, please try again later.",
             });
         }
     })),
