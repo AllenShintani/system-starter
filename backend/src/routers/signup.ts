@@ -1,8 +1,7 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import { userSchema } from "../schemas/userSchemas";
 import { z } from "zod";
 import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
-import { TRPCError } from "@trpc/server";
 import { adminInit, auth } from "../components/lib/firebase/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { prisma } from "../../prisma/client";
@@ -34,7 +33,10 @@ export const signupRouter = t.router({
         adminInit();
 
         if (!email || !password) {
-          throw new Error("Email and password are required");
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Email and password are required",
+          });
         }
 
         const userCredential = await createUserWithEmailAndPassword(
@@ -56,22 +58,27 @@ export const signupRouter = t.router({
           },
         });
         const jwtPayload: JwtPayload = { userId: prismaUser.id };
-        const token = ctx.fastify.jwt.sign(jwtPayload);
+        const token = ctx.fastify.jwt.sign(jwtPayload, {
+          expiresIn: "7d",
+          algorithm: "HS256",
+        });
         ctx.reply.setCookie("token", token, {
-          httpOnly: false,
-          secure: false,
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
           sameSite: "strict",
           path: "/",
-          maxAge: 60 * 60 * 24 * 7, // 7日間有効
+          maxAge: 60 * 60 * 24 * 7, // 7 days
         });
 
-        const userUuid = prismaUser.id;
-        return { userUuid };
+        return { success: true, userId: prismaUser.id, redirect: "/" };
       } catch (error) {
         console.error(error);
+        if (error instanceof TRPCError) {
+          throw error;
+        }
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "An unexpected error occurred, please try again later.",
+          message: "An unexpected error occurred",
         });
       }
     }),

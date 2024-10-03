@@ -47,7 +47,6 @@ server.register(fastify_1.fastifyTRPCPlugin, {
         }),
     },
 });
-console.log("process.env.FRONTEND_URL:", process.env.FRONTEND_URL);
 server.register(cors_1.default, {
     origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],

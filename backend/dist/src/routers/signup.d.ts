@@ -46,7 +46,9 @@ export declare const signupRouter: import("@trpc/server").CreateRouterInner<impo
         _output_in: typeof import("@trpc/server").unsetMarker;
         _output_out: typeof import("@trpc/server").unsetMarker;
     }, {
-        userUuid: string;
+        success: boolean;
+        userId: string;
+        redirect: string;
     }>;
 }>;
 //# sourceMappingURL=signup.d.ts.map

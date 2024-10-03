@@ -4,7 +4,7 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import 'firebase/compat/auth'
 import { userSchema } from '@/schemas'
-import router from 'next/router'
+import { useRouter } from 'next/router'
 import { ZodError } from 'zod'
 import type { ZodIssue } from 'zod'
 import { TRPCClientError } from '@trpc/client'
@@ -19,6 +19,7 @@ import {
   FormControlLabel,
   Checkbox,
   Button,
+  Link,
 } from '@mui/material'
 import { trpc } from '@/utils/trpc'
 
@@ -38,36 +39,49 @@ const translateZodError = (error: ZodIssue) => {
   }
 }
 
-const handleSubmit = async (e: FormEvent<HTMLFormElement>, setError: (message: string) => void) => {
-  e.preventDefault()
-  const formData = new FormData(e.currentTarget)
-
-  const userData = {
-    email: formData.get('email')?.toString() || '',
-    password: formData.get('password')?.toString() || '',
-    firstName: formData.get('firstName')?.toString() || '',
-    lastName: formData.get('lastName')?.toString() || '',
-  }
-
-  try {
-    userSchema.parse(userData)
-    await trpc.signup.mutate({ userData })
-    router.push(`/`)
-  } catch (error) {
-    if (error instanceof ZodError) {
-      const translatedError = translateZodError(error.errors[0])
-      setError(translatedError)
-    } else if (error instanceof TRPCClientError && error.data?.code === 'CONFLICT') {
-      setError('このメールアドレスは既に使用されています')
-    } else {
-      console.error(error)
-      setError('登録に失敗しました。もう一度お試しください。')
-    }
-  }
-}
-
 export default function SignUp() {
   const [error, setError] = useState('')
+  const router = useRouter()
+  const signupMutation = trpc.signup.useMutation({
+    onSuccess: (data) => {
+      if (data.redirect) {
+        router.push(data.redirect)
+      }
+    },
+    onError: (error) => {
+      if (error instanceof TRPCClientError && error.data?.code === 'CONFLICT') {
+        setError('このメールアドレスは既に使用されています')
+      } else {
+        console.error(error)
+        setError('登録に失敗しました。もう一度お試しください。')
+      }
+    },
+  })
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+
+    const userData = {
+      email: formData.get('email')?.toString() || '',
+      password: formData.get('password')?.toString() || '',
+      firstName: formData.get('firstName')?.toString() || '',
+      lastName: formData.get('lastName')?.toString() || '',
+    }
+
+    try {
+      userSchema.parse(userData)
+      signupMutation.mutate({ userData })
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const translatedError = translateZodError(error.errors[0])
+        setError(translatedError)
+      } else {
+        console.error(error)
+        setError('登録に失敗しました。もう一度お試しください。')
+      }
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -104,7 +118,7 @@ export default function SignUp() {
           <Box
             component="form"
             noValidate
-            onSubmit={(e) => handleSubmit(e, setError)}
+            onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid
@@ -167,7 +181,6 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-
               <Grid
                 item
                 xs={12}
@@ -183,21 +196,26 @@ export default function SignUp() {
                 />
               </Grid>
             </Grid>
-
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={signupMutation.isLoading}
             >
-              登録
+              {signupMutation.isLoading ? '登録中...' : '登録'}
             </Button>
             <Grid
               container
               justifyContent="flex-end"
             >
               <Grid item>
-                <a href="/login">既にアカウントをお持ちの方</a>
+                <Link
+                  href="/login"
+                  variant="body2"
+                >
+                  既にアカウントをお持ちの方
+                </Link>
               </Grid>
             </Grid>
           </Box>

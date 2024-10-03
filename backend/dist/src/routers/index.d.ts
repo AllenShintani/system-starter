@@ -141,7 +141,9 @@ export declare const appRouter: import("@trpc/server").Router<{
             _output_in: typeof import("@trpc/server").unsetMarker;
             _output_out: typeof import("@trpc/server").unsetMarker;
         }, {
-            userUuid: string;
+            success: boolean;
+            userId: string;
+            redirect: string;
         }>;
     };
     record: {
@@ -275,7 +277,9 @@ export declare const appRouter: import("@trpc/server").Router<{
             _output_in: typeof import("@trpc/server").unsetMarker;
             _output_out: typeof import("@trpc/server").unsetMarker;
         }, {
-            userUuid: string;
+            success: boolean;
+            userId: string;
+            redirect: string;
         }>;
     };
     queries: {};
@@ -412,7 +416,9 @@ export declare const appRouter: import("@trpc/server").Router<{
         _output_in: typeof import("@trpc/server").unsetMarker;
         _output_out: typeof import("@trpc/server").unsetMarker;
     }, {
-        userUuid: string;
+        success: boolean;
+        userId: string;
+        redirect: string;
     }>;
 };
 export type AppRouter = typeof appRouter;

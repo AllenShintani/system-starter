@@ -36,7 +36,6 @@ exports.signupRouter = void 0;
 const server_1 = require("@trpc/server");
 const userSchemas_1 = require("../schemas/userSchemas");
 const zod_1 = require("zod");
-const server_2 = require("@trpc/server");
 const firebase_1 = require("../components/lib/firebase/firebase");
 const auth_1 = require("firebase/auth");
 const client_1 = require("../../prisma/client");
@@ -59,7 +58,10 @@ exports.signupRouter = t.router({
         try {
             (0, firebase_1.adminInit)();
             if (!email || !password) {
-                throw new Error("Email and password are required");
+                throw new server_1.TRPCError({
+                    code: "BAD_REQUEST",
+                    message: "Email and password are required",
+                });
             }
             const userCredential = yield (0, auth_1.createUserWithEmailAndPassword)(firebase_1.auth, email, password);
             const firebaseToken = yield userCredential.user.getIdToken();
@@ -75,22 +77,27 @@ exports.signupRouter = t.router({
                 },
             });
             const jwtPayload = { userId: prismaUser.id };
-            const token = ctx.fastify.jwt.sign(jwtPayload);
+            const token = ctx.fastify.jwt.sign(jwtPayload, {
+                expiresIn: "7d",
+                algorithm: "HS256",
+            });
             ctx.reply.setCookie("token", token, {
-                httpOnly: false,
-                secure: false,
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
                 sameSite: "strict",
                 path: "/",
-                maxAge: 60 * 60 * 24 * 7, // 7日間有効
+                maxAge: 60 * 60 * 24 * 7, // 7 days
             });
-            const userUuid = prismaUser.id;
-            return { userUuid };
+            return { success: true, userId: prismaUser.id, redirect: "/" };
         }
         catch (error) {
             console.error(error);
-            throw new server_2.TRPCError({
+            if (error instanceof server_1.TRPCError) {
+                throw error;
+            }
+            throw new server_1.TRPCError({
                 code: "INTERNAL_SERVER_ERROR",
-                message: "An unexpected error occurred, please try again later.",
+                message: "An unexpected error occurred",
             });
         }
     })),
