@@ -40,6 +40,7 @@
     "@types/react": "^18.2.67",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "autoprefixer": "^10.4.20",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.1.4",
@@ -50,8 +51,10 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-sonarjs": "^1.0.3",
+    "postcss": "^8.4.47",
     "prettier": "3.2.5",
     "prisma": "^5.11.0",
+    "tailwindcss": "^3.4.12",
     "ts-loader": "^9.5.1",
     "typescript": "*"
   }
