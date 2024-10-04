@@ -17,7 +17,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 export default function SignIn() {
   const [error, setError] = useState('')
   const router = useRouter()
+  const utils = trpc.useUtils()
   const loginMutation = trpc.login.useMutation({
+    onSuccess: async (data) => {
+      if (data.success) {
+        await utils.checkAuth.invalidate()
+        router.push('/')
+      }
+    },
     onError: (error: any) => {
       if (error.data?.code === 'UNAUTHORIZED') {
         setError('パスワードが間違っています')

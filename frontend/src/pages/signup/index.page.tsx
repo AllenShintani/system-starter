@@ -42,9 +42,11 @@ const translateZodError = (error: ZodIssue) => {
 export default function SignUp() {
   const [error, setError] = useState('')
   const router = useRouter()
+  const utils = trpc.useUtils()
   const signupMutation = trpc.signup.useMutation({
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.redirect) {
+        await utils.checkAuth.invalidate()
         router.push(data.redirect)
       }
     },
