@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { trpc } from '@/utils/trpc'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import Loading from '@/components/Loading'
 
 const publicRoutes = ['/login', '/signup']
 
@@ -26,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [isLoading, authData, router])
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   if (!isAuthorized) {
