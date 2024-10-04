@@ -8,10 +8,26 @@
     "start": "npm run dev -w frontend",
     "build:frontend": "cd frontend && next build",
     "build:backend": "cd backend && npm run build",
-    "build": "npm run setup && NODE_ENV=production npm run build:frontend || true && NODE_ENV=production npm run build:backend"
+    "build": "npm run setup && NODE_ENV=production npm run build:frontend || true && NODE_ENV=production npm run build:backend",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "frontend/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix --config frontend/.eslintrc.js",
+      "prettier --write"
+    ],
+    "frontend/**/*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "workspaces": [
     "backend",
     "frontend"
-  ]
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.3.0"
+  }
 }

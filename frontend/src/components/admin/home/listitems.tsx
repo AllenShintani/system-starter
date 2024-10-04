@@ -39,6 +39,7 @@ const listItems = [
     label: 'Machine learning',
     href: '',
   },
+
   { id: 7, icon: <SettingsIcon />, label: '設定', href: '' },
   { id: 8, icon: <TimerIcon />, label: '勤怠時間', href: '/workTime' },
 ]
@@ -49,7 +50,7 @@ export const Navigator = (props: DrawerProps) => {
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number,
+    index: number
   ) => {
     setSelectedSideItem(index)
   }
