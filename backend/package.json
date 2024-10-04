@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "prisma generate && tsc -p tsconfig.json && npm run generate-types",
-    "start": "node dist/src/server.js",
+    "start": "node --trace-warnings dist/src/server.js",
     "seed": "npx vite-node prisma/seed.ts",
     "dev": "npm run build && npm run start",
     "generate-types": "tsc --emitDeclarationOnly --project tsconfig.json",

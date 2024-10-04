@@ -51,7 +51,7 @@ server.register(cors, {
 const start = async () => {
   try {
     await prisma.$connect();
-    await server.listen({ port: 8080, host: "0.0.0.0" });
+    await server.listen({ port: 8080 });
     console.log(`Server listening on port: http://localhost:8080`);
   } catch (err) {
     server.log.error(err);

@@ -56,7 +56,7 @@ server.register(cors_1.default, {
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield client_1.prisma.$connect();
-        yield server.listen({ port: 8080, host: "0.0.0.0" });
+        yield server.listen({ port: 8080 });
         console.log(`Server listening on port: http://localhost:8080`);
     }
     catch (err) {
