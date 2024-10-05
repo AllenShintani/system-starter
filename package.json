@@ -8,8 +8,8 @@
     "start": "npm run dev -w frontend",
     "build:frontend": "cd frontend && next build",
     "build:backend": "cd backend && npm run build",
-    "build": "npm run setup && NODE_ENV=production npm run build:frontend || true && NODE_ENV=production npm run build:backend",
-    "prepare": "husky"
+    "build": "npm run setup && NODE_ENV=production npm run build:frontend && NODE_ENV=production npm run build:backend",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "frontend/**/*.{js,jsx,ts,tsx}": [
