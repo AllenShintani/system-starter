@@ -43,7 +43,6 @@ module.exports = {
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'no-dupe-else-if': 'error',
     'max-lines': ['error', 400],
-    'sonarjs/cognitive-complexity': 'error',
     'sonarjs/cognitive-complexity': ['error', 10],
     'no-restricted-syntax': [
       'error',
