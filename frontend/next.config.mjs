@@ -3,8 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   basePath: process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}` : '',
   trailingSlash: true,
-
-  pageExtensions: ['.tsx', 'page.ts', 'page.tsx', 'page.jsx', 'page.js', 'tsx', 'ts', 'jsx', 'js'],
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -14,6 +13,9 @@ const nextConfig = {
       }
     }
     return config
+  },
+  experimental: {
+    appDir: true,
   },
 }
 

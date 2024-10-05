@@ -25,6 +25,3 @@ export const trpc = createTRPCNext<AppRouter>({
   },
   ssr: false,
 })
-
-// Add this type to ensure type safety
-export type TRPCReact = typeof trpc

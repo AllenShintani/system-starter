@@ -1,10 +1,12 @@
+'use client'
+
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import 'firebase/compat/auth'
 import { userSchema } from '@/schemas'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { ZodError } from 'zod'
 import type { ZodIssue } from 'zod'
 import { TRPCClientError } from '@trpc/client'

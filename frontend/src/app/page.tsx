@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { trpc } from '@/utils/trpc'
 
@@ -16,7 +18,7 @@ export default function TopPage() {
         height: '100vh',
       }}
     >
-      <h1 style={{ fontSize: '4rem' }}>Hello, {data?.firstName || 'Guest'}!</h1>
+      <h1 style={{ fontSize: '4rem' }}>Hello, {data?.firstName}!</h1>
     </div>
   )
 }
