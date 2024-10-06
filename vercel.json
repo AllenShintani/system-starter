@@ -2,12 +2,12 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/next",
-      "config": {
-        "installCommand": "npm run setup",
-        "buildCommand": "cd frontend && npm run build"
-      }
+      "src": "frontend/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "backend/package.json",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -15,10 +15,5 @@
       "src": "/(.*)",
       "dest": "frontend/$1"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "VERCEL": "1",
-    "VERCEL_FORCE_NO_BUILD_CACHE": "1"
-  }
+  ]
 }
