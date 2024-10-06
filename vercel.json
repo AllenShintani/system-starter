@@ -3,19 +3,11 @@
   "builds": [
     {
       "src": "frontend/package.json",
-      "use": "@vercel/next",
-      "config": {
-        "installCommand": "npm install --omit=dev",
-        "buildCommand": "npm run build"
-      }
+      "use": "@vercel/next"
     },
     {
       "src": "backend/package.json",
-      "use": "@vercel/node",
-      "config": {
-        "installCommand": "npm install --omit=dev",
-        "buildCommand": "npm run build"
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -23,9 +15,5 @@
       "src": "/(.*)",
       "dest": "frontend/$1"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "VERCEL": "1"
-  }
+  ]
 }
