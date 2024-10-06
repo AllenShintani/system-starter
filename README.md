@@ -21,20 +21,15 @@ DB, ORM： MySQL, Prisma
 
 
 ```
-npm i
-npm install --prefix frontend
+npm run setup
 
-cp frontend/.env.local.example frontend/.env.local
-cp frontend/.env.production.example frontend/.env.production
-
-npm run --prefix frontend dev
-```
-
-backendディレクトリでコマンドを打ってください。
-```
 cp backend/.env.example backend/.env
-cp backend/.env.local.example backend/.env.local
-cp backend/projectName-firebase-adminsdk.json.example backend/projectName-firebase-adminsdk.json
+cp frontend/.env.local.example .env.local
+cp frontend/.env.production.example .env.production
+```
+
+backendに移動してセットアップを完了しましょう。
+```
 
 cd backend
 docker-compose up -d
@@ -43,7 +38,6 @@ npx prisma generate
 npx prisma migrate dev
 
 npm run seed
-npm run dev
 ```
 
 起動はfrontend, backendそれぞれのディレクトリで`npm run dev`
