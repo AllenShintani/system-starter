@@ -60,12 +60,24 @@ const start = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log(`Server listening on port: http://localhost:8080`);
     }
     catch (err) {
-        server.log.error(err);
+        if (err instanceof Error) {
+            if (err.message.includes("EADDRINUSE")) {
+                console.error("Error: Port 8080 is already in use. Please choose a different port or close the application using this port.");
+            }
+            else {
+                console.error("Error starting server:", err.message);
+            }
+        }
+        else {
+            console.error("An unknown error occurred:", err);
+        }
+        yield client_1.prisma.$disconnect();
         process.exit(1);
     }
 });
-start().catch((err) => {
+start().catch((err) => __awaiter(void 0, void 0, void 0, function* () {
     console.error("Error starting server:", err);
+    yield client_1.prisma.$disconnect();
     process.exit(1);
-});
+}));
 //# sourceMappingURL=server.js.map
