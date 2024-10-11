@@ -50,8 +50,14 @@ export default function SignUp() {
       }
     },
     onError: (error) => {
-      if (error instanceof TRPCClientError && error.data?.code === 'CONFLICT') {
-        setError('このメールアドレスは既に使用されています')
+      if (error instanceof TRPCClientError) {
+        if (error.data?.code === 'CONFLICT') {
+          setError('このメールアドレスは既に使用されています')
+        } else if (error.data?.code === 'BAD_REQUEST') {
+          setError('入力情報が不正です。すべての必須項目を入力してください。')
+        } else {
+          setError('登録に失敗しました。もう一度お試しください。')
+        }
       } else {
         console.error(error)
         setError('登録に失敗しました。もう一度お試しください。')

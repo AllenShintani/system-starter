@@ -76,6 +76,15 @@ export const signupRouter = t.router({
         if (error instanceof TRPCError) {
           throw error;
         }
+        if (
+          error instanceof Error &&
+          error.message.includes("auth/email-already-in-use")
+        ) {
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "このメールアドレスは既に使用されています",
+          });
+        }
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "An unexpected error occurred",
