@@ -14,7 +14,7 @@ export function useAuth() {
     data: authData,
     error,
     isLoading,
-  } = trpc.checkAuth.useQuery(undefined, {
+  } = trpc.loginRouter.checkAuth.useQuery(undefined, {
     retry: false,
     refetchOnWindowFocus: false,
   })
@@ -28,15 +28,16 @@ export function useAuth() {
   }
 
   useEffect(() => {
-    if (!isLoading && authData !== undefined && pathname !== null) {
-      const currentRouteIsPublic = isPublicRoute(pathname)
-      if (authData.authenticated && currentRouteIsPublic) {
-        router.push('/')
-      } else if (!authData.authenticated && !currentRouteIsPublic) {
-        router.push('/login')
-      } else {
-        setIsAuthorized(true)
-      }
+    if (isLoading || authData === undefined || !pathname) return
+
+    const currentRouteIsPublic = isPublicRoute(pathname)
+
+    if (authData.authenticated && currentRouteIsPublic) {
+      router.push('/')
+    } else if (!authData.authenticated && !currentRouteIsPublic) {
+      router.push('/login')
+    } else {
+      setIsAuthorized(true)
     }
   }, [isLoading, authData, router, pathname])
 

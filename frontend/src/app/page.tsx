@@ -4,7 +4,7 @@ import React from 'react'
 import { trpc } from '@/utils/trpc'
 
 export default function TopPage() {
-  const { data } = trpc.getUser.useQuery(undefined, {
+  const { data } = trpc.userRouter.getUser.useQuery(undefined, {
     retry: false,
   })
 

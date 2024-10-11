@@ -20,10 +20,10 @@ export default function SignIn() {
   const [error, setError] = useState('')
   const router = useRouter()
   const utils = trpc.useUtils()
-  const loginMutation = trpc.login.useMutation({
+  const loginMutation = trpc.loginRouter.login.useMutation({
     onSuccess: async (data) => {
       if (data.success) {
-        await utils.checkAuth.invalidate()
+        await utils.loginRouter.checkAuth.invalidate()
         router.push('/')
       }
     },

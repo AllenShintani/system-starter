@@ -6,5 +6,9 @@ const signup_1 = require("./signup");
 const login_1 = require("./login");
 const user_1 = require("./user");
 const t = server_1.initTRPC.create();
-exports.appRouter = t.mergeRouters(signup_1.signupRouter, login_1.loginRouter, user_1.userRouter);
+exports.appRouter = t.router({
+    signupRouter: signup_1.signupRouter,
+    loginRouter: login_1.loginRouter,
+    userRouter: user_1.userRouter,
+});
 //# sourceMappingURL=index.js.map
