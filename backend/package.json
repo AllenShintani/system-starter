@@ -18,6 +18,9 @@
     "./schemas": "./dist/src/schemas/index.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.667.0",
+    "@aws-sdk/credential-provider-sso": "^3.667.0",
+    "@aws-sdk/s3-request-presigner": "^3.667.0",
     "@fastify/cookie": "^9.3.1",
     "@fastify/cors": "^8.5.0",
     "@fastify/jwt": "^6.7.1",

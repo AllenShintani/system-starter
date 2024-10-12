@@ -40,14 +40,9 @@ const firebase_1 = require("../components/lib/firebase/firebase");
 const auth_1 = require("firebase/auth");
 const client_1 = require("../../prisma/client");
 const admin = __importStar(require("firebase-admin"));
-const createContext = ({ req, res }) => ({
-    fastify: req.server,
-    request: req,
-    reply: res,
-});
-const t = server_1.initTRPC.context().create();
-exports.signupRouter = t.router({
-    signup: t.procedure
+const createContext_1 = require("../utils/createContext");
+exports.signupRouter = createContext_1.t.router({
+    signup: createContext_1.t.procedure
         .input(zod_1.z.object({
         userData: userSchemas_1.userSchema,
     }))
@@ -67,7 +62,7 @@ exports.signupRouter = t.router({
             const firebaseToken = yield userCredential.user.getIdToken();
             const firebaseUid = (yield admin.auth().verifyIdToken(firebaseToken))
                 .uid;
-            const prismaUser = yield client_1.prisma.user.create({
+            const createUser = yield client_1.prisma.user.create({
                 data: {
                     email,
                     firebaseUid: firebaseUid,
@@ -76,7 +71,11 @@ exports.signupRouter = t.router({
                     fullName: fullName,
                 },
             });
-            const jwtPayload = { userId: prismaUser.id };
+            const jwtPayload = {
+                userId: createUser.id,
+                fullName: createUser.fullName,
+                avatarUrl: createUser.profilePicture,
+            };
             const token = ctx.fastify.jwt.sign(jwtPayload, {
                 expiresIn: "7d",
                 algorithm: "HS256",
@@ -88,19 +87,21 @@ exports.signupRouter = t.router({
                 path: "/",
                 maxAge: 60 * 60 * 24 * 7, // 7 days
             });
-            return { success: true, userId: prismaUser.id, redirect: "/" };
+            return {
+                success: true,
+                user: {
+                    id: createUser.id,
+                    email: createUser.email,
+                    name: createUser.fullName,
+                    avatarUrl: createUser.profilePicture,
+                },
+                redirect: "/",
+            };
         }
         catch (error) {
             console.error(error);
             if (error instanceof server_1.TRPCError) {
                 throw error;
-            }
-            if (error instanceof Error &&
-                error.message.includes("auth/email-already-in-use")) {
-                throw new server_1.TRPCError({
-                    code: "CONFLICT",
-                    message: "このメールアドレスは既に使用されています",
-                });
             }
             throw new server_1.TRPCError({
                 code: "INTERNAL_SERVER_ERROR",

@@ -1,33 +1,17 @@
-// backend/src/routers/login.ts
-import { initTRPC, TRPCError } from "@trpc/server";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { loginSchema } from "../schemas/userSchemas";
-import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 import { adminInit, auth } from "../components/lib/firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import * as admin from "firebase-admin";
 import { prisma } from "../../prisma/client";
 import { JwtPayload } from "../types/jwt";
-
-const createContext = ({ req, res }: CreateFastifyContextOptions) => ({
-  fastify: req.server,
-  request: req,
-  reply: res,
-});
-
-const t = initTRPC.context<typeof createContext>().create();
+import { t } from "../utils/createContext";
 
 export const loginRouter = t.router({
   login: t.procedure
     .input(z.object({ loginData: loginSchema }))
     .mutation(async ({ input, ctx }) => {
-      if (!process.env.JWT_SECRET) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "JWT_SECRET is not set",
-        });
-      }
-
       const { loginData } = input;
       const { email, password } = loginData;
 
@@ -48,16 +32,20 @@ export const loginRouter = t.router({
         const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
         const firebaseUid = decodedToken.uid;
 
-        const prismaUser = await prisma.user.findUnique({
+        const searchedUser = await prisma.user.findUnique({
           where: { firebaseUid },
         });
-        if (!prismaUser) {
+        if (!searchedUser) {
           throw new TRPCError({
             code: "NOT_FOUND",
             message: "User not found",
           });
         }
-        const jwtPayload: JwtPayload = { userId: prismaUser.id };
+        const jwtPayload: JwtPayload = {
+          userId: searchedUser.id,
+          fullName: searchedUser.fullName,
+          avatarUrl: searchedUser.profilePicture,
+        };
         const token = ctx.fastify.jwt.sign(jwtPayload, {
           expiresIn: "7d",
           algorithm: "HS256",
@@ -70,41 +58,57 @@ export const loginRouter = t.router({
           maxAge: 60 * 60 * 24 * 7, // 7 days
         });
 
-        return { success: true, userId: prismaUser.id, redirect: "/" };
+        return {
+          success: true,
+          user: {
+            id: searchedUser.id,
+            email: searchedUser.email,
+            name: searchedUser.fullName,
+            avatarUrl: searchedUser.profilePicture,
+          },
+          redirect: "/",
+        };
       } catch (error) {
         console.error(error);
-        if (error instanceof TRPCError) {
-          throw error;
-        }
+        if (error instanceof TRPCError) throw error;
+
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "An unexpected error occurred",
         });
       }
     }),
+  logout: t.procedure.mutation(async ({ ctx }) => {
+    ctx.reply.clearCookie("token", { path: "/" });
+    return { success: true, redirect: "/login" };
+  }),
 
   checkAuth: t.procedure.query(async ({ ctx }) => {
     try {
       const token = ctx.request.cookies.token;
-      if (!token) {
-        return { authenticated: false, redirect: "/login" };
-      }
+      if (!token)
+        return { authenticated: false, redirect: "/login", user: null };
+
       const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
       const user = await prisma.user.findUnique({
         where: { id: decoded.userId },
       });
-      if (!user) {
-        return { authenticated: false, redirect: "/login" };
-      }
-      return { authenticated: true, userId: user.id, redirect: null };
+      if (!user)
+        return { authenticated: false, redirect: "/login", user: null };
+
+      return {
+        authenticated: true,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.fullName,
+          avatarUrl: user.profilePicture,
+        },
+        redirect: null,
+      };
     } catch (error) {
       console.error(error);
-      return { authenticated: false, redirect: "/login" };
+      return { authenticated: false, redirect: "/login", user: null };
     }
-  }),
-
-  logout: t.procedure.mutation(async ({ ctx }) => {
-    ctx.reply.clearCookie("token", { path: "/" });
-    return { success: true, redirect: "/login" };
   }),
 });

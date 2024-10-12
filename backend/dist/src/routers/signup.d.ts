@@ -47,7 +47,12 @@ export declare const signupRouter: import("@trpc/server").CreateRouterInner<impo
         _output_out: typeof import("@trpc/server").unsetMarker;
     }, {
         success: boolean;
-        userId: string;
+        user: {
+            id: string;
+            email: string;
+            name: string | null;
+            avatarUrl: string | null;
+        };
         redirect: string;
     }>;
 }>;

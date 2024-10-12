@@ -63,6 +63,35 @@ export declare const loginSchema: z.ZodObject<{
     email: string;
     password: string;
 }>;
+export declare const userUpdateSchema: z.ZodObject<{
+    firstName: z.ZodOptional<z.ZodString>;
+    lastName: z.ZodOptional<z.ZodString>;
+    profilePicture: z.ZodOptional<z.ZodObject<{
+        fileName: z.ZodString;
+        fileType: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        fileName: string;
+        fileType: string;
+    }, {
+        fileName: string;
+        fileType: string;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    profilePicture?: {
+        fileName: string;
+        fileType: string;
+    } | undefined;
+}, {
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    profilePicture?: {
+        fileName: string;
+        fileType: string;
+    } | undefined;
+}>;
+export type UserUpdateInput = z.infer<typeof userUpdateSchema>;
 export type User = z.infer<typeof userSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;

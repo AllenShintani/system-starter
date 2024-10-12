@@ -23,6 +23,19 @@ export const loginSchema = z.object({
   password: z.string(),
 });
 
+export const userUpdateSchema = z.object({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  profilePicture: z
+    .object({
+      fileName: z.string(),
+      fileType: z.string(),
+    })
+    .optional(),
+});
+
+export type UserUpdateInput = z.infer<typeof userUpdateSchema>;
+
 export type User = z.infer<typeof userSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
