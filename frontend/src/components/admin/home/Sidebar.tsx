@@ -19,7 +19,7 @@ export const Sidebar: React.FC = () => {
     >
       <Toolbar />
       <Box>
-        <Navigator PaperProps={{ style: { width: DRAWERWIDTH } }} />
+        <Navigator />
       </Box>
     </Drawer>
   )
