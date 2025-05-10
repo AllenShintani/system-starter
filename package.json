@@ -1,0 +1,34 @@
+{
+  "name": "info_plat",
+  "private": true,
+  "scripts": {
+    "setup": "npm i && npm run setup:backend && npm run setup:frontend",
+    "setup:backend": "cd backend && npm install && npm run build && npm run generate-types",
+    "setup:frontend": "cd frontend && npm install && npm run build",
+    "start": "npm run dev -w frontend",
+    "build:frontend": "cd frontend && next build",
+    "build:backend": "cd backend && npm run build",
+    "build": "npm run setup && NODE_ENV=production npm run build:frontend || true && NODE_ENV=production npm run build:backend",
+    "prepare": "node -e \"if(process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') { require('husky').install() }\""
+  },
+  "lint-staged": {
+    "frontend/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix --config frontend/.eslintrc.js",
+      "prettier --write"
+    ],
+    "frontend/**/*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@types/js-yaml": "^4.0.9",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.3.0"
+  }
+}

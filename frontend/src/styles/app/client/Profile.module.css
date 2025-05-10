@@ -1,0 +1,189 @@
+/* styles/app/client/Profile.module.css */
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 24px 16px;
+  }
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  color: #1a1f36;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  color: #1a1f36;
+  font-size: 16px;
+  line-height: 24px;
+  transition: border-color 0.15s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #635bff;
+  box-shadow: 0 0 0 1px #635bff;
+}
+
+.input:disabled {
+  background-color: #f7fafc;
+  color: #697386;
+  cursor: not-allowed;
+}
+
+.select {
+  composes: input;
+  appearance: none;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23697386' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (max-width: 640px) {
+  .buttonGroup {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.buttonPrimary {
+  composes: button;
+  background-color: #635bff;
+  color: white;
+  border: 1px solid #635bff;
+}
+
+.buttonPrimary:hover:not(:disabled) {
+  background-color: #0a2540;
+  border-color: #0a2540;
+}
+
+.buttonSecondary {
+  composes: button;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  color: #1a1f36;
+}
+
+.buttonSecondary:hover:not(:disabled) {
+  background-color: #f7fafc;
+  border-color: #cbd5e1;
+}
+
+.buttonDanger {
+  composes: button;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  color: #dc2626;
+}
+
+.buttonDanger:hover:not(:disabled) {
+  background-color: #fef2f2;
+  border-color: #dc2626;
+}
+
+.paymentCard {
+  padding: 16px;
+  background: #f7fafc;
+  border-radius: 4px;
+  margin-top: 16px;
+}
+
+.paymentInfo {
+  color: #1a1f36;
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.cardLabel {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a1f36;
+  margin-bottom: 16px;
+}
+
+.error {
+  color: #dc2626;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.paymentForm {
+  width: 100%;
+}
+
+.paymentForm .formGroup {
+  margin-bottom: 20px;
+}
+
+.paymentForm .buttonGroup {
+  margin-top: 24px;
+}
+
+@media (max-width: 640px) {
+  .paymentForm .buttonGroup {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

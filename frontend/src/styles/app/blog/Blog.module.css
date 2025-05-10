@@ -1,0 +1,114 @@
+.pageContainer {
+  min-height: 100vh;
+  background-color: #ffffff;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.mainContent {
+  padding-top: 64px;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  min-height: calc(100vh - 64px);
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.pageTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #1a1a1a;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.postsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 32px;
+  width: 100%;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  width: 100%;
+  font-size: 1.2rem;
+  color: #6b7280;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  width: 100%;
+  font-size: 1.2rem;
+  color: #6b7280;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+/* テキストエフェクトのリセット用の追加クラス */
+.text-effect-reset {
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.text-effect-reset * {
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 16px;
+  }
+
+  .pageTitle {
+    font-size: 2rem;
+    margin-bottom: 24px;
+  }
+
+  .postsGrid {
+    grid-template-columns: 1fr;
+  }
+}

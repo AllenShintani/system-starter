@@ -1,0 +1,107 @@
+/* 記事フッター */
+.articleFooter {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.footerShare {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footerShare span {
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.socialButtons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.socialButton {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.socialButton:hover {
+  transform: translateY(-2px);
+}
+
+.twitterButton {
+  background-color: #1da1f2;
+  color: white;
+}
+
+.twitterButton:hover {
+  background-color: #0c85d0;
+}
+
+.linkedinButton {
+  background-color: #0077b5;
+  color: white;
+}
+
+.linkedinButton:hover {
+  background-color: #005e93;
+}
+
+.facebookButton {
+  background-color: #4267b2;
+  color: white;
+}
+
+.facebookButton:hover {
+  background-color: #365899;
+}
+
+.footerNav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.footerNavLink {
+  color: #4b5563;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+  padding: 8px 0;
+}
+
+.footerNavLink:hover {
+  color: #3b82f6;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .footerShare {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footerNav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .relatedGrid {
+    grid-template-columns: 1fr;
+  }
+}

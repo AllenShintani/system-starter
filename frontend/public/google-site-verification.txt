@@ -1,0 +1,9 @@
+Google Search Console向けのサイト所有権確認用ファイル
+
+サイト所有権を確認するには：
+1. https://search.google.com/search-console にアクセス
+2. URLプレフィックスを選択し、サイトのURLを入力
+3. 所有権の確認方法として「HTMLファイル」を選択
+4. ダウンロードしたHTMLファイルをサイトのルートディレクトリにアップロード
+   または
+5. HTMLタグ方式を選択して<meta>タグをHeadコンポーネントに追加

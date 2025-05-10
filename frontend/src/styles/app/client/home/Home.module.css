@@ -1,0 +1,231 @@
+.container {
+  min-height: 100vh;
+  padding: 1rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.mainSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.title {
+  color: black;
+  font-size: 1.25rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.questCard {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .questCard {
+    padding: 1.5rem;
+  }
+}
+
+.questContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.questInfo {
+  flex: 1;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.questImage {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #f3f4f6;
+}
+
+.questTitle {
+  color: black;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .questTitle {
+    font-size: 1.25rem;
+  }
+}
+
+.questDescription {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.questTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.tag {
+  background: rgba(0, 0, 0, 0.1);
+  color: black;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+
+.chevronButton {
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: opacity 0.2s;
+}
+
+.chevronButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.chevronIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.iconGroup {
+  display: flex;
+  margin-right: -0.5rem;
+}
+
+.iconWrapper {
+  width: 2rem;
+  height: 2rem;
+  background-color: rgba(17, 24, 39, 0.1);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-12deg);
+  margin-left: -0.5rem;
+}
+
+@media (min-width: 768px) {
+  .iconWrapper {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  color: rgb(55, 65, 81);
+}
+
+@media (min-width: 768px) {
+  .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.button {
+  width: 100%;
+  height: 56px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: none;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.buttonIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.roseIcon {
+  background-color: rgb(255, 241, 242);
+  color: var(--mui-palette-primary-main);
+}
+
+.chevron {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: rgb(107, 114, 128);
+}
+
+.noQuests {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 160px;
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.noImage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  color: #6b7280;
+}
+
+.noImageIcon {
+  margin-bottom: 8px;
+}
+
+.blurred {
+  filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.3s ease;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

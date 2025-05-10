@@ -1,0 +1,261 @@
+.pageContainer {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.contentWrapper {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.card {
+  width: 100%;
+  border-radius: 12px;
+  background-color: #1e1f22;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  transform: translateY(-5px);
+  transition: none;
+  pointer-events: none;
+}
+
+.cardContent {
+  padding: 32px !important;
+  pointer-events: auto;
+}
+
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.avatar {
+  margin: 8px;
+  background-color: #1976d2 !important;
+  width: 40px;
+  height: 40px;
+}
+
+.title {
+  margin: 16px 0 8px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.socialButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.buttonWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.googleButton,
+.githubButton,
+.facebookButton {
+  width: 100%;
+  height: 48px;
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.googleButton {
+  border: 1px solid #747775;
+  background-color: #ffffff;
+  box-shadow:
+    0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+.googleButton:hover {
+  background-color: #f8f9fa;
+  border-color: #747775;
+  box-shadow:
+    0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 2px 6px 2px rgba(60, 64, 67, 0.15);
+}
+
+.googleButton:focus {
+  border-color: #4285f4;
+  outline: none;
+}
+
+.googleButton:active {
+  background-color: #f1f3f4;
+  box-shadow:
+    0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 2px 6px 2px rgba(60, 64, 67, 0.15);
+}
+
+.githubButton {
+  background-color: #24292e;
+  border: 1px solid #24292e;
+  color: #ffffff;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.3),
+    0 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+.githubButton:hover {
+  background-color: #2f363d;
+  border-color: #2f363d;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.3),
+    0 2px 6px 2px rgba(0, 0, 0, 0.15);
+}
+
+.githubButton:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 2px #ffffff,
+    0 0 0 4px #24292e;
+}
+
+.facebookButton {
+  background-color: #1877f2;
+  border: none;
+  color: #ffffff;
+  box-shadow:
+    0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+.facebookButton:hover {
+  background-color: #166fe5;
+}
+
+.facebookButton:active {
+  background-color: #1464d6;
+}
+
+.facebookButton:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 2px #ffffff,
+    0 0 0 4px #1877f2;
+}
+
+.googleButton:disabled,
+.githubButton:disabled,
+.facebookButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.googleIconContainer,
+.githubIconContainer,
+.facebookIconContainer {
+  position: absolute;
+  left: 12px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.googleIcon,
+.githubIcon,
+.facebookIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.buttonContentWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 52px;
+  padding-right: 52px;
+}
+
+.textContainer {
+  width: 140px;
+  text-align: left;
+}
+
+.googleButtonText,
+.githubButtonText,
+.facebookButtonText {
+  font-family: Roboto, arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  white-space: nowrap;
+}
+
+.googleButtonText {
+  color: #1f1f1f;
+}
+
+.githubButtonText,
+.facebookButtonText {
+  color: #ffffff;
+}
+
+/* Form styles */
+.form {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.forgotPassword {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.forgotPassword:hover {
+  text-decoration: underline;
+}
+
+.signupLink {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signupLink:hover {
+  text-decoration: underline;
+}
+
+.dividerContainer {
+  width: 100%;
+  margin: 24px 0;
+  position: relative;
+  text-align: center;
+}
+
+.dividerText {
+  background-color: #1e1f22;
+  padding: 0 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.errorText {
+  color: #f44336;
+  margin: 16px 0;
+  text-align: center;
+}

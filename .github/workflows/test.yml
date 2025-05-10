@@ -1,0 +1,37 @@
+name: Test
+
+on: push
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
+      - uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            backend/node_modules
+          key: client-npm-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+
+      - name: Build backend
+        run: npm run build -w backend
+
+      - name: Run lint
+        run: npm run lint -w frontend
+
+      - name: Run typecheck
+        run: npm run typecheck -w frontend

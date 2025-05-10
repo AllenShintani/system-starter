@@ -1,0 +1,5 @@
+malicious-domain1.com
+malicious-domain2.net
+c2-server.org
+apt-infrastructure.net
+command-control.com

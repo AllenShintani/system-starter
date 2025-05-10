@@ -1,0 +1,79 @@
+.container {
+  width: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.navigationWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionHeader {
+  background-color: rgba(31, 41, 55, 0.95);
+  padding: 0.75rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #ffffff;
+}
+
+.sectionLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.sectionName {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.chaptersContainer {
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  border-left: 2px solid rgba(55, 65, 81, 0.7);
+  padding-top: 0.5rem;
+}
+
+.chapterItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 0 0.375rem 0.375rem 0;
+  user-select: none;
+}
+
+.chapterItem:hover {
+  background-color: rgba(31, 41, 55, 0.7);
+  color: rgb(74, 222, 128);
+}
+
+.chapterNumber {
+  min-width: 5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.chapterTitle {
+  flex: 1;
+  font-size: 0.85rem;
+}
+
+.active {
+  background-color: rgba(31, 41, 55, 0.7);
+  color: rgb(74, 222, 128);
+}
+
+.chapterItem:focus {
+  outline: none;
+  background-color: rgba(31, 41, 55, 0.5);
+}

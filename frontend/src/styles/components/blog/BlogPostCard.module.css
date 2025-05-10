@@ -1,0 +1,143 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  text-decoration: none;
+  height: 100%;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.thumbnailContainer {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+}
+
+.thumbnail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .thumbnail {
+  transform: scale(1.05);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  flex-grow: 1;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tag {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin: 0 0 16px 0;
+  line-height: 1.6;
+  flex-grow: 1;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: auto;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.date,
+.author {
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+/* テキストエフェクトのリセット用の追加クラス */
+.text-effect-reset {
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}
+
+.text-effect-reset * {
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+  -moz-text-stroke: 0 !important;
+  -ms-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+}

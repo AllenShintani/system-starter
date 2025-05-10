@@ -1,0 +1,506 @@
+.container {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #000;
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+.canvasContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+}
+
+.mainContent {
+  position: relative;
+  z-index: 1;
+  flex-grow: 1;
+  padding: 8rem 0;
+}
+
+.contentWrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(45deg, #00ffff, #80ffff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  font-family: monospace;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  margin-bottom: 4rem;
+  font-family: monospace;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  color: #00ffff;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-family: monospace;
+  position: relative;
+}
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ffff, transparent);
+}
+
+.missionSection,
+.valuesSection {
+  margin-bottom: 6rem;
+  padding: 3rem;
+  background: rgba(0, 20, 40, 0.5);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+}
+
+.missionStatement,
+.visionStatement {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  background: linear-gradient(45deg, #00ffff, #80ffff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: monospace;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+}
+
+.sectionText {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  max-width: 800px;
+  margin: 2rem auto 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.valuesContent {
+  padding: 2rem;
+}
+
+.foundersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.founderCard {
+  background: rgba(0, 20, 40, 0.5);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  padding: 2rem;
+  text-align: center;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.founderCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+  border-color: rgba(0, 255, 255, 0.3);
+}
+
+.founderImageWrapper {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(0, 255, 255, 0.2);
+}
+
+.founderImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.founderCard:hover .founderImage {
+  transform: scale(1.05);
+}
+
+.founderInfo {
+  text-align: center;
+}
+
+.founderName {
+  font-size: 1.8rem;
+  color: #00ffff;
+  margin-bottom: 0.5rem;
+  font-family: monospace;
+}
+
+.founderRole {
+  font-size: 1.2rem;
+  color: rgba(0, 255, 255, 0.8);
+  margin-bottom: 1rem;
+  font-family: monospace;
+}
+
+.founderDescription {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.githubLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 20px;
+  color: #00ffff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.githubLink:hover {
+  background: rgba(0, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.githubIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.contactSection {
+  text-align: center;
+  padding: 4rem;
+  background: rgba(0, 20, 40, 0.5);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.contactText {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  line-height: 1.8;
+}
+
+.contactButton {
+  display: inline-block;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  color: #000;
+  background: linear-gradient(45deg, #00ffff, #80ffff);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: monospace;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.contactButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+.contactButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+}
+
+.contactButton:hover::before {
+  left: 100%;
+}
+
+.signInButton {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 20px;
+  color: #00ffff;
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.signInButton:hover {
+  background: rgba(0, 255, 255, 0.2);
+  border-color: rgba(0, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+.signInIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.signInButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.3);
+}
+
+/* アニメーション */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.2);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.founderCard:hover .githubIcon {
+  animation: pulse 2s ease infinite;
+}
+
+/* アクセシビリティのための追加 */
+.contactButton:focus,
+.githubLink:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.5);
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 1024px) {
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .missionSection,
+  .valuesContent {
+    padding: 2rem;
+  }
+
+  .foundersGrid {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 3rem auto 0;
+  }
+
+  .founderCard {
+    max-width: 100%;
+  }
+
+  .missionStatement,
+  .visionStatement {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 6rem 0;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .sectionText {
+    font-size: 1rem;
+  }
+
+  .founderImageWrapper {
+    width: 150px;
+    height: 150px;
+  }
+
+  .founderName {
+    font-size: 1.5rem;
+  }
+
+  .founderRole {
+    font-size: 1rem;
+  }
+
+  .founderDescription {
+    font-size: 0.9rem;
+  }
+
+  .contactSection {
+    padding: 2rem;
+  }
+
+  .contactText {
+    font-size: 1rem;
+  }
+
+  .contactButton {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+
+  .signInButton {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .signInIcon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .missionStatement,
+  .sectionText {
+    margin-top: 1.5rem;
+  }
+}
+
+.teamSection {
+  text-align: center;
+  padding: 4rem;
+  background: rgba(0, 20, 40, 0.5);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  margin-bottom: 6rem;
+}
+
+/* ダークモードのサポート */
+@media (prefers-color-scheme: dark) {
+  .founderCard {
+    background: rgba(0, 20, 40, 0.7);
+  }
+
+  .contactButton {
+    color: #000;
+  }
+}
+
+.companyInfoSection {
+  margin-top: 6rem; /* Contact usセクションとの間に余白を追加 */
+}
+
+.infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.infoRow {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(0, 20, 40, 0.5);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.infoLabel {
+  color: rgba(0, 255, 255, 0.8);
+  font-family: monospace;
+  font-size: 1.1rem;
+  text-align: right;
+}
+
+.infoValue {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+}
+
+.contactImage {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .companyInfoSection {
+    margin-top: 4rem; /* モバイル表示時の余白調整 */
+  }
+
+  .infoRow {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .infoLabel {
+    text-align: left;
+  }
+}

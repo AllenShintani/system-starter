@@ -1,0 +1,518 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+  background: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  height: 40px;
+  width: 40px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.buttonIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.title {
+  text-align: left;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  color: #404145;
+}
+
+.form {
+  background: white;
+  padding: 24px;
+  border-radius: 4px;
+  border: 1px solid #dadbdd;
+  display: grid;
+  gap: 20px;
+}
+
+.amountDisplay {
+  margin-bottom: 32px;
+  background: #fff;
+  border: 1px solid #dadbdd;
+  border-radius: 4px;
+  padding: 24px;
+}
+
+.amountDisplay h3 {
+  font-size: 16px;
+  color: #404145;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.amount {
+  font-size: 36px;
+  font-weight: 700;
+  color: #404145;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.originalAmount {
+  font-size: 20px;
+  color: #74767e;
+  text-decoration: line-through;
+}
+
+/* クーポンセクションのスタイル */
+.couponSection {
+  margin-top: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.couponInput {
+  flex: 1;
+}
+
+.couponInput :global(.MuiOutlinedInput-root) {
+  height: 56px;
+  background: white;
+}
+
+.couponInput :global(.MuiOutlinedInput-input) {
+  padding: 16px;
+}
+
+.couponButton {
+  height: 56px !important;
+  padding: 0 24px !important;
+  min-width: 120px !important;
+  background: #ffffff !important;
+  color: rgb(0, 0, 0) !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+}
+
+.couponButton:hover {
+  background: #7fff44 !important;
+}
+
+.couponButton:disabled {
+  background: #ccc !important;
+}
+
+.discountInfo {
+  background: #f0f7ff;
+  border-radius: 4px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.originalPrice {
+  color: #74767e;
+  text-decoration: line-through;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.discount {
+  color: #0066ff;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* 統一されたボタンスタイル */
+.submitButton,
+.backButton,
+.savedCardButton,
+.retryButton,
+.initButton {
+  height: 56px;
+  padding: 0 24px;
+  background: #0066ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.submitButton:hover,
+.backButton:hover,
+.savedCardButton:hover,
+.retryButton:hover,
+.initButton:hover {
+  background: #0052cc;
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled,
+.backButton:disabled,
+.savedCardButton:disabled,
+.retryButton:disabled,
+.initButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ボタングループ */
+.buttonGroup {
+  display: flex;
+  gap: 24px;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+/* バックボタンの特別なスタイル */
+.backButton {
+  background: #f0f0f0;
+  color: #404145;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  height: 56px;
+  flex: 1;
+}
+
+.backButton:hover {
+  background: #e0e0e0;
+  transform: translateY(-1px);
+}
+
+/* 決済ボタンのスタイル */
+.payButton {
+  height: 56px;
+  padding: 0 24px;
+  background: #0066ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.payButton:hover {
+  background: #0052cc;
+  transform: translateY(-1px);
+}
+
+.payButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.error {
+  color: #f74040;
+  background: #fff8f8;
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 20px;
+  border: 1px solid #ffd4d4;
+}
+
+.errorAlert {
+  margin-bottom: 24px;
+}
+
+.savedCard {
+  background: white;
+  padding: 24px;
+  border-radius: 4px;
+  margin-bottom: 32px;
+  border: 1px solid #dadbdd;
+}
+
+.savedCardContent {
+  margin-bottom: 24px;
+}
+
+.savedCardLabel {
+  font-size: 14px;
+  color: #404145;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.cardDetails {
+  font-size: 14px;
+  color: #74767e;
+  margin-bottom: 16px;
+}
+
+.divider {
+  text-align: center;
+  margin: 24px 0;
+  font-size: 14px;
+  color: #74767e;
+  position: relative;
+  font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: #dadbdd;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.feeBreakdown {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #74767e;
+  margin-bottom: 16px;
+}
+
+.baseAmount {
+  display: inline;
+  margin-right: 4px;
+  color: #74767e;
+}
+
+.feeNote {
+  display: inline;
+  color: #74767e;
+}
+
+.explanations {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #dadbdd;
+}
+
+.explanationList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.explanationList li {
+  color: #74767e;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.explanationList li:before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #74767e;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.explanationList li:last-child {
+  margin-bottom: 0;
+}
+
+.loading {
+  color: #74767e;
+  text-align: center;
+  padding: 24px;
+  font-size: 14px;
+}
+
+.registerCardMessage {
+  color: #404145;
+  font-size: 16px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+/* MUIボタンのスタイル上書き */
+.button {
+  width: 100%;
+  height: 56px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0 24px;
+  background: #0066ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background: #0052cc;
+  transform: translateY(-1px);
+}
+
+.buttonIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* ステッパーUI */
+.stepperContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.stepCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.activeStep {
+  background-color: #3ea98a; /* 緑色 */
+}
+
+.inactiveStep {
+  background-color: #a0a0a0; /* グレー */
+}
+
+.stepText {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+.stepText.active {
+  color: #3ea98a;
+}
+
+.stepConnector {
+  height: 2px;
+  width: 60px;
+  background-color: #e0e0e0;
+  margin: 0 8px;
+  position: relative;
+  top: -20px;
+}
+
+/* メディアクエリ */
+@media (max-width: 640px) {
+  .container {
+    padding: 16px;
+  }
+
+  .form,
+  .savedCard,
+  .amountDisplay {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .amount {
+    font-size: 32px;
+  }
+
+  .explanationList li {
+    font-size: 13px;
+  }
+
+  .feeBreakdown {
+    font-size: 14px;
+  }
+
+  .couponSection {
+    flex-direction: column;
+  }
+
+  .couponButton {
+    width: 100% !important;
+  }
+
+  .discountInfo {
+    padding: 12px;
+  }
+}

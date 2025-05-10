@@ -1,0 +1,35 @@
+# All search engines
+User-agent: *
+Allow: /
+
+# Specific private pages to disallow
+Disallow: /admin/
+Disallow: /passwordReset/
+Disallow: /userIconUpload/
+Disallow: /data-deletion/
+Disallow: /auth/
+Disallow: /terms/
+Disallow: /about/
+Disallow: /policy/
+
+# Special instructions for Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Special instructions for Bing
+User-agent: Bingbot  
+Allow: /
+Crawl-delay: 2
+
+# Special instructions for image crawlers
+User-agent: Googlebot-Image
+Allow: /public/
+Allow: /blog/
+Disallow: /
+
+# Host
+Host: https://info-plat.tech
+
+# Sitemaps
+Sitemap: https://info-plath/sitemap.xml

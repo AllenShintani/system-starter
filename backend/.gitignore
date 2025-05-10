@@ -1,0 +1,9 @@
+node_modules
+.env
+.env.local
+.env.production
+mysql_data
+sql
+*firebaseadminsdk.json
+!hoge-firebaseadminsdk.json
+dist

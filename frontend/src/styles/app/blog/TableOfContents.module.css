@@ -1,0 +1,135 @@
+/* テーブルオブコンテンツ（目次）のスタイル */
+.tableOfContents {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0;
+  border-top: 2px solid #3b82f6;
+  box-shadow: 0 2px 8px #0000000d;
+}
+
+.tocTitle {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  position: relative;
+  text-align: center;
+  font-weight: 600;
+}
+
+.tocTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background-color: #3b82f6;
+  border-radius: 2px;
+}
+
+.tocItem {
+  position: relative;
+  line-height: 1.5;
+  padding-left: 0;
+  list-style: none !important;
+  display: block !important;
+  margin-left: 0 !important;
+  background: none !important;
+}
+
+.tocItem::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.tocLink {
+  display: flex;
+  align-items: flex-start;
+  text-decoration: none;
+  color: inherit;
+}
+
+.tocText {
+  flex: 1;
+}
+
+.tocNumber {
+  display: inline-block;
+  margin-right: 8px;
+  color: #3b82f6;
+  font-weight: bold;
+  position: relative;
+}
+
+.tocList {
+  padding-left: 0;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+}
+
+/* 点を消すための強力なリセット用クラス */
+.resetList {
+  list-style-type: none !important;
+  padding-left: 0 !important;
+}
+
+.resetListItem {
+  list-style: none !important;
+  list-style-type: none !important;
+  display: block !important;
+}
+
+.resetListItem::before {
+  content: none !important;
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  /* モバイルサイズでレイアウトを縦方向に変更 */
+  .blogLayout {
+    flex-direction: column;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 24px 16px 80px;
+  }
+
+  .tocSidebar {
+    width: 100%;
+    position: relative;
+    top: 0;
+    margin-bottom: 2rem;
+  }
+
+  .tableOfContents {
+    padding: 16px;
+  }
+
+  .tocItem {
+    padding-left: 0;
+  }
+
+  .tocLevel2 {
+    padding-left: 1.5rem;
+  }
+
+  .tocLevel3 {
+    padding-left: 2rem;
+  }
+
+  .bottomCta {
+    padding: 0.7rem 0.5rem;
+  }
+}

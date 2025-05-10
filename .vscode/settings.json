@@ -1,0 +1,39 @@
+{
+  "eslint.run": "onSave",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.removeUnused": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "debug.openDebug": "openOnSessionStart",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.eol": "\n",
+  "stylelint.validate": ["css", "less", "postcss", "typescriptreact"],
+  "[log]": {
+    "editor.wordWrap": "off",
+    "files.insertFinalNewline": true
+  },
+  "[markdown]": {
+    "editor.formatOnSave": false
+  },
+  "cSpell.words": ["lucide", "Osint", "sguild"],
+  //これよりしたはmodule.cssのカラーピッカーを表示するための設定
+
+  "editor.colorDecorators": true,
+  "files.associations": {
+    "*.module.css": "css"
+  },
+  "colorize.languages": [
+    "css",
+    "sass",
+    "scss",
+    "less",
+    "postcss",
+    "sss",
+    "stylus",
+    "xml",
+    "svg"
+  ]
+}

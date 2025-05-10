@@ -1,0 +1,286 @@
+.guideOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* 透明度を上げる */
+  z-index: 999999; /* モーダルより上に表示するために大きな値に変更 */
+  pointer-events: all; /* オーバーレイ全体でクリックを捕捉 */
+  transition: background-color 0.3s ease;
+}
+
+/* ハイライト領域の上に透明な要素を配置して、クリックを透過させる */
+.clickThroughArea {
+  position: absolute;
+  background-color: transparent;
+  z-index: 1000001; /* 最前面に配置して確実にクリックできるようにする (targetHighlightより上) */
+  pointer-events: auto !important; /* この要素自体はクリックを捕捉 */
+  cursor: pointer !important; /* カーソルを必ずポインターにする */
+}
+
+.targetHighlight {
+  position: absolute;
+  box-shadow: none; /* 背景を暗くしないように変更 */
+  border-radius: 4px;
+  z-index: 1000000; /* より高いz-indexに変更 */
+  pointer-events: none; /* クリックイベントを透過させる */
+  animation: pulse 2s infinite;
+  border: 2px solid #4caf50; /* 境界線を薄くしてカードにぴったり合わせる */
+  outline: 1px solid white; /* 白い外側の枠線も薄く */
+  filter: brightness(1.3); /* 明るさを調整 */
+  background-color: transparent; /* 背景を透明に */
+  box-sizing: border-box; /* ボーダーを要素のサイズに含める */
+}
+
+/* ガイドボックス自体も暗くならないようにする */
+.guideBox {
+  position: absolute; /* 絶対位置配置 */
+  width: 320px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 0 0 2px rgba(76, 175, 80, 0.4); /* 緑色の薄い外枠 */
+  padding: 16px;
+  z-index: 1000002; /* clickThroughAreaより上に設定 */
+  pointer-events: all !important; /* ガイドボックスのクリックイベントを強制的に有効化 */
+  filter: brightness(1.05); /* ガイドボックスを明るく */
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spotlight {
+  0% {
+    box-shadow:
+      0 0 0 5000px rgba(0, 0, 0, 0.65),
+      0 0 40px 15px rgba(76, 175, 80, 0.8);
+    filter: brightness(3);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5000px rgba(0, 0, 0, 0.65),
+      0 0 50px 20px rgba(76, 175, 80, 0.7);
+    filter: brightness(3.5);
+  }
+  100% {
+    box-shadow:
+      0 0 0 5000px rgba(0, 0, 0, 0.65),
+      0 0 40px 15px rgba(76, 175, 80, 0.8);
+    filter: brightness(3);
+  }
+}
+
+.guideHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.stepIndicator {
+  font-size: 12px;
+  color: #757575;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #757575;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.closeButton:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.guideTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.guideDescription {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.guideActions {
+  display: flex;
+  justify-content: space-between;
+  pointer-events: all !important;
+  flex-direction: column; /* 縦方向に並べる */
+  align-items: center;
+}
+
+.prevButton,
+.nextButton {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  pointer-events: all !important;
+}
+
+.prevButton {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.prevButton:hover {
+  background-color: #e0e0e0;
+}
+
+.nextButton {
+  background-color: #1976d2; /* 青色系のプライマリーカラーに変更 */
+  color: white;
+  border: none;
+  position: relative;
+  z-index: 9999; /* 最も前面に表示 */
+  font-size: 16px; /* フォントサイズを大きく */
+  font-weight: 600; /* フォントをより太く */
+  padding: 10px 24px; /* パディングを大きく */
+  border-radius: 6px; /* 角丸を少し大きく */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 軽い影を追加 */
+  text-transform: capitalize; /* 先頭文字を大文字に */
+  min-width: 150px; /* 最小幅を設定 */
+  text-align: center; /* テキストを中央揃え */
+}
+
+.nextButton:hover {
+  background-color: #1565c0; /* 少し濃い青に変更 */
+  transform: translateY(-1px); /* ホバー時に少し浮き上がる効果 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* ホバー時は影を強調 */
+  transition: all 0.2s ease; /* スムーズなアニメーション */
+}
+
+.nextButton:active {
+  transform: translateY(1px); /* クリック時の視覚的フィードバック */
+  background-color: #0d47a1; /* より濃い青色に変更 */
+}
+
+/* ポインター/矢印のスタイル */
+.guideBox::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+/* 中央表示の場合は矢印を表示しない */
+.guideBoxCenter {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  z-index: 1000002 !important;
+}
+
+.guideBoxCenter::before {
+  display: none !important;
+}
+
+/* 位置に基づいて矢印の向きを変更 */
+.guideBoxTop::before {
+  border-width: 10px 10px 0 10px;
+  border-color: #ffffff transparent transparent transparent;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.guideBoxRight::before {
+  border-width: 10px 10px 10px 0;
+  border-color: transparent #ffffff transparent transparent;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.guideBoxBottom::before {
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent #ffffff transparent;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.guideBoxLeft::before {
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent #ffffff;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 矢印の向きを独立して指定するためのクラス */
+.arrowTop::before {
+  border-width: 10px 10px 0 10px !important;
+  border-color: #ffffff transparent transparent transparent !important;
+  bottom: -10px !important;
+  left: 50% !important;
+  top: auto !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+.arrowRight::before {
+  border-width: 10px 0 10px 10px !important;
+  border-color: transparent transparent transparent #ffffff !important;
+  right: -10px !important;
+  top: 50% !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+}
+
+.arrowBottom::before {
+  border-width: 0 10px 10px 10px !important;
+  border-color: transparent transparent #ffffff transparent !important;
+  top: -10px !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+.arrowLeft::before {
+  border-width: 10px 10px 10px 0 !important;
+  border-color: transparent #ffffff transparent transparent !important;
+  left: -10px !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+}
+
+.arrowNone::before {
+  display: none !important;
+}

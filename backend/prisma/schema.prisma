@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MYSQL_PUBLIC_URL")
+}
+
+model User {
+  id                 String               @id @default(uuid())
+  firebaseUid        String               @unique @db.VarChar(255)
+  email              String               @unique
+  profilePicture     String?
+  role               User_role            @default(HACKER_USER)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt
+  userName           String
+  firstName          String?
+  lastName           String?
+  phoneNumber        String?
+  address            String?
+  dateOfBirth        DateTime?
+  isTermsAgree       Boolean              @default(true)
+  isVerified         Boolean              @default(false)
+  BlogPost           BlogPost[]
+
+  @@index([firebaseUid])
+  @@index([role])
+}
+
+model BlogPost {
+  id           String    @id @default(uuid())
+  title        String
+  content      String    @db.Text
+  imageKey     String
+  thumbnailUrl String
+  isPublished  Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  authorId     String
+  author       User      @relation(fields: [authorId], references: [id])
+  tags         BlogTag[]
+
+  @@index([authorId], map: "BlogPost_authorId_fkey")
+}
+
+model BlogTag {
+  id     String   @id @default(uuid())
+  name   String
+  postId String
+  post   BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+}
+
+enum User_role {
+  SUPER_ADMIN
+  CONTENT_ADMIN
+  CLIENT_USER
+  HACKER_USER
+  PRE_REGISTERED_USER
+}

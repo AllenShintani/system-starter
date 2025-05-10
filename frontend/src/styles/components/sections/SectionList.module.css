@@ -1,0 +1,114 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.message {
+  text-decoration: none;
+}
+
+.grid a {
+  text-decoration: none;
+}
+
+.card {
+  width: 400px;
+  height: 275px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+}
+
+.imageContainer {
+  position: relative;
+  height: 200px;
+}
+
+.thumbnail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .thumbnail {
+  transform: scale(1.05);
+}
+
+.content {
+  flex: 1;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 75px;
+}
+
+.contentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.duration {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+.durationText {
+  margin-right: 0.25rem;
+}
+
+.icon {
+  font-size: 14px;
+}
+
+.chevron {
+  font-size: 24px;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.card:hover .chevron {
+  transform: translateX(4px);
+}

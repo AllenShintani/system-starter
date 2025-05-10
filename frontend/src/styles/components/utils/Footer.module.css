@@ -1,0 +1,168 @@
+.footer {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid #333333;
+  position: relative;
+  margin-left: -32px;
+  margin-right: -32px;
+  width: calc(100% + 64px);
+  margin-bottom: -32px; /* 新しく追加: メインコンテンツのパディングを相殺 */
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 36px 28px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+.linkGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.link {
+  font-size: 0.875rem;
+  text-decoration: none;
+  color: #e5e5e5;
+  transition: color 0.2s ease;
+  line-height: 1.5;
+}
+
+.link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.bottomSection {
+  padding-top: 32px;
+  margin-top: 32px;
+  border-top: 1px solid #333333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .bottomSection {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.socialSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.socialLabel {
+  font-size: 0.875rem;
+  color: #a3a3a3;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 12px;
+}
+
+.socialIcon {
+  color: #a3a3a3;
+  transition: all 0.2s ease;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialIcon:hover {
+  color: #ffffff;
+  background-color: #333333;
+}
+
+.mobileSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobileLabel {
+  font-size: 0.875rem;
+  color: #a3a3a3;
+}
+
+.mobileIcon {
+  height: 32px;
+  width: auto;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.mobileIcon:hover {
+  opacity: 1;
+}
+
+.copyright {
+  margin-top: 32px;
+  text-align: center;
+  color: #a3a3a3;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 767px) {
+  .footer {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: -32px; /* モバイル用に調整 */
+  }
+
+  .container {
+    width: 100%;
+    padding: 40px 16px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .grid {
+    gap: 32px;
+  }
+
+  .bottomSection {
+    gap: 24px;
+  }
+
+  .socialSection {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mobileSection {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,48 @@
+.container {
+  padding: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.notificationList {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.notificationItem {
+  padding: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.notificationItem:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.unreadNotification {
+  background-color: rgba(25, 118, 210, 0.05);
+}
+
+.notificationContent {
+  display: block;
+  margin-top: 8px;
+  white-space: pre-line;
+}
+
+.notificationMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}

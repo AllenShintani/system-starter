@@ -1,0 +1,144 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 4px;
+  padding-right: 4px;
+  min-height: 64px;
+}
+
+.logoContainer {
+  width: 100%;
+  height: 70%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  object-fit: contain;
+  padding: 0px;
+}
+
+.menuButton {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.menuIconContainer {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.menuIconContainer.visible {
+  opacity: 1;
+}
+
+.content {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.content a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.content :global(.MuiListItemIcon-root) {
+  color: inherit;
+}
+
+.content :global(.MuiListItemText-root) {
+  color: inherit;
+}
+
+.content :global(.MuiListItem-root) {
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.content > * {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.userSection {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  margin-top: auto;
+  padding: 16px;
+  display: block;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.userContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.userTopRow {
+  padding-left: 52px;
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.userBottomRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.userSection:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.userSection:hover .editButton {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.userInfo {
+  margin-left: 16px;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.userInfo :global(.MuiTypography-root) {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.editButton {
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.verificationChip {
+  width: fit-content;
+  height: 24px;
+  font-size: 0.75rem;
+}
+
+.verificationChip :global(.MuiChip-icon) {
+  font-size: 1rem;
+  margin-left: 4px;
+}
