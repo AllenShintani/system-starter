@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(curl:*)",
+      "Bash(rm -rf:*)",
+      "Bash(npm run dev)",
+      "Bash(npx prisma migrate*)
+    ]
+  },
+  "env": {
+    "DEBUG": "true"
+  },
+  "ignorePatterns": [
+    "node_modules",
+    "node_modules/**",
+    "dist",
+    ".git",
+    "mysql_data"
+  ],
+  "preferredNotifChannel": "iterm2",
+  "verbose": true
+}

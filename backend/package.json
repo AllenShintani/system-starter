@@ -39,6 +39,7 @@
     "dotenv": "^16.4.5",
     "prettier": "^2.8.7",
     "prisma": "^5.12.1",
+    "tsc-files": "^1.1.4",
     "typescript": "^5.6.2"
   }
 }
