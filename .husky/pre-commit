@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+echo "🔍 コードチェックを実行中..."
 npx lint-staged
 
-# Run build process
+echo "🔎 ビルドを実行します..."
 npm run build
