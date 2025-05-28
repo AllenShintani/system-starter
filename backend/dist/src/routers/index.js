@@ -8,9 +8,9 @@ const user_1 = require("./user");
 const video_1 = require("./video");
 const t = server_1.initTRPC.create();
 exports.appRouter = t.router({
-    signupRouter: signup_1.signupRouter,
-    loginRouter: login_1.loginRouter,
-    userRouter: user_1.userRouter,
-    videoRouter: video_1.videoRouter,
+  signupRouter: signup_1.signupRouter,
+  loginRouter: login_1.loginRouter,
+  userRouter: user_1.userRouter,
+  videoRouter: video_1.videoRouter,
 });
 //# sourceMappingURL=index.js.map
