@@ -1,8 +1,11 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔍 コードチェックを実行中..."
+echo "🔍 Prettierとlintチェックを実行中..."
 npx lint-staged
 
-echo "🔎 ビルドを実行します..."
-npm run build
+echo "🔎 フロントエンドの型チェックを実行中..."
+cd frontend && npm run typecheck
+
+echo "🔎 バックエンドの型チェックを実行中..."
+cd ../backend && npm run typecheck
