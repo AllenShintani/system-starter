@@ -1,4 +1,4 @@
-'@mui/material/ListItemButton'
+import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import PermMediaOutlinedIcon from '@mui/icons-material/PermMediaOutlined'
@@ -6,8 +6,6 @@ import PeopleIcon from '@mui/icons-material/People'
 import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet'
 import TimerIcon from '@mui/icons-material/Timer'
 import PublicIcon from '@mui/icons-material/Public'
-import type { DrawerProps } from '@mui/material/Drawer'
-import Drawer from '@mui/material/Drawer'
 import DnsRoundedIcon from '@mui/icons-material/DnsOutlined'
 import Box from '@mui/material/Box'
 import ListItem from '@mui/material/ListItem'
@@ -15,7 +13,6 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent'
 import List from '@mui/material/List'
 import Link from 'next/link'
-import { ListItemButton } from '@mui/material'
 import React from 'react'
 
 const perItemStyle = {
@@ -48,7 +45,7 @@ export const ListItems = () => {
   const [selectedSideItem, setSelectedSideItem] = React.useState(1)
 
   const handleListItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number
   ) => {
     setSelectedSideItem(index)

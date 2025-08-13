@@ -3,7 +3,6 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import 'firebase/compat/auth'
 import { userSchema } from '@/schemas'
 import { useRouter } from 'next/navigation'
 import { ZodError } from 'zod'

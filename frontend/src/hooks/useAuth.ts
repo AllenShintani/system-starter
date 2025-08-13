@@ -10,11 +10,7 @@ export function useAuth() {
   const router = useRouter()
   const pathname = usePathname()
   const [isAuthorized, setIsAuthorized] = useState(false)
-  const {
-    data: authData,
-    error,
-    isLoading,
-  } = trpc.loginRouter.checkAuth.useQuery(undefined, {
+  const { data: authData, isLoading } = trpc.loginRouter.checkAuth.useQuery(undefined, {
     retry: false,
     refetchOnWindowFocus: false,
   })

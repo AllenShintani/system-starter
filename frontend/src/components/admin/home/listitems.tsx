@@ -1,4 +1,4 @@
-'@mui/material/ListItemButton'
+import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import PermMediaOutlinedIcon from '@mui/icons-material/PermMediaOutlined'
@@ -15,7 +15,6 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent'
 import List from '@mui/material/List'
 import Link from 'next/link'
-import { ListItemButton } from '@mui/material'
 import React from 'react'
 
 const perItemStyle = {
@@ -49,7 +48,7 @@ export const Navigator = (props: DrawerProps) => {
   const [selectedSideItem, setSelectedSideItem] = React.useState(1)
 
   const handleListItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    _event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number
   ) => {
     setSelectedSideItem(index)
