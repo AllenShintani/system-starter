@@ -1,16 +1,16 @@
 module.exports = {
   root: true,
   extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:react/jsx-runtime',
-    'prettier',
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:react/jsx-runtime",
+    "prettier",
   ],
-  plugins: ['@typescript-eslint', 'react', 'sonarjs'],
-  parser: '@typescript-eslint/parser',
+  plugins: ["@typescript-eslint", "react", "sonarjs", "import", "unused-imports", "prettier"],
+  parser: "@typescript-eslint/parser",
   env: {
     browser: true,
     node: true,
@@ -18,11 +18,11 @@ module.exports = {
   },
   settings: {
     react: {
-      version: 'detect',
+      version: "detect",
     },
   },
   parserOptions: {
-    sourceType: 'module',
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
@@ -31,45 +31,83 @@ module.exports = {
     impliedStrict: true, // 常にStrictMode
   },
   rules: {
-    'react/prop-types': 'off',
-    'react/self-closing-comp': 'error',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error',
-    'prefer-template': 'error',
-    '@typescript-eslint/consistent-type-imports': 'error',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-var-requires': 'off',
-    'no-unreachable': 'error', // 到達できないコードはエラー
-    'no-console': ['error', { allow: ['warn', 'error'] }],
-    'no-dupe-else-if': 'error',
-    'max-lines': ['error', 400],
-    'sonarjs/cognitive-complexity': ['error', 10],
-    'no-restricted-syntax': [
-      'error',
+    // Prettier
+    "prettier/prettier": "error",
+
+    // Unused imports
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      { vars: "all", varsIgnorePattern: "^_", args: "after-used", argsIgnorePattern: "^_" },
+    ],
+
+    // Import order
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling"],
+          "index",
+          "object",
+          "type",
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          order: "asc",
+          caseInsensitive: true,
+        },
+      },
+    ],
+    "import/newline-after-import": "error",
+
+    // React
+    "react/prop-types": "off",
+    "react/self-closing-comp": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+
+    // TypeScript
+    "prefer-template": "error",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-var-requires": "off",
+
+    // General
+    "no-unreachable": "error", // 到達できないコードはエラー
+    "no-console": ["error", { allow: ["warn", "error"] }],
+    "no-dupe-else-if": "error",
+    "max-lines": ["error", 400],
+    "sonarjs/cognitive-complexity": ["error", 10],
+    "no-restricted-syntax": [
+      "error",
       {
         selector: "VariableDeclaration[kind='let']",
-        message: 'Use const instead of let.',
+        message: "Use const instead of let.",
       },
       {
         selector: "VariableDeclaration[kind='var']",
-        message: 'Use const instead of var.',
+        message: "Use const instead of var.",
       },
       {
-        selector: 'WhileStatement',
-        message: 'Use map instead of while.',
+        selector: "WhileStatement",
+        message: "Use map instead of while.",
       },
       {
-        selector: 'ForStatement',
-        message: 'Use map instead of for.',
+        selector: "ForStatement",
+        message: "Use map instead of for.",
       },
       {
-        selector: 'IfStatement > BlockStatement ~ IfStatement',
-        message: 'Avoid using else if.',
+        selector: "IfStatement > BlockStatement ~ IfStatement",
+        message: "Avoid using else if.",
       },
       {
-        selector: 'IfStatement > BlockStatement ~ BlockStatement',
-        message: 'Avoid using else.',
+        selector: "IfStatement > BlockStatement ~ BlockStatement",
+        message: "Avoid using else.",
       },
     ],
   },
-}
+};

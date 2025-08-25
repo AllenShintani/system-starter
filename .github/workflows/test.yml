@@ -30,8 +30,14 @@ jobs:
       - name: Build backend
         run: npm run build -w backend
 
-      - name: Run lint
+      - name: Run backend lint
+        run: npm run lint -w backend
+
+      - name: Run backend typecheck
+        run: npm run typecheck -w backend
+
+      - name: Run frontend lint
         run: npm run lint -w frontend
 
-      - name: Run typecheck
+      - name: Run frontend typecheck
         run: npm run typecheck -w frontend

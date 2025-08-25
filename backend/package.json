@@ -9,9 +9,12 @@
     "dev": "npm run build && npm run start",
     "generate-types": "tsc --emitDeclarationOnly --project tsconfig.json",
     "generate-prisma": "npx prisma generate",
-    "lint": "lint",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write \"./backend/**/*.{ts,tsx}\""
+    "format": "prettier --write \"./src/**/*.{ts,tsx}\"",
+    "format:check": "prettier --check \"./src/**/*.{ts,tsx}\"",
+    "fix": "npm run lint:fix && npm run format"
   },
   "exports": {
     "./routers": "./dist/src/routers/index.js",
@@ -40,7 +43,11 @@
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^18.19.50",
     "dotenv": "^16.4.5",
-    "prettier": "^2.8.7",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-unused-imports": "^4.2.0",
+    "prettier": "^3.6.2",
     "prisma": "^5.12.1",
     "tsc-files": "^1.1.4",
     "typescript": "^5.6.2"

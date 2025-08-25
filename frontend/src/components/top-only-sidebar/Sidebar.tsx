@@ -1,32 +1,35 @@
-import type * as React from 'react'
-import Box from '@mui/material/Box'
-import { DRAWERWIDTH } from '@/constants'
-import Drawer from '@mui/material/Drawer'
-import Typography from '@mui/material/Typography'
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance' // 仮のロゴとして使用
-import { ListItems } from './Listitems'
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance"; // 仮のロゴとして使用
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import Typography from "@mui/material/Typography";
+
+import { ListItems } from "./Listitems";
+
+import type * as React from "react";
+
+import { DRAWERWIDTH } from "@/constants";
 
 export const Sidebar: React.FC = () => {
   return (
     <Drawer
       variant="permanent"
       sx={{
-        'width': DRAWERWIDTH,
-        'flexShrink': 0,
-        '& .MuiDrawer-paper': {
+        "width": DRAWERWIDTH,
+        "flexShrink": 0,
+        "& .MuiDrawer-paper": {
           width: DRAWERWIDTH,
-          boxSizing: 'border-box',
+          boxSizing: "border-box",
         },
       }}
     >
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           padding: 2,
-          borderBottom: '1px solid',
-          borderColor: 'divider',
+          borderBottom: "1px solid",
+          borderColor: "divider",
         }}
       >
         <AccountBalanceIcon sx={{ fontSize: 40, marginRight: 1 }} />
@@ -40,5 +43,5 @@ export const Sidebar: React.FC = () => {
 
       <ListItems />
     </Drawer>
-  )
-}
+  );
+};

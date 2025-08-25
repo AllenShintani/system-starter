@@ -1,27 +1,25 @@
-import { httpBatchLink } from '@trpc/client'
-import { createTRPCNext } from '@trpc/next'
-import type { AppRouter } from '@project_name/backend/routers'
+import { httpBatchLink } from "@trpc/client";
+import { createTRPCNext } from "@trpc/next";
 
-const API_HOST =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:8080'
-    : `${process.env.NEXT_PUBLIC_API_HOST}`
+import type { AppRouter } from "@project_name/backend/routers";
+
+import { config } from "@/config/env.config";
 
 export const trpc = createTRPCNext<AppRouter>({
   config() {
     return {
       links: [
         httpBatchLink({
-          url: `${API_HOST}/trpc`,
+          url: `${config.API_HOST}/trpc`,
           fetch(url, options) {
             return fetch(url, {
               ...options,
-              credentials: 'include',
-            })
+              credentials: "include",
+            });
           },
         }),
       ],
-    }
+    };
   },
   ssr: false,
-})
+});

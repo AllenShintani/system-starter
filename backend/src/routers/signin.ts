@@ -1,19 +1,22 @@
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
-import { loginSchema } from "../schemas/userSchemas";
-import { adminInit, auth } from "../components/lib/firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import * as admin from "firebase-admin";
+import { z } from "zod";
+
 import { prisma } from "../../prisma/client";
-import { JwtPayload } from "../types/jwt";
+import { adminInit, auth } from "../components/lib/firebase/firebase";
+import { config } from "../config/env.config";
+import { signinSchema } from "../schemas/userSchemas";
 import { t } from "../utils/createContext";
 
-export const loginRouter = t.router({
-  login: t.procedure
-    .input(z.object({ loginData: loginSchema }))
+import type { JwtPayload } from "../types/jwt";
+
+export const signinRouter = t.router({
+  signin: t.procedure
+    .input(z.object({ signinData: signinSchema }))
     .mutation(async ({ input, ctx }) => {
-      const { loginData } = input;
-      const { email, password } = loginData;
+      const { signinData } = input;
+      const { email, password } = signinData;
 
       try {
         adminInit();
@@ -23,11 +26,7 @@ export const loginRouter = t.router({
             message: "Email and password are required",
           });
         }
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const firebaseToken = await userCredential.user.getIdToken();
         const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
         const firebaseUid = decodedToken.uid;
@@ -52,7 +51,7 @@ export const loginRouter = t.router({
         });
         ctx.reply.setCookie("token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: config.NODE_ENV === "production",
           sameSite: "strict",
           path: "/",
           maxAge: 60 * 60 * 24 * 7, // 7 days
@@ -80,21 +79,19 @@ export const loginRouter = t.router({
     }),
   logout: t.procedure.mutation(async ({ ctx }) => {
     ctx.reply.clearCookie("token", { path: "/" });
-    return { success: true, redirect: "/login" };
+    return { success: true, redirect: "/signin" };
   }),
 
   checkAuth: t.procedure.query(async ({ ctx }) => {
     try {
       const token = ctx.request.cookies.token;
-      if (!token)
-        return { authenticated: false, redirect: "/login", user: null };
+      if (!token) return { authenticated: false, redirect: "/signin", user: null };
 
       const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
       const user = await prisma.user.findUnique({
         where: { id: decoded.userId },
       });
-      if (!user)
-        return { authenticated: false, redirect: "/login", user: null };
+      if (!user) return { authenticated: false, redirect: "/signin", user: null };
 
       return {
         authenticated: true,
@@ -108,7 +105,7 @@ export const loginRouter = t.router({
       };
     } catch (error) {
       console.error(error);
-      return { authenticated: false, redirect: "/login", user: null };
+      return { authenticated: false, redirect: "/signin", user: null };
     }
   }),
 });

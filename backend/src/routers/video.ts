@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
-import { prisma } from "../../prisma/client";
 import z from "zod";
+
+import { prisma } from "../../prisma/client";
 import { videoSchema } from "../schemas/video";
 import { t } from "../utils/createContext";
 import { generateFileUpload } from "../utils/s3/generateFileUpload";
@@ -21,23 +22,21 @@ export const videoRouter = t.router({
     }
   }),
 
-  getVideo: t.procedure
-    .input(z.string())
-    .query(async ({ input: videoId, ctx }) => {
-      try {
-        verifyAuth(ctx);
-        const video = await prisma.video.findUnique({
-          where: { id: videoId },
-        });
-        return video;
-      } catch (error) {
-        console.error(error);
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "ビデオ情報の取得に失敗しました",
-        });
-      }
-    }),
+  getVideo: t.procedure.input(z.string()).query(async ({ input: videoId, ctx }) => {
+    try {
+      verifyAuth(ctx);
+      const video = await prisma.video.findUnique({
+        where: { id: videoId },
+      });
+      return video;
+    } catch (error) {
+      console.error(error);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "ビデオ情報の取得に失敗しました",
+      });
+    }
+  }),
 
   putVideo: t.procedure
     .input(videoSchema.extend({ id: z.string() }))
@@ -100,11 +99,7 @@ export const videoRouter = t.router({
         : undefined;
 
       const thumbnailUploadData = input.thumbnailFile
-        ? await generateFileUpload(
-            input.thumbnailFile,
-            newVideo.id,
-            "thumbnail"
-          )
+        ? await generateFileUpload(input.thumbnailFile, newVideo.id, "thumbnail")
         : undefined;
 
       if (videoUploadData?.url || thumbnailUploadData?.url) {

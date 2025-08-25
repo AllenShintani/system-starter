@@ -1,24 +1,25 @@
-'use client'
+"use client";
 
-import ImageUpload from '@/components/ImageUpload'
-import ProfileImage from '@/components/ProfileImage'
-import { useS3Image } from '@/hooks/useS3Image'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from "@mui/material";
+
+import ImageUpload from "@/components/ImageUpload";
+import ProfileImage from "@/components/ProfileImage";
+import { useS3Image } from "@/hooks/useS3Image";
 
 function Profile() {
-  const { UserIconUrl, error, isLoading, uploadImage } = useS3Image()
+  const { UserIconUrl, error, isLoading, uploadImage } = useS3Image();
 
   const handleImageUpload = async (file: File) => {
     try {
-      await uploadImage(file)
+      await uploadImage(file);
     } catch (err) {
-      console.error('Failed to upload image:', err)
+      console.error("Failed to upload image:", err);
     }
-  }
+  };
 
   return (
     <div>
-      <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box sx={{ mb: 4, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <ProfileImage
           imageUrl={UserIconUrl}
           size={100}
@@ -50,7 +51,7 @@ function Profile() {
         </Box>
       </Box>
     </div>
-  )
+  );
 }
 
-export default Profile
+export default Profile;

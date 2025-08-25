@@ -1,4 +1,4 @@
-import VideoUploadAndDisplay from '@/components/admin/VideoUploadAndDisplay'
+import VideoUploadAndDisplay from "@/components/admin/VideoUploadAndDisplay";
 
 const LessonPage: React.FC = () => {
   return (
@@ -6,7 +6,7 @@ const LessonPage: React.FC = () => {
       <h1>新しいビデオをアップロード</h1>
       <VideoUploadAndDisplay />
     </div>
-  )
-}
+  );
+};
 
-export default LessonPage
+export default LessonPage;

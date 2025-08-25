@@ -1,12 +1,14 @@
-import { TRPCError } from "@trpc/server";
-import { prisma } from "../../prisma/client";
-import { JwtPayload } from "../types/jwt";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import z from "zod";
-import s3Client from "../utils/s3Client";
+import { TRPCError } from "@trpc/server";
+
+import { prisma } from "../../prisma/client";
 import { userUpdateSchema } from "../schemas/userSchemas";
 import { t } from "../utils/createContext";
+import s3Client from "../utils/s3Client";
+
+import type { JwtPayload } from "../types/jwt";
+import type z from "zod";
 
 const generateProfilePictureData = async (
   input: z.infer<typeof userUpdateSchema>,
@@ -98,10 +100,7 @@ export const userRouter = t.router({
         }
         const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
 
-        const profilePictureData = await generateProfilePictureData(
-          input,
-          decoded.userId
-        );
+        const profilePictureData = await generateProfilePictureData(input, decoded.userId);
 
         const updatedUser = await prisma.user.update({
           where: { id: decoded.userId },

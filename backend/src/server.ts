@@ -7,16 +7,12 @@ import fastifyJwt from "@fastify/jwt";
 import { appRouter } from "./routers";
 import { prisma } from "../prisma/client";
 import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
+import { config } from "./config/env.config";
 
 const server: FastifyInstance = Fastify();
 
-if (!process.env.JWT_SECRET) {
-  console.error("JWT_SECRET is not set in environment variables");
-  process.exit(1);
-}
-
 server.register(fastifyJwt, {
-  secret: process.env.JWT_SECRET,
+  secret: config.JWT_SECRET,
   sign: {
     algorithm: "HS256",
     expiresIn: "7d", // トークンの有効期限を設定
@@ -42,7 +38,7 @@ server.register(fastifyTRPCPlugin, {
 });
 
 server.register(cors, {
-  origin: process.env.FRONTEND_URL,
+  origin: config.CORS_ORIGIN,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
 });
@@ -51,13 +47,13 @@ server.register(cors, {
 const start = async () => {
   try {
     await prisma.$connect();
-    await server.listen({ port: 8080 });
-    console.log(`Server listening on port: http://localhost:8080`);
+    await server.listen({ port: config.PORT });
+    console.log(`Server listening on port: http://localhost:${config.PORT}`);
   } catch (err) {
     if (err instanceof Error) {
       if (err.message.includes("EADDRINUSE")) {
         console.error(
-          "Error: Port 8080 is already in use. Please choose a different port or close the application using this port."
+          `Error: Port ${config.PORT} is already in use. Please choose a different port or close the application using this port.`
         );
       } else {
         console.error("Error starting server:", err.message);

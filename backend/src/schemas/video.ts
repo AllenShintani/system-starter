@@ -19,5 +19,3 @@ export const videoSchema = z.object({
     })
     .optional(),
 });
-
-export type VideoInput = z.infer<typeof videoSchema>;

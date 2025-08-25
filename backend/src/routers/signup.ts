@@ -1,12 +1,15 @@
 import { TRPCError } from "@trpc/server";
-import { userSchema } from "../schemas/userSchemas";
-import { z } from "zod";
-import { adminInit, auth } from "../components/lib/firebase/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { prisma } from "../../prisma/client";
 import * as admin from "firebase-admin";
-import { JwtPayload } from "../types/jwt";
+import { z } from "zod";
+
+import { prisma } from "../../prisma/client";
+import { adminInit, auth } from "../components/lib/firebase/firebase";
+import { config } from "../config/env.config";
+import { userSchema } from "../schemas/userSchemas";
 import { t } from "../utils/createContext";
+
+import type { JwtPayload } from "../types/jwt";
 
 export const signupRouter = t.router({
   signup: t.procedure
@@ -18,8 +21,7 @@ export const signupRouter = t.router({
     .mutation(async ({ input, ctx }) => {
       const { userData } = input;
       const { email, password, firstName, lastName } = userData;
-      const fullName =
-        firstName && lastName ? `${lastName} ${firstName}` : undefined;
+      const fullName = firstName && lastName ? `${lastName} ${firstName}` : undefined;
 
       try {
         adminInit();
@@ -31,14 +33,9 @@ export const signupRouter = t.router({
           });
         }
 
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const firebaseToken = await userCredential.user.getIdToken();
-        const firebaseUid = (await admin.auth().verifyIdToken(firebaseToken))
-          .uid;
+        const firebaseUid = (await admin.auth().verifyIdToken(firebaseToken)).uid;
 
         const createUser = await prisma.user.create({
           data: {
@@ -61,7 +58,7 @@ export const signupRouter = t.router({
         });
         ctx.reply.setCookie("token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: config.NODE_ENV === "production",
           sameSite: "strict",
           path: "/",
           maxAge: 60 * 60 * 24 * 7, // 7 days

@@ -1,2 +1,2 @@
-export const DRAWERWIDTH = 250
-export const APPBARHEIGHT = 80
+export const DRAWERWIDTH = 250;
+export const APPBARHEIGHT = 80;

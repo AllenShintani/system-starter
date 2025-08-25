@@ -1,8 +1,6 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { trpc } from '@/utils/trpc'
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
   Container,
   CssBaseline,
@@ -13,39 +11,47 @@ import {
   Button,
   Grid,
   Link,
-} from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+} from "@mui/material";
+import { TRPCClientError } from "@trpc/client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import { trpc } from "@/utils/trpc";
 
 export default function SignIn() {
-  const [error, setError] = useState('')
-  const router = useRouter()
-  const utils = trpc.useUtils()
-  const loginMutation = trpc.loginRouter.login.useMutation({
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const utils = trpc.useUtils();
+  const signinMutation = trpc.signinRouter.signin.useMutation({
     onSuccess: async (data) => {
       if (data.success) {
-        await utils.loginRouter.checkAuth.invalidate()
-        router.push('/')
+        await utils.signinRouter.checkAuth.invalidate();
+        router.push("/");
       }
     },
-    onError: (error: any) => {
-      if (error.data?.code === 'UNAUTHORIZED') {
-        setError('パスワードが間違っています')
-      } else if (error.data?.code === 'TOO_MANY_REQUESTS') {
-        setError('パスワードを間違えすぎました。しばらくしてから再試行してください。')
+    onError: (error) => {
+      if (error instanceof TRPCClientError) {
+        if (error.data?.code === "UNAUTHORIZED") {
+          setError("パスワードが間違っています");
+        } else if (error.data?.code === "TOO_MANY_REQUESTS") {
+          setError("パスワードを間違えすぎました。しばらくしてから再試行してください。");
+        } else {
+          setError("ログインに失敗しました。もう一度お試しください。");
+        }
       } else {
-        setError('ログインに失敗しました。もう一度お試しください。')
+        setError("ログインに失敗しました。もう一度お試しください。");
       }
     },
-  })
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const email = formData.get('email')?.toString() || ''
-    const password = formData.get('password')?.toString() || ''
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email")?.toString() || "";
+    const password = formData.get("password")?.toString() || "";
 
-    loginMutation.mutate({ loginData: { email, password } })
-  }
+    signinMutation.mutate({ signinData: { email, password } });
+  };
 
   return (
     <Container
@@ -56,12 +62,12 @@ export default function SignIn() {
       <Box
         sx={{
           marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography
@@ -109,9 +115,9 @@ export default function SignIn() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            disabled={loginMutation.isLoading}
+            disabled={signinMutation.isLoading}
           >
-            {loginMutation.isLoading ? 'ログイン中...' : 'ログイン'}
+            {signinMutation.isLoading ? "ログイン中..." : "ログイン"}
           </Button>
           <Grid container>
             <Grid
@@ -130,12 +136,12 @@ export default function SignIn() {
                 href="/signup"
                 variant="body2"
               >
-                {'アカウントをお持ちでない方はこちら'}
+                {"アカウントをお持ちでない方はこちら"}
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
     </Container>
-  )
+  );
 }
