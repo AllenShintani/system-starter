@@ -6,7 +6,9 @@
     "build": "prisma generate && tsc -p tsconfig.json && npm run generate-types",
     "start": "node --trace-warnings dist/src/server.js",
     "seed": "npx vite-node prisma/seed.ts",
-    "dev": "npm run build && npm run start",
+    "dev": "concurrently \"npm run watch:types\" \"npm run watch:server\"",
+    "watch:server": "nodemon",
+    "watch:types": "tsc --emitDeclarationOnly --project tsconfig.json --watch",
     "generate-types": "tsc --emitDeclarationOnly --project tsconfig.json",
     "generate-prisma": "npx prisma generate",
     "lint": "eslint src/**/*.ts",
@@ -42,14 +44,17 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^18.19.50",
+    "concurrently": "^9.2.1",
     "dotenv": "^16.4.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-unused-imports": "^4.2.0",
+    "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "prisma": "^5.12.1",
     "tsc-files": "^1.1.4",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "vite-node": "^3.2.4"
   }
 }
