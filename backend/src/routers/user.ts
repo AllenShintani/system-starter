@@ -42,8 +42,7 @@ type UpdateResponse = {
   success: boolean;
   user: {
     id: string;
-    firstName: string | null;
-    lastName: string | null;
+    userName: string;
     email: string;
     profilePicture: string | null;
   };
@@ -66,8 +65,7 @@ export const userRouter = t.router({
         where: { id: decoded.userId },
         select: {
           id: true,
-          firstName: true,
-          lastName: true,
+          userName: true,
           email: true,
           profilePicture: true,
         },
@@ -105,8 +103,7 @@ export const userRouter = t.router({
         const updatedUser = await prisma.user.update({
           where: { id: decoded.userId },
           data: {
-            firstName: input.firstName,
-            lastName: input.lastName,
+            userName: input.userName,
             profilePicture: profilePictureData?.profilePictureUrl,
           },
         });
@@ -115,8 +112,7 @@ export const userRouter = t.router({
           success: true,
           user: {
             id: updatedUser.id,
-            firstName: updatedUser.firstName,
-            lastName: updatedUser.lastName,
+            userName: updatedUser.userName,
             email: updatedUser.email,
             profilePicture: updatedUser.profilePicture,
           },

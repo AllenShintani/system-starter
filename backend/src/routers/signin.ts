@@ -42,7 +42,7 @@ export const signinRouter = t.router({
         }
         const jwtPayload: JwtPayload = {
           userId: searchedUser.id,
-          fullName: searchedUser.fullName,
+          userName: searchedUser.userName,
           avatarUrl: searchedUser.profilePicture,
         };
         const token = ctx.fastify.jwt.sign(jwtPayload, {
@@ -62,7 +62,7 @@ export const signinRouter = t.router({
           user: {
             id: searchedUser.id,
             email: searchedUser.email,
-            name: searchedUser.fullName,
+            name: searchedUser.userName,
             avatarUrl: searchedUser.profilePicture,
           },
           redirect: "/",
@@ -98,7 +98,7 @@ export const signinRouter = t.router({
         user: {
           id: user.id,
           email: user.email,
-          name: user.fullName,
+          name: user.userName,
           avatarUrl: user.profilePicture,
         },
         redirect: null,
