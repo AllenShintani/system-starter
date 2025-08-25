@@ -9,7 +9,7 @@
     "build:frontend": "cd frontend && next build",
     "build:backend": "cd backend && npm run build",
     "build": "npm run setup && NODE_ENV=production npm run build:frontend && NODE_ENV=production npm run build:backend",
-    "prepare": "node -e \"if(process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') { require('husky').install() }\""
+    "prepare": "node -e \"if(process.env.NODE_ENV !== 'production') { require('husky').install() }\""
   },
   "lint-staged": {
     "frontend/**/*.{js,jsx,ts,tsx}": [
