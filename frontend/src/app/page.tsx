@@ -17,7 +17,7 @@ export default function TopPage() {
         height: "100vh",
       }}
     >
-      <h1 style={{ fontSize: "4rem" }}>Hello, {data?.firstName}!</h1>
+      <h1 style={{ fontSize: "4rem" }}>Hello, {data?.userName}!</h1>
     </div>
   );
 }

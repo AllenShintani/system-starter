@@ -20,8 +20,7 @@ export const signupRouter = t.router({
     )
     .mutation(async ({ input, ctx }) => {
       const { userData } = input;
-      const { email, password, firstName, lastName } = userData;
-      const fullName = firstName && lastName ? `${lastName} ${firstName}` : undefined;
+      const { email, password, userName } = userData;
 
       try {
         adminInit();
@@ -41,15 +40,13 @@ export const signupRouter = t.router({
           data: {
             email,
             firebaseUid: firebaseUid,
-            firstName: firstName,
-            lastName: lastName,
-            fullName: fullName,
+            userName: userName,
           },
         });
 
         const jwtPayload: JwtPayload = {
           userId: createUser.id,
-          fullName: createUser.fullName,
+          userName: createUser.userName,
           avatarUrl: createUser.profilePicture,
         };
         const token = ctx.fastify.jwt.sign(jwtPayload, {
@@ -69,7 +66,7 @@ export const signupRouter = t.router({
           user: {
             id: createUser.id,
             email: createUser.email,
-            name: createUser.fullName,
+            name: createUser.userName,
             avatarUrl: createUser.profilePicture,
           },
           redirect: "/",

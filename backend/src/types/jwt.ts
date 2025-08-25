@@ -1,6 +1,6 @@
 export type JwtPayload = {
   userId: string;
-  fullName: string | null;
+  userName: string;
   avatarUrl: string | null;
   iat?: number;
   exp?: number;

@@ -17,9 +17,7 @@ model User {
   id    String     @id @default(uuid())
   firebaseUid String @unique @db.VarChar(255)
   email String  @unique
-  firstName  String?
-  lastName  String?
-  fullName  String?
+  userName  String
   profilePicture  String?
 }
 

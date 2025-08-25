@@ -73,8 +73,7 @@ export default function SignUp() {
     const userData = {
       email: formData.get("email")?.toString() || "",
       password: formData.get("password")?.toString() || "",
-      firstName: formData.get("firstName")?.toString() || "",
-      lastName: formData.get("lastName")?.toString() || "",
+      userName: formData.get("userName")?.toString() || "",
     };
 
     try {
@@ -135,30 +134,15 @@ export default function SignUp() {
             <Grid
               item
               xs={12}
-              sm={6}
             >
               <TextField
-                autoComplete="given-name"
-                name="lastName"
+                autoComplete="username"
+                name="userName"
                 required
                 fullWidth
-                id="lastName"
-                label="姓"
+                id="userName"
+                label="ユーザー名"
                 autoFocus
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={6}
-            >
-              <TextField
-                required
-                fullWidth
-                id="firstName"
-                label="名"
-                name="firstName"
-                autoComplete="family-name"
               />
             </Grid>
             <Grid
