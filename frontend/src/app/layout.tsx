@@ -1,31 +1,30 @@
-"use client";
-
 import "../styles/globals.css";
-import { trpc } from "../utils/trpc";
 
+import { ClerkProvider } from "@clerk/nextjs";
+
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-import Loading from "@/components/Loading";
-import { useAuth } from "@/hooks/useAuth";
+import { jaJP } from "@/localization/ja";
+import { TRPCProvider } from "@/providers/TRPCProvider";
 
-function RootLayout({ children }: { children: ReactNode }) {
-  const { isLoading, isAuthorized } = useAuth();
+export const metadata: Metadata = {
+  title: "System Starter",
+  description: "A modern web application starter",
+};
 
-  if (isLoading) {
-    return (
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <ClerkProvider
+      localization={jaJP}
+      signInUrl="/signin"
+      signUpUrl="/signup"
+    >
       <html lang="ja">
         <body>
-          <Loading />
+          <TRPCProvider>{children}</TRPCProvider>
         </body>
       </html>
-    );
-  }
-
-  return (
-    <html lang="ja">
-      <body>{isAuthorized ? children : <Loading />}</body>
-    </html>
+    </ClerkProvider>
   );
 }
-
-export default trpc.withTRPC(RootLayout);

@@ -1,42 +1,35 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useAuth as useClerkAuth, useUser } from "@clerk/nextjs";
+import { useEffect } from "react";
 
 import { trpc } from "@/utils/trpc";
 
-const publicRoutes = ["/signin", "/signup"];
+export const useAuth = () => {
+  const { isLoaded, userId, sessionId, signOut } = useClerkAuth();
+  const { user } = useUser();
+  const utils = trpc.useUtils();
 
-export function useAuth() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const { data: authData, isLoading } = trpc.signinRouter.checkAuth.useQuery(undefined, {
-    retry: false,
-    refetchOnWindowFocus: false,
+  // Clerkでサインイン後、バックエンドと同期
+  const signinMutation = trpc.signinRouter.signin.useMutation({
+    onSuccess: () => {
+      utils.signinRouter.checkAuth.invalidate();
+    },
   });
 
-  const isPublicRoute = (path: string | null): boolean => {
-    if (path === null) return false;
-    const trimmedPath = path.endsWith("/") ? path.slice(0, -1) : path;
-    return publicRoutes.some(
-      (route) => trimmedPath === route || trimmedPath.startsWith(`${route}/`)
-    );
-  };
-
   useEffect(() => {
-    if (isLoading || authData === undefined || !pathname) return;
-
-    const currentRouteIsPublic = isPublicRoute(pathname);
-
-    if (authData.authenticated && currentRouteIsPublic) {
-      router.push("/");
-    } else if (!authData.authenticated && !currentRouteIsPublic) {
-      router.push("/signin");
-    } else {
-      setIsAuthorized(true);
+    if (isLoaded && userId && !signinMutation.isLoading) {
+      // Clerkでサインインしたら、バックエンドにも通知
+      signinMutation.mutate({ clerkUserId: userId });
     }
-  }, [isLoading, authData, router, pathname]);
+  }, [isLoaded, userId, signinMutation]);
 
-  return { isLoading, authData, isAuthorized };
-}
+  return {
+    isAuthenticated: !!userId,
+    isLoading: !isLoaded || signinMutation.isLoading,
+    userId,
+    sessionId,
+    user,
+    signOut,
+  };
+};

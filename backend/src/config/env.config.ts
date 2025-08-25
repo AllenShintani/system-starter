@@ -14,15 +14,9 @@ function createConfig(): {
   readonly S3_BUCKET_NAME: string;
   readonly STRIPE_SECRET_KEY: string;
   readonly STRIPE_WEBHOOK_SECRET: string;
-  readonly FIREBASE_API_KEY: string;
-  readonly FIREBASE_AUTH_DOMAIN: string;
-  readonly FIREBASE_PROJECT_ID: string;
-  readonly FIREBASE_STORAGE_BUCKET: string;
-  readonly FIREBASE_MESSAGING_SENDER_ID: string;
-  readonly FIREBASE_APP_ID: string;
+  readonly CLERK_SECRET_KEY: string;
   readonly isAwsEnabled: () => boolean;
   readonly isStripeEnabled: () => boolean;
-  readonly isFirebaseEnabled: () => boolean;
 } {
   const get = (key: string): string => {
     const value = process.env[key];
@@ -51,16 +45,10 @@ function createConfig(): {
     S3_BUCKET_NAME: get("S3_BUCKET_NAME"),
     STRIPE_SECRET_KEY: get("STRIPE_SECRET_KEY"),
     STRIPE_WEBHOOK_SECRET: get("STRIPE_WEBHOOK_SECRET"),
-    FIREBASE_API_KEY: get("FIREBASE_API_KEY"),
-    FIREBASE_AUTH_DOMAIN: get("FIREBASE_AUTH_DOMAIN"),
-    FIREBASE_PROJECT_ID: get("FIREBASE_PROJECT_ID"),
-    FIREBASE_STORAGE_BUCKET: get("FIREBASE_STORAGE_BUCKET"),
-    FIREBASE_MESSAGING_SENDER_ID: get("FIREBASE_MESSAGING_SENDER_ID"),
-    FIREBASE_APP_ID: get("FIREBASE_APP_ID"),
+    CLERK_SECRET_KEY: get("CLERK_SECRET_KEY"),
 
     isAwsEnabled: (): boolean => true,
     isStripeEnabled: (): boolean => true,
-    isFirebaseEnabled: (): boolean => true,
   } as const;
 }
 
