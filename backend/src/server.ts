@@ -1,13 +1,15 @@
-import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
-import type { FastifyInstance } from "fastify";
-import Fastify from "fastify";
-import cors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
+import cors from "@fastify/cors";
 import fastifyJwt from "@fastify/jwt";
+import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
+import Fastify from "fastify";
+
 import { appRouter } from "./routers";
 import { prisma } from "../prisma/client";
-import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 import { config } from "./config/env.config";
+
+import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
+import type { FastifyInstance } from "fastify";
 
 const server: FastifyInstance = Fastify();
 
@@ -44,21 +46,25 @@ server.register(cors, {
 });
 
 // サーバーを起動
-const start = async () => {
+const start = async (): Promise<void> => {
   try {
     await prisma.$connect();
     await server.listen({ port: config.PORT });
-    console.log(`Server listening on port: http://localhost:${config.PORT}`);
+    // eslint-disable-next-line no-console
+    console.log(`🚀 Server listening on port: http://localhost:${config.PORT}`);
   } catch (err) {
     if (err instanceof Error) {
       if (err.message.includes("EADDRINUSE")) {
+        // eslint-disable-next-line no-console
         console.error(
           `Error: Port ${config.PORT} is already in use. Please choose a different port or close the application using this port.`
         );
       } else {
+        // eslint-disable-next-line no-console
         console.error("Error starting server:", err.message);
       }
     } else {
+      // eslint-disable-next-line no-console
       console.error("An unknown error occurred:", err);
     }
     await prisma.$disconnect();
@@ -67,6 +73,7 @@ const start = async () => {
 };
 
 start().catch(async (err) => {
+  // eslint-disable-next-line no-console
   console.error("Error starting server:", err);
   await prisma.$disconnect();
   process.exit(1);
