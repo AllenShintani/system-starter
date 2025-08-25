@@ -1,5 +1,6 @@
 import { initTRPC } from "@trpc/server";
-import { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
+
+import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 
 const createContext = ({
   req,

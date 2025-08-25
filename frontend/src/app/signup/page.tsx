@@ -1,13 +1,6 @@
-'use client'
+"use client";
 
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { userSchema } from '@/schemas'
-import { useRouter } from 'next/navigation'
-import { ZodError } from 'zod'
-import type { ZodIssue } from 'zod'
-import { TRPCClientError } from '@trpc/client'
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
   Container,
   CssBaseline,
@@ -20,74 +13,83 @@ import {
   Checkbox,
   Button,
   Link,
-} from '@mui/material'
-import { trpc } from '@/utils/trpc'
+} from "@mui/material";
+import { TRPCClientError } from "@trpc/client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ZodError } from "zod";
+
+import type { FormEvent } from "react";
+import type { ZodIssue } from "zod";
+
+import { userSchema } from "@/schemas";
+import { trpc } from "@/utils/trpc";
 
 const translateZodError = (error: ZodIssue) => {
   switch (error.code) {
-    case 'too_small':
-      if (error.path.includes('password')) {
-        return 'パスワードは8文字以上でなければなりません。'
+    case "too_small":
+      if (error.path.includes("password")) {
+        return "パスワードは8文字以上でなければなりません。";
       }
-      return '入力値が短すぎます。'
-    case 'invalid_type':
-      return '値が不正です'
+      return "入力値が短すぎます。";
+    case "invalid_type":
+      return "値が不正です";
     default:
-      return '無効な入力が含まれています。'
+      return "無効な入力が含まれています。";
   }
-}
+};
 
 export default function SignUp() {
-  const [error, setError] = useState('')
-  const router = useRouter()
-  const utils = trpc.useUtils()
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const utils = trpc.useUtils();
   const signupMutation = trpc.signupRouter.signup.useMutation({
     onSuccess: async (data) => {
       if (data.redirect) {
-        await utils.loginRouter.checkAuth.invalidate()
-        router.push(data.redirect)
+        await utils.loginRouter.checkAuth.invalidate();
+        router.push(data.redirect);
       }
     },
     onError: (error) => {
       if (error instanceof TRPCClientError) {
-        if (error.data?.code === 'CONFLICT') {
-          setError('このメールアドレスは既に使用されています')
-        } else if (error.data?.code === 'BAD_REQUEST') {
-          setError('入力情報が不正です。すべての必須項目を入力してください。')
+        if (error.data?.code === "CONFLICT") {
+          setError("このメールアドレスは既に使用されています");
+        } else if (error.data?.code === "BAD_REQUEST") {
+          setError("入力情報が不正です。すべての必須項目を入力してください。");
         } else {
-          setError('登録に失敗しました。もう一度お試しください。')
+          setError("登録に失敗しました。もう一度お試しください。");
         }
       } else {
-        console.error(error)
-        setError('登録に失敗しました。もう一度お試しください。')
+        console.error(error);
+        setError("登録に失敗しました。もう一度お試しください。");
       }
     },
-  })
+  });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
 
     const userData = {
-      email: formData.get('email')?.toString() || '',
-      password: formData.get('password')?.toString() || '',
-      firstName: formData.get('firstName')?.toString() || '',
-      lastName: formData.get('lastName')?.toString() || '',
-    }
+      email: formData.get("email")?.toString() || "",
+      password: formData.get("password")?.toString() || "",
+      firstName: formData.get("firstName")?.toString() || "",
+      lastName: formData.get("lastName")?.toString() || "",
+    };
 
     try {
-      userSchema.parse(userData)
-      signupMutation.mutate({ userData })
+      userSchema.parse(userData);
+      signupMutation.mutate({ userData });
     } catch (error) {
       if (error instanceof ZodError) {
-        const translatedError = translateZodError(error.errors[0])
-        setError(translatedError)
+        const translatedError = translateZodError(error.errors[0]);
+        setError(translatedError);
       } else {
-        console.error(error)
-        setError('登録に失敗しました。もう一度お試しください。')
+        console.error(error);
+        setError("登録に失敗しました。もう一度お試しください。");
       }
     }
-  }
+  };
 
   return (
     <Container
@@ -98,12 +100,12 @@ export default function SignUp() {
       <Box
         sx={{
           marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography
@@ -208,7 +210,7 @@ export default function SignUp() {
             sx={{ mt: 3, mb: 2 }}
             disabled={signupMutation.isLoading}
           >
-            {signupMutation.isLoading ? '登録中...' : '登録'}
+            {signupMutation.isLoading ? "登録中..." : "登録"}
           </Button>
           <Grid
             container
@@ -226,5 +228,5 @@ export default function SignUp() {
         </Box>
       </Box>
     </Container>
-  )
+  );
 }

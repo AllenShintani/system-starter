@@ -1,14 +1,15 @@
-'use client'
+"use client";
 
-import '../styles/globals.css'
-import type { ReactNode } from 'react'
-import { useAuth } from '@/hooks/useAuth'
-import { trpc } from '../utils/trpc'
-import Loading from '@/components/Loading'
-import React from 'react'
+import "../styles/globals.css";
+import { trpc } from "../utils/trpc";
+
+import type { ReactNode } from "react";
+
+import Loading from "@/components/Loading";
+import { useAuth } from "@/hooks/useAuth";
 
 function RootLayout({ children }: { children: ReactNode }) {
-  const { isLoading, isAuthorized } = useAuth()
+  const { isLoading, isAuthorized } = useAuth();
 
   if (isLoading) {
     return (
@@ -17,14 +18,14 @@ function RootLayout({ children }: { children: ReactNode }) {
           <Loading />
         </body>
       </html>
-    )
+    );
   }
 
   return (
     <html lang="ja">
       <body>{isAuthorized ? children : <Loading />}</body>
     </html>
-  )
+  );
 }
 
-export default trpc.withTRPC(RootLayout)
+export default trpc.withTRPC(RootLayout);

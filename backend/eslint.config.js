@@ -1,5 +1,8 @@
 const typescriptEslint = require("@typescript-eslint/eslint-plugin");
 const typescriptParser = require("@typescript-eslint/parser");
+const importPlugin = require("eslint-plugin-import");
+const unusedImports = require("eslint-plugin-unused-imports");
+const prettierPlugin = require("eslint-plugin-prettier");
 
 module.exports = [
   {
@@ -16,13 +19,46 @@ module.exports = [
     },
     plugins: {
       "@typescript-eslint": typescriptEslint,
+      "import": importPlugin,
+      "unused-imports": unusedImports,
+      "prettier": prettierPlugin,
     },
     rules: {
-      // TypeScriptルール
-      "@typescript-eslint/no-unused-vars": [
+      // Prettier
+      "prettier/prettier": "error",
+
+      // Unused imports
+      "@typescript-eslint/no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
         "warn",
-        { argsIgnorePattern: "^_" },
+        { vars: "all", varsIgnorePattern: "^_", args: "after-used", argsIgnorePattern: "^_" },
       ],
+
+      // Import order
+      "import/order": [
+        "error",
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            ["parent", "sibling"],
+            "index",
+            "object",
+            "type",
+          ],
+          "newlines-between": "always",
+          "alphabetize": {
+            order: "asc",
+            caseInsensitive: true,
+          },
+        },
+      ],
+      "import/newline-after-import": "error",
+
+      // TypeScript rules
+      "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/explicit-function-return-type": "error",
 
@@ -46,6 +82,6 @@ module.exports = [
     },
   },
   {
-    ignores: ["dist/", "node_modules/", "**/*.js", "mysql_data/"],
+    ignores: ["dist/", "node_modules/", "**/*.js", "mysql_data/", "eslint.config.js"],
   },
 ];

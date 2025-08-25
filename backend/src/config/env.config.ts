@@ -35,9 +35,7 @@ function createConfig(): {
 
   const PORT = Number(get("PORT"));
   if (isNaN(PORT)) {
-    console.error(
-      `❌ Environment variable 'PORT' must be a number, got: ${process.env.PORT}`
-    );
+    console.error(`❌ Environment variable 'PORT' must be a number, got: ${process.env.PORT}`);
     process.exit(1);
   }
 

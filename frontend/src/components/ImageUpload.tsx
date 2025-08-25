@@ -1,50 +1,52 @@
-import type React from 'react'
-import { useState } from 'react'
-import { Button, CircularProgress, Box, Typography } from '@mui/material'
-import ProfileImage from './ProfileImage'
+import { Button, CircularProgress, Box, Typography } from "@mui/material";
+import { useState } from "react";
+
+import ProfileImage from "./ProfileImage";
+
+import type React from "react";
 
 interface ImageUploadProps {
-  initialImageUrl?: string | null
-  onUpload: (file: File) => Promise<void>
+  initialImageUrl?: string | null;
+  onUpload: (file: File) => Promise<void>;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ initialImageUrl, onUpload }) => {
-  const [file, setFile] = useState<File | null>(null)
-  const [uploading, setUploading] = useState(false)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl || null)
-  const [error, setError] = useState<string | null>(null)
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl || null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      const selectedFile = event.target.files[0]
-      setFile(selectedFile)
-      setPreviewUrl(URL.createObjectURL(selectedFile))
-      setError(null)
+      const selectedFile = event.target.files[0];
+      setFile(selectedFile);
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+      setError(null);
     }
-  }
+  };
 
   const handleUpload = async () => {
-    if (!file) return
+    if (!file) return;
 
-    setUploading(true)
-    setError(null)
+    setUploading(true);
+    setError(null);
     try {
-      await onUpload(file)
+      await onUpload(file);
       // Note: The actual update of the image URL will be handled by the parent component
     } catch (error) {
-      console.error('Error uploading image:', error)
+      console.error("Error uploading image:", error);
       setError(
         `画像のアップロードに失敗しました: ${
-          error instanceof Error ? error.message : '不明なエラー'
+          error instanceof Error ? error.message : "不明なエラー"
         }`
-      )
+      );
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
-  }
+  };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
       <ProfileImage
         imageUrl={previewUrl}
         size={150}
@@ -52,7 +54,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ initialImageUrl, onUpload }) 
       />
       <input
         accept="image/*"
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         id="raised-button-file"
         type="file"
         onChange={handleFileChange}
@@ -72,7 +74,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ initialImageUrl, onUpload }) 
           variant="contained"
           color="primary"
         >
-          {uploading ? <CircularProgress size={24} /> : 'アップロード'}
+          {uploading ? <CircularProgress size={24} /> : "アップロード"}
         </Button>
       )}
       {error && (
@@ -84,7 +86,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ initialImageUrl, onUpload }) 
         </Typography>
       )}
     </Box>
-  )
-}
+  );
+};
 
-export default ImageUpload
+export default ImageUpload;

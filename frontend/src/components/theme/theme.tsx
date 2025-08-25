@@ -1,15 +1,15 @@
-import { createTheme } from '@mui/material'
+import { createTheme } from "@mui/material";
 
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#ffffff',
+      main: "#ffffff",
     },
     secondary: {
-      main: '#db0c55',
+      main: "#db0c55",
     },
   },
-})
+});
 
 const theme = {
   ...defaultTheme,
@@ -17,7 +17,7 @@ const theme = {
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#ffffff',
+          backgroundColor: "#ffffff",
         },
       },
     },
@@ -26,12 +26,12 @@ const theme = {
     MuiIconButton: {
       styleOverrides: {
         root: {
-          '&:hover': {
-            backgroundColor: '#cfcfcf',
-            borderRadius: '50%',
+          "&:hover": {
+            backgroundColor: "#cfcfcf",
+            borderRadius: "50%",
           },
-          '&:active': {
-            background: '',
+          "&:active": {
+            background: "",
           },
         },
       },
@@ -41,9 +41,9 @@ const theme = {
     MuiListItemButton: {
       styleOverrides: {
         root: {
-          '&.Mui-selected': {
-            color: '#12AFF0',
-            backgroundColor: '#cfcfcf',
+          "&.Mui-selected": {
+            color: "#12AFF0",
+            backgroundColor: "#cfcfcf",
           },
         },
       },
@@ -63,16 +63,16 @@ const theme = {
     MuiListItemIcon: {
       styleOverrides: {
         root: {
-          'color': 'inherit',
-          'minWidth': 'auto',
-          'marginRight': defaultTheme.spacing(2),
-          '& svg': {
+          "color": "inherit",
+          "minWidth": "auto",
+          "marginRight": defaultTheme.spacing(2),
+          "& svg": {
             fontSize: 25,
           },
         },
       },
     },
   },
-}
+};
 
-export default theme
+export default theme;

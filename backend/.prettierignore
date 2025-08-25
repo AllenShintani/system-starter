@@ -1,0 +1,21 @@
+# dependencies
+node_modules
+
+# build output
+dist/
+build/
+
+# database
+prisma/migrations/
+mysql_data/
+
+# config files
+eslint.config.js
+
+# misc
+.DS_Store
+*.pem
+coverage/
+
+# generated files
+*.generated.ts

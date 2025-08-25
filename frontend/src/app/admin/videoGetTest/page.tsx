@@ -1,5 +1,5 @@
-'use client'
-import LessonList from '@/components/VideoList'
+"use client";
+import LessonList from "@/components/VideoList";
 
 const LessonPage: React.FC = () => {
   return (
@@ -7,7 +7,7 @@ const LessonPage: React.FC = () => {
       <h1>新しいレッスンをアップロード</h1>
       <LessonList />
     </div>
-  )
-}
+  );
+};
 
-export default LessonPage
+export default LessonPage;

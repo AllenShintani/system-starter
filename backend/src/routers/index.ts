@@ -1,6 +1,7 @@
 import { initTRPC } from "@trpc/server";
-import { signupRouter } from "./signup";
+
 import { loginRouter } from "./login";
+import { signupRouter } from "./signup";
 import { userRouter } from "./user";
 import { videoRouter } from "./video";
 

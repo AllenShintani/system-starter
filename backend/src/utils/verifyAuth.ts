@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
-import { JwtPayload } from "../types/jwt";
-import { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
+
+import type { JwtPayload } from "../types/jwt";
+import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 
 type Context = {
   fastify: CreateFastifyContextOptions["req"]["server"];

@@ -1,13 +1,15 @@
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
-import { loginSchema } from "../schemas/userSchemas";
-import { adminInit, auth } from "../components/lib/firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import * as admin from "firebase-admin";
+import { z } from "zod";
+
 import { prisma } from "../../prisma/client";
-import { JwtPayload } from "../types/jwt";
-import { t } from "../utils/createContext";
+import { adminInit, auth } from "../components/lib/firebase/firebase";
 import { config } from "../config/env.config";
+import { loginSchema } from "../schemas/userSchemas";
+import { t } from "../utils/createContext";
+
+import type { JwtPayload } from "../types/jwt";
 
 export const loginRouter = t.router({
   login: t.procedure
@@ -24,11 +26,7 @@ export const loginRouter = t.router({
             message: "Email and password are required",
           });
         }
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const firebaseToken = await userCredential.user.getIdToken();
         const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
         const firebaseUid = decodedToken.uid;
@@ -87,15 +85,13 @@ export const loginRouter = t.router({
   checkAuth: t.procedure.query(async ({ ctx }) => {
     try {
       const token = ctx.request.cookies.token;
-      if (!token)
-        return { authenticated: false, redirect: "/login", user: null };
+      if (!token) return { authenticated: false, redirect: "/login", user: null };
 
       const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
       const user = await prisma.user.findUnique({
         where: { id: decoded.userId },
       });
-      if (!user)
-        return { authenticated: false, redirect: "/login", user: null };
+      if (!user) return { authenticated: false, redirect: "/login", user: null };
 
       return {
         authenticated: true,
