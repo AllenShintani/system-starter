@@ -4,6 +4,4 @@ node_modules
 .env.production
 mysql_data
 sql
-*firebaseadminsdk.json
-!hoge-firebaseadminsdk.json
 dist
