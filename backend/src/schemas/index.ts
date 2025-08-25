@@ -1,3 +1,3 @@
-import type { LoginInput } from "./userSchemas";
+import type { SigninInput } from "./userSchemas";
 
-export type { LoginInput };
+export type { SigninInput };
