@@ -46,7 +46,7 @@ export default function SignUp() {
   const signupMutation = trpc.signupRouter.signup.useMutation({
     onSuccess: async (data) => {
       if (data.redirect) {
-        await utils.loginRouter.checkAuth.invalidate();
+        await utils.signinRouter.checkAuth.invalidate();
         router.push(data.redirect);
       }
     },
@@ -218,7 +218,7 @@ export default function SignUp() {
           >
             <Grid item>
               <Link
-                href="/login"
+                href="/signin"
                 variant="body2"
               >
                 既にアカウントをお持ちの方

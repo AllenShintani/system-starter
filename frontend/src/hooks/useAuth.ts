@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 
 import { trpc } from "@/utils/trpc";
 
-const publicRoutes = ["/login", "/signup"];
+const publicRoutes = ["/signin", "/signup"];
 
 export function useAuth() {
   const router = useRouter();
   const pathname = usePathname();
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const { data: authData, isLoading } = trpc.loginRouter.checkAuth.useQuery(undefined, {
+  const { data: authData, isLoading } = trpc.signinRouter.checkAuth.useQuery(undefined, {
     retry: false,
     refetchOnWindowFocus: false,
   });
@@ -32,7 +32,7 @@ export function useAuth() {
     if (authData.authenticated && currentRouteIsPublic) {
       router.push("/");
     } else if (!authData.authenticated && !currentRouteIsPublic) {
-      router.push("/login");
+      router.push("/signin");
     } else {
       setIsAuthorized(true);
     }

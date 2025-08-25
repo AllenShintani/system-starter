@@ -8,7 +8,7 @@ export const userSchema = z.object({
   fullName: z.string().optional(),
 });
 
-export const loginSchema = z.object({
+export const signinSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
@@ -24,4 +24,4 @@ export const userUpdateSchema = z.object({
     .optional(),
 });
 
-export type LoginInput = z.infer<typeof loginSchema>;
+export type SigninInput = z.infer<typeof signinSchema>;

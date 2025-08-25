@@ -6,17 +6,17 @@ import { z } from "zod";
 import { prisma } from "../../prisma/client";
 import { adminInit, auth } from "../components/lib/firebase/firebase";
 import { config } from "../config/env.config";
-import { loginSchema } from "../schemas/userSchemas";
+import { signinSchema } from "../schemas/userSchemas";
 import { t } from "../utils/createContext";
 
 import type { JwtPayload } from "../types/jwt";
 
-export const loginRouter = t.router({
-  login: t.procedure
-    .input(z.object({ loginData: loginSchema }))
+export const signinRouter = t.router({
+  signin: t.procedure
+    .input(z.object({ signinData: signinSchema }))
     .mutation(async ({ input, ctx }) => {
-      const { loginData } = input;
-      const { email, password } = loginData;
+      const { signinData } = input;
+      const { email, password } = signinData;
 
       try {
         adminInit();
@@ -79,19 +79,19 @@ export const loginRouter = t.router({
     }),
   logout: t.procedure.mutation(async ({ ctx }) => {
     ctx.reply.clearCookie("token", { path: "/" });
-    return { success: true, redirect: "/login" };
+    return { success: true, redirect: "/signin" };
   }),
 
   checkAuth: t.procedure.query(async ({ ctx }) => {
     try {
       const token = ctx.request.cookies.token;
-      if (!token) return { authenticated: false, redirect: "/login", user: null };
+      if (!token) return { authenticated: false, redirect: "/signin", user: null };
 
       const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
       const user = await prisma.user.findUnique({
         where: { id: decoded.userId },
       });
-      if (!user) return { authenticated: false, redirect: "/login", user: null };
+      if (!user) return { authenticated: false, redirect: "/signin", user: null };
 
       return {
         authenticated: true,
@@ -105,7 +105,7 @@ export const loginRouter = t.router({
       };
     } catch (error) {
       console.error(error);
-      return { authenticated: false, redirect: "/login", user: null };
+      return { authenticated: false, redirect: "/signin", user: null };
     }
   }),
 });

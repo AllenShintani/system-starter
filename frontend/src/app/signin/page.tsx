@@ -12,6 +12,7 @@ import {
   Grid,
   Link,
 } from "@mui/material";
+import { TRPCClientError } from "@trpc/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -21,18 +22,22 @@ export default function SignIn() {
   const [error, setError] = useState("");
   const router = useRouter();
   const utils = trpc.useUtils();
-  const loginMutation = trpc.loginRouter.login.useMutation({
+  const signinMutation = trpc.signinRouter.signin.useMutation({
     onSuccess: async (data) => {
       if (data.success) {
-        await utils.loginRouter.checkAuth.invalidate();
+        await utils.signinRouter.checkAuth.invalidate();
         router.push("/");
       }
     },
-    onError: (error: any) => {
-      if (error.data?.code === "UNAUTHORIZED") {
-        setError("パスワードが間違っています");
-      } else if (error.data?.code === "TOO_MANY_REQUESTS") {
-        setError("パスワードを間違えすぎました。しばらくしてから再試行してください。");
+    onError: (error) => {
+      if (error instanceof TRPCClientError) {
+        if (error.data?.code === "UNAUTHORIZED") {
+          setError("パスワードが間違っています");
+        } else if (error.data?.code === "TOO_MANY_REQUESTS") {
+          setError("パスワードを間違えすぎました。しばらくしてから再試行してください。");
+        } else {
+          setError("ログインに失敗しました。もう一度お試しください。");
+        }
       } else {
         setError("ログインに失敗しました。もう一度お試しください。");
       }
@@ -45,7 +50,7 @@ export default function SignIn() {
     const email = formData.get("email")?.toString() || "";
     const password = formData.get("password")?.toString() || "";
 
-    loginMutation.mutate({ loginData: { email, password } });
+    signinMutation.mutate({ signinData: { email, password } });
   };
 
   return (
@@ -110,9 +115,9 @@ export default function SignIn() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            disabled={loginMutation.isLoading}
+            disabled={signinMutation.isLoading}
           >
-            {loginMutation.isLoading ? "ログイン中..." : "ログイン"}
+            {signinMutation.isLoading ? "ログイン中..." : "ログイン"}
           </Button>
           <Grid container>
             <Grid
