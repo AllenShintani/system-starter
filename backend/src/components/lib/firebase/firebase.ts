@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import * as admin from "firebase-admin";
+
 import { config } from "../../../config/env.config";
 
 const firebaseConfig = {
@@ -15,15 +16,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-let adminApp: admin.app.App | null = null;
+const adminAppInstance = {
+  app: null as admin.app.App | null,
+};
 
-const adminInit = () => {
-  if (adminApp) {
-    return;
+const adminInit = (): admin.app.App => {
+  if (adminAppInstance.app) {
+    return adminAppInstance.app;
   }
-  adminApp = admin.initializeApp({
+  adminAppInstance.app = admin.initializeApp({
     credential: admin.credential.applicationDefault(),
   });
-  return adminApp;
+  return adminAppInstance.app;
 };
 export { auth, adminInit };

@@ -50,21 +50,17 @@ const start = async (): Promise<void> => {
   try {
     await prisma.$connect();
     await server.listen({ port: config.PORT });
-    // eslint-disable-next-line no-console
-    console.log(`🚀 Server listening on port: http://localhost:${config.PORT}`);
+    console.info(`🚀 Server listening on port: http://localhost:${config.PORT}`);
   } catch (err) {
     if (err instanceof Error) {
       if (err.message.includes("EADDRINUSE")) {
-        // eslint-disable-next-line no-console
         console.error(
           `Error: Port ${config.PORT} is already in use. Please choose a different port or close the application using this port.`
         );
       } else {
-        // eslint-disable-next-line no-console
         console.error("Error starting server:", err.message);
       }
     } else {
-      // eslint-disable-next-line no-console
       console.error("An unknown error occurred:", err);
     }
     await prisma.$disconnect();
@@ -73,7 +69,6 @@ const start = async (): Promise<void> => {
 };
 
 start().catch(async (err) => {
-  // eslint-disable-next-line no-console
   console.error("Error starting server:", err);
   await prisma.$disconnect();
   process.exit(1);
