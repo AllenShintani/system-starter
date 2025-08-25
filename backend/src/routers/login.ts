@@ -7,6 +7,7 @@ import * as admin from "firebase-admin";
 import { prisma } from "../../prisma/client";
 import { JwtPayload } from "../types/jwt";
 import { t } from "../utils/createContext";
+import { config } from "../config/env.config";
 
 export const loginRouter = t.router({
   login: t.procedure
@@ -52,7 +53,7 @@ export const loginRouter = t.router({
         });
         ctx.reply.setCookie("token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: config.NODE_ENV === "production",
           sameSite: "strict",
           path: "/",
           maxAge: 60 * 60 * 24 * 7, // 7 days

@@ -9,7 +9,7 @@
     "dev": "npm run build && npm run start",
     "generate-types": "tsc --emitDeclarationOnly --project tsconfig.json",
     "generate-prisma": "npx prisma generate",
-    "lint": "lint",
+    "lint": "eslint src/**/*.ts",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"./backend/**/*.{ts,tsx}\""
   },
