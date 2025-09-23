@@ -3,12 +3,14 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import s3Client from "../s3Client";
 
+import type { FileUploadRequest, SignedUpload } from "../../schemas/infrastructure/s3.schemas";
+
 export const generateFileUpload = async (
-  file: { fileName: string; fileType: string },
-  lessonId: string,
+  file: FileUploadRequest,
+  videoId: string,
   fileType: "video" | "thumbnail"
-): Promise<{ url: string; signedUrl: string }> => {
-  const key = `lessons/${lessonId}/${fileType}/${file.fileName}`;
+): Promise<SignedUpload> => {
+  const key = `lessons/${videoId}/${fileType}/${file.fileName}`;
 
   const command = new PutObjectCommand({
     Bucket: "hackers-guild-bucket",

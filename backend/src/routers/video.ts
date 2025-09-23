@@ -1,18 +1,51 @@
 import { TRPCError } from "@trpc/server";
-import z from "zod";
 
 import { prisma } from "../../prisma/client";
-import { videoSchema } from "../schemas/video";
+import {
+  videoCreateInputSchema,
+  videoIdSchema,
+  videoListResponseSchema,
+  videoMutationResponseSchema,
+  videoUpdateInputSchema,
+} from "../schemas";
 import { t } from "../utils/createContext";
 import { generateFileUpload } from "../utils/s3/generateFileUpload";
 import { verifyAuth } from "../utils/verifyAuth";
+import {
+  createVideo as createVideoUsecase,
+  getVideoById as getVideoByIdUsecase,
+  listVideos as listVideosUsecase,
+  updateVideo as updateVideoUsecase,
+} from "../features/video/domain/usecases/video";
+import type { VideoPorts, VideoStoragePorts } from "../features/video/domain/ports/video";
+
+const videoPorts: VideoPorts = {
+  list: () => prisma.video.findMany(),
+  findById: (id) =>
+    prisma.video.findUnique({
+      where: { id },
+    }),
+  create: (data) =>
+    prisma.video.create({
+      data,
+    }),
+  update: (id, data) =>
+    prisma.video.update({
+      where: { id },
+      data,
+    }),
+};
+
+const videoStoragePorts: VideoStoragePorts = {
+  createUpload: (file, videoId, target) => generateFileUpload(file, videoId, target),
+};
 
 export const videoRouter = t.router({
   getAllVideoes: t.procedure.query(async ({ ctx }) => {
     try {
       verifyAuth(ctx);
-      const videoes = await prisma.video.findMany();
-      return videoes;
+      const videos = await listVideosUsecase(videoPorts);
+      return videoListResponseSchema.parse(videos);
     } catch (error) {
       console.error(error);
       throw new TRPCError({
@@ -22,13 +55,12 @@ export const videoRouter = t.router({
     }
   }),
 
-  getVideo: t.procedure.input(z.string()).query(async ({ input: videoId, ctx }) => {
+  getVideo: t.procedure.input(videoIdSchema).query(async ({ input: videoId, ctx }) => {
     try {
       verifyAuth(ctx);
-      const video = await prisma.video.findUnique({
-        where: { id: videoId },
-      });
-      return video;
+      const video = await getVideoByIdUsecase(videoPorts, videoId);
+      if (!video) return null;
+      return videoMutationResponseSchema.shape.video.parse(video);
     } catch (error) {
       console.error(error);
       throw new TRPCError({
@@ -38,86 +70,35 @@ export const videoRouter = t.router({
     }
   }),
 
-  putVideo: t.procedure
-    .input(videoSchema.extend({ id: z.string() }))
-    .mutation(async ({ input, ctx }) => {
-      try {
-        const decoded = verifyAuth(ctx);
-
-        const videoUploadData = input.videoFile
-          ? await generateFileUpload(input.videoFile, input.id, "video")
-          : undefined;
-
-        const thumbnailUploadData = input.thumbnailFile
-          ? await generateFileUpload(input.thumbnailFile, input.id, "thumbnail")
-          : undefined;
-
-        const updatedVideo = await prisma.video.update({
-          where: { id: input.id },
-          data: {
-            title: input.title,
-            description: input.description,
-            duration: input.duration,
-            videoUrl: videoUploadData?.url,
-            thumbnailUrl: thumbnailUploadData?.url,
-            authorId: decoded.userId,
-          },
-        });
-
-        return {
-          success: true,
-          video: updatedVideo,
-          videoSignedUrl: videoUploadData?.signedUrl,
-          thumbnailSignedUrl: thumbnailUploadData?.signedUrl,
-        };
-      } catch (error) {
-        console.error(error);
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "ビデオ情報の更新に失敗しました",
-        });
-      }
-    }),
-
-  postVideo: t.procedure.input(videoSchema).mutation(async ({ input, ctx }) => {
+  putVideo: t.procedure.input(videoUpdateInputSchema).mutation(async ({ input, ctx }) => {
     try {
-      const decoded = verifyAuth(ctx);
-
-      const newVideo = await prisma.video.create({
-        data: {
-          title: input.title,
-          description: input.description,
-          duration: input.duration,
-          authorId: decoded.userId,
-          videoUrl: "",
-          thumbnailUrl: "",
-        },
-      });
-
-      const videoUploadData = input.videoFile
-        ? await generateFileUpload(input.videoFile, newVideo.id, "video")
-        : undefined;
-
-      const thumbnailUploadData = input.thumbnailFile
-        ? await generateFileUpload(input.thumbnailFile, newVideo.id, "thumbnail")
-        : undefined;
-
-      if (videoUploadData?.url || thumbnailUploadData?.url) {
-        await prisma.video.update({
-          where: { id: newVideo.id },
-          data: {
-            videoUrl: videoUploadData?.url ?? newVideo.videoUrl,
-            thumbnailUrl: thumbnailUploadData?.url ?? newVideo.thumbnailUrl,
-          },
-        });
-      }
-
-      return {
+      const { userId } = verifyAuth(ctx);
+      const result = await updateVideoUsecase(videoPorts, videoStoragePorts, userId, input);
+      return videoMutationResponseSchema.parse({
         success: true,
-        video: newVideo,
-        videoSignedUrl: videoUploadData?.signedUrl,
-        thumbnailSignedUrl: thumbnailUploadData?.signedUrl,
-      };
+        video: result.video,
+        videoSignedUrl: result.videoUpload?.signedUrl,
+        thumbnailSignedUrl: result.thumbnailUpload?.signedUrl,
+      });
+    } catch (error) {
+      console.error(error);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "ビデオ情報の更新に失敗しました",
+      });
+    }
+  }),
+
+  postVideo: t.procedure.input(videoCreateInputSchema).mutation(async ({ input, ctx }) => {
+    try {
+      const { userId } = verifyAuth(ctx);
+      const result = await createVideoUsecase(videoPorts, videoStoragePorts, userId, input);
+      return videoMutationResponseSchema.parse({
+        success: true,
+        video: result.video,
+        videoSignedUrl: result.videoUpload?.signedUrl,
+        thumbnailSignedUrl: result.thumbnailUpload?.signedUrl,
+      });
     } catch (error) {
       console.error(error);
       throw new TRPCError({

@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 
+import { jwtPayloadSchema } from "../schemas";
 import type { JwtPayload } from "../types/jwt";
 import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 
@@ -19,7 +20,7 @@ export function verifyAuth(ctx: Context): JwtPayload {
   }
   try {
     const decoded = ctx.fastify.jwt.verify(token);
-    return decoded as JwtPayload;
+    return jwtPayloadSchema.parse(decoded);
   } catch (error) {
     throw new TRPCError({
       code: "UNAUTHORIZED",

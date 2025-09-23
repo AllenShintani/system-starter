@@ -3,73 +3,55 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { TRPCError } from "@trpc/server";
 
 import { prisma } from "../../prisma/client";
-import { userUpdateSchema } from "../schemas/userSchemas";
+import { userUpdateInputSchema, userUpdateResponseSchema } from "../schemas";
+import { getUserProfile, updateUserProfile } from "../features/user/domain/usecases/profile";
+import type { UserPorts, UserUpdateData } from "../features/user/domain/ports/user";
 import { t } from "../utils/createContext";
+import { verifyAuth } from "../utils/verifyAuth";
 import s3Client from "../utils/s3Client";
 
-import type { JwtPayload } from "../types/jwt";
-import type z from "zod";
+import type { FileUploadRequest } from "../schemas";
 
-const generateProfilePictureData = async (
-  input: z.infer<typeof userUpdateSchema>,
-  userId: string
-): Promise<{ profilePictureUrl: string; signedUrl: string } | undefined> => {
-  if (
-    input.profilePicture &&
-    "fileName" in input.profilePicture &&
-    "fileType" in input.profilePicture
-  ) {
-    const { fileName, fileType } = input.profilePicture;
-    const key = `profile-pictures/${userId}/${fileName}`;
-
-    const command = new PutObjectCommand({
-      Bucket: "hackers-guild-bucket",
-      Key: key,
-      ContentType: fileType,
-    });
-
-    const signedUrl = await getSignedUrl(s3Client, command, {
-      expiresIn: 3600,
-    });
-    const profilePictureUrl = `https://hackers-guild-bucket.s3.ap-northeast-1.amazonaws.com/${key}`;
-
-    return { profilePictureUrl, signedUrl };
-  }
-  return undefined;
+const userPorts: UserPorts = {
+  findById: (id) =>
+    prisma.user.findUnique({
+      where: { id },
+    }),
+  update: (id, data) =>
+    prisma.user.update({
+      where: { id },
+      data,
+    }),
 };
 
-type UpdateResponse = {
-  success: boolean;
-  user: {
-    id: string;
-    userName: string;
-    email: string;
-    profilePicture: string | null;
-  };
-  signedUrl?: string;
-  profilePictureUrl?: string;
+const generateProfilePictureData = async (
+  profilePicture: FileUploadRequest | undefined,
+  userId: string
+): Promise<{ profilePictureUrl: string; signedUrl: string } | undefined> => {
+  if (!profilePicture) return undefined;
+
+  const { fileName, fileType } = profilePicture;
+  const key = `profile-pictures/${userId}/${fileName}`;
+
+  const command = new PutObjectCommand({
+    Bucket: "hackers-guild-bucket",
+    Key: key,
+    ContentType: fileType,
+  });
+
+  const signedUrl = await getSignedUrl(s3Client, command, {
+    expiresIn: 3600,
+  });
+  const profilePictureUrl = `https://hackers-guild-bucket.s3.ap-northeast-1.amazonaws.com/${key}`;
+
+  return { profilePictureUrl, signedUrl };
 };
 
 export const userRouter = t.router({
   getUser: t.procedure.query(async ({ ctx }) => {
     try {
-      const token = ctx.request.cookies.token;
-      if (!token) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "認証されていません",
-        });
-      }
-      const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
-      const user = await prisma.user.findUnique({
-        where: { id: decoded.userId },
-        select: {
-          id: true,
-          userName: true,
-          email: true,
-          profilePicture: true,
-        },
-      });
+      const { userId } = verifyAuth(ctx);
+      const user = await getUserProfile(userPorts, userId);
       if (!user) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -85,51 +67,33 @@ export const userRouter = t.router({
       });
     }
   }),
-  update: t.procedure
-    .input(userUpdateSchema)
-    .mutation(async ({ input, ctx }): Promise<UpdateResponse> => {
-      try {
-        const token = ctx.request.cookies.token;
-        if (!token) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "認証されていません",
-          });
-        }
-        const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
+  update: t.procedure.input(userUpdateInputSchema).mutation(async ({ input, ctx }) => {
+    try {
+      const { userId } = verifyAuth(ctx);
+      const profilePictureData = await generateProfilePictureData(input.profilePicture, userId);
 
-        const profilePictureData = await generateProfilePictureData(input, decoded.userId);
-
-        const updatedUser = await prisma.user.update({
-          where: { id: decoded.userId },
-          data: {
-            userName: input.userName,
-            profilePicture: profilePictureData?.profilePictureUrl,
-          },
-        });
-
-        const response: UpdateResponse = {
-          success: true,
-          user: {
-            id: updatedUser.id,
-            userName: updatedUser.userName,
-            email: updatedUser.email,
-            profilePicture: updatedUser.profilePicture,
-          },
-        };
-
-        if (profilePictureData) {
-          response.signedUrl = profilePictureData.signedUrl;
-          response.profilePictureUrl = profilePictureData.profilePictureUrl;
-        }
-
-        return response;
-      } catch (error) {
-        console.error(error);
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "ユーザー情報の更新に失敗しました",
-        });
+      const patch: UserUpdateData = {};
+      if (typeof input.userName !== "undefined") {
+        patch.userName = input.userName;
       }
-    }),
+      if (profilePictureData) {
+        patch.profilePicture = profilePictureData.profilePictureUrl;
+      }
+
+      const updatedUser = await updateUserProfile(userPorts, userId, patch);
+
+      return userUpdateResponseSchema.parse({
+        success: true,
+        user: updatedUser,
+        signedUrl: profilePictureData?.signedUrl,
+        profilePictureUrl: profilePictureData?.profilePictureUrl,
+      });
+    } catch (error) {
+      console.error(error);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "ユーザー情報の更新に失敗しました",
+      });
+    }
+  }),
 });
