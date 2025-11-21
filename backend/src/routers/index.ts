@@ -1,8 +1,8 @@
 import { initTRPC } from "@trpc/server";
 
-import { signinRouter } from "./signin";
-import { userRouter } from "./user";
-import { videoRouter } from "./video";
+import { signinRouter } from "@/routers/signin";
+import { userRouter } from "@/routers/user";
+import { videoRouter } from "@/routers/video";
 
 const t = initTRPC.create();
 

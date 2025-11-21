@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 
-import type { JwtPayload } from "../types/jwt";
+import type { JwtPayload } from "@/types/jwt";
 import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 
 type Context = {
@@ -9,7 +9,7 @@ type Context = {
   reply: CreateFastifyContextOptions["res"];
 };
 
-export function verifyAuth(ctx: Context): JwtPayload {
+export const verifyAuth = (ctx: Context): JwtPayload => {
   const token = ctx.request.cookies.token;
   if (!token) {
     throw new TRPCError({
@@ -18,12 +18,11 @@ export function verifyAuth(ctx: Context): JwtPayload {
     });
   }
   try {
-    const decoded = ctx.fastify.jwt.verify(token);
-    return decoded as JwtPayload;
+    return ctx.fastify.jwt.verify<JwtPayload>(token);
   } catch (error) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "無効なトークンです",
     });
   }
-}
+};

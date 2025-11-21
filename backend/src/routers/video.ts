@@ -1,18 +1,17 @@
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
-import { prisma } from "../../prisma/client";
-import { videoSchema } from "../schemas/video";
-import { t } from "../utils/createContext";
-import { generateFileUpload } from "../utils/s3/generateFileUpload";
-import { verifyAuth } from "../utils/verifyAuth";
+import { prisma } from "@/prisma/client";
+import { videoSchema } from "@/schemas/video";
+import { t } from "@/utils/createContext";
+import { generateFileUpload } from "@/utils/s3/generateFileUpload";
+import { verifyAuth } from "@/utils/verifyAuth";
 
 export const videoRouter = t.router({
   getAllVideoes: t.procedure.query(async ({ ctx }) => {
     try {
       verifyAuth(ctx);
-      const videoes = await prisma.video.findMany();
-      return videoes;
+      return await prisma.video.findMany();
     } catch (error) {
       console.error(error);
       throw new TRPCError({
@@ -25,10 +24,9 @@ export const videoRouter = t.router({
   getVideo: t.procedure.input(z.string()).query(async ({ input: videoId, ctx }) => {
     try {
       verifyAuth(ctx);
-      const video = await prisma.video.findUnique({
+      return await prisma.video.findUnique({
         where: { id: videoId },
       });
-      return video;
     } catch (error) {
       console.error(error);
       throw new TRPCError({

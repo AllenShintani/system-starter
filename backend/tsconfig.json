@@ -9,6 +9,10 @@
     "module": "NodeNext",
     "moduleDetection": "force",
     "moduleResolution": "NodeNext",
+    "paths": {
+      "@/prisma/*": ["./prisma/*"],
+      "@/*": ["./src/*"]
+    },
     "rootDir": ".",
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,5 +20,5 @@
     "skipLibCheck": true
   },
   "include": ["./**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "vite.config.ts"]
 }

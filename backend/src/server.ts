@@ -4,12 +4,12 @@ import fastifyJwt from "@fastify/jwt";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
 import Fastify from "fastify";
 
-import { appRouter } from "./routers";
-import { prisma } from "../prisma/client";
-import { config } from "./config/env.config";
-
 import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 import type { FastifyInstance } from "fastify";
+
+import { config } from "@/config/env.config";
+import { prisma } from "@/prisma/client";
+import { appRouter } from "@/routers";
 
 const server: FastifyInstance = Fastify();
 

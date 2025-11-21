@@ -1,12 +1,12 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { prisma } from "../../prisma/client";
-import { config } from "../config/env.config";
-import { getClerkUser } from "../lib/clerk";
-import { t } from "../utils/createContext";
+import type { JwtPayload } from "@/types/jwt";
 
-import type { JwtPayload } from "../types/jwt";
+import { config } from "@/config/env.config";
+import { getClerkUser } from "@/lib/clerk";
+import { prisma } from "@/prisma/client";
+import { t } from "@/utils/createContext";
 
 export const signinRouter = t.router({
   /**

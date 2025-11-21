@@ -1,1 +1,1 @@
-export { userUpdateSchema } from "./userSchemas";
+export { userUpdateSchema } from "@/schemas/userSchemas";

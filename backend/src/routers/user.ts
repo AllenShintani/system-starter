@@ -2,13 +2,13 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { TRPCError } from "@trpc/server";
 
-import { prisma } from "../../prisma/client";
-import { userUpdateSchema } from "../schemas/userSchemas";
-import { t } from "../utils/createContext";
-import s3Client from "../utils/s3Client";
-
-import type { JwtPayload } from "../types/jwt";
+import type { JwtPayload } from "@/types/jwt";
 import type z from "zod";
+
+import { prisma } from "@/prisma/client";
+import { userUpdateSchema } from "@/schemas/userSchemas";
+import { t } from "@/utils/createContext";
+import s3Client from "@/utils/s3Client";
 
 const generateProfilePictureData = async (
   input: z.infer<typeof userUpdateSchema>,
