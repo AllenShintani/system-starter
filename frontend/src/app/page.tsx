@@ -2,7 +2,7 @@
 
 import { trpc } from "@/utils/trpc";
 
-export default function TopPage() {
+const TopPage = () => {
   const { data } = trpc.userRouter.getUser.useQuery(undefined, {
     retry: false,
   });
@@ -20,4 +20,6 @@ export default function TopPage() {
       <h1 style={{ fontSize: "4rem" }}>Hello, {data?.userName}!</h1>
     </div>
   );
-}
+};
+
+export default TopPage;

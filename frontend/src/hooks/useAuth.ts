@@ -1,7 +1,8 @@
 "use client";
 
-import { useAuth as useClerkAuth, useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
+
+import { useAuth as useClerkAuth, useUser } from "@clerk/nextjs";
 
 import { trpc } from "@/utils/trpc";
 

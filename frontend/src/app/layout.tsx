@@ -1,19 +1,20 @@
 import "../styles/globals.css";
 
-import { ClerkProvider } from "@clerk/nextjs";
-
-import type { Metadata } from "next";
 import type { ReactNode } from "react";
+
+import { ClerkProvider } from "@clerk/nextjs";
 
 import { jaJP } from "@/localization/ja";
 import { TRPCProvider } from "@/providers/TRPCProvider";
+
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "System Starter",
   description: "A modern web application starter",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <ClerkProvider
       localization={jaJP}
@@ -27,4 +28,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </html>
     </ClerkProvider>
   );
-}
+};
+
+export default RootLayout;

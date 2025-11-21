@@ -1,15 +1,15 @@
 module.exports = {
   root: true,
   extends: [
+    "next/core-web-vitals",
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:react/jsx-runtime",
     "prettier",
   ],
-  plugins: ["@typescript-eslint", "react", "sonarjs", "import", "unused-imports", "prettier"],
+  plugins: ["@typescript-eslint", "react", "sonarjs", "import", "unused-imports"],
   parser: "@typescript-eslint/parser",
   env: {
     browser: true,
@@ -25,23 +25,29 @@ module.exports = {
     sourceType: "module",
     ecmaFeatures: {
       jsx: true,
+      impliedStrict: true, // 常にStrictMode
     },
   },
-  ecmaFeatures: {
-    impliedStrict: true, // 常にStrictMode
-  },
   rules: {
-    // Prettier
-    "prettier/prettier": "error",
-
+    // Restrict API type imports to backend schemas only
+    "no-restricted-imports": [
+      "error",
+      {
+        patterns: [
+          {
+            group: ["**/src/types/api/**", "**/types/api/**"],
+            message: "Import API types only from @project_name/backend/schemas.",
+          },
+        ],
+      },
+    ],
     // Unused imports
     "@typescript-eslint/no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
-      "warn",
+      "error",
       { vars: "all", varsIgnorePattern: "^_", args: "after-used", argsIgnorePattern: "^_" },
     ],
-
     // Import order
     "import/order": [
       "error",
@@ -56,6 +62,19 @@ module.exports = {
           "type",
         ],
         "newlines-between": "always",
+        "pathGroups": [
+          {
+            pattern: "{react,react-dom/**,react-router-dom}",
+            group: "builtin",
+            position: "before",
+          },
+          {
+            pattern: "@/**",
+            group: "internal",
+            position: "before",
+          },
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
         "alphabetize": {
           order: "asc",
           caseInsensitive: true,
@@ -63,22 +82,21 @@ module.exports = {
       },
     ],
     "import/newline-after-import": "error",
-
-    // React
+    // React / TypeScript specifics
     "react/prop-types": "off",
     "react/self-closing-comp": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
-
-    // TypeScript
     "prefer-template": "error",
-    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-var-requires": "off",
-
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/consistent-type-assertions": "off",
     // General
-    "no-unreachable": "error", // 到達できないコードはエラー
-    "no-console": ["error", { allow: ["warn", "error"] }],
+    "no-unreachable": "error",
+    "no-console": ["error", { allow: ["error", "info"] }],
     "no-dupe-else-if": "error",
     "max-lines": ["error", 400],
     "sonarjs/cognitive-complexity": ["error", 10],
@@ -101,13 +119,50 @@ module.exports = {
         message: "Use map instead of for.",
       },
       {
-        selector: "IfStatement > BlockStatement ~ IfStatement",
-        message: "Avoid using else if.",
+        selector: "ForInStatement",
+        message: "Use Object.entries() などのユーティリティを利用してください。",
       },
       {
-        selector: "IfStatement > BlockStatement ~ BlockStatement",
-        message: "Avoid using else.",
+        selector: "ForOfStatement",
+        message: "Use array helpers instead of for...of.",
+      },
+      {
+        selector: "FunctionDeclaration",
+        message: "Use const arrow functions instead of function declarations.",
+      },
+      {
+        selector: "FunctionExpression",
+        message: "Use arrow functions instead of function expressions.",
+      },
+      {
+        selector: "TSInterfaceDeclaration",
+        message: "Use type aliases instead of interfaces.",
+      },
+      {
+        selector: "IfStatement[alternate]",
+        message: "Avoid using else/else if. Use early return pattern instead.",
+      },
+      {
+        selector:
+          'TSAsExpression:not([typeAnnotation.type="TSTypeReference"][typeAnnotation.typeName.name="const"])',
+        message: 'Type assertions are not allowed except for "as const".',
+      },
+      {
+        selector: "TSUnknownKeyword",
+        message: "Use specific types instead of unknown",
+      },
+      {
+        selector: "TSNeverKeyword",
+        message: "Use specific types instead of never",
       },
     ],
   },
+  overrides: [
+    {
+      files: ["src/localization/*.ts"],
+      rules: {
+        "max-lines": "off",
+      },
+    },
+  ],
 };

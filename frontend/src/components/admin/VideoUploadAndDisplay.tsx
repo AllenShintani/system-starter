@@ -1,13 +1,13 @@
 "use client";
 
-import { Button, CircularProgress, Typography, Box, TextField } from "@mui/material";
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 
-import type React from "react";
+import { Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
+import Image from "next/image";
 
 import { trpc } from "@/utils/trpc";
 
-const VideoUploadAndDisplay: React.FC = () => {
+const VideoUploadAndDisplay = () => {
   const [file, setFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -32,7 +32,7 @@ const VideoUploadAndDisplay: React.FC = () => {
       // Get video duration
       const video = document.createElement("video");
       video.preload = "metadata";
-      video.onloadedmetadata = function () {
+      video.onloadedmetadata = () => {
         window.URL.revokeObjectURL(video.src);
         setDuration(Math.round(video.duration));
       };
@@ -111,9 +111,9 @@ const VideoUploadAndDisplay: React.FC = () => {
     } catch (err) {
       if (err instanceof Error) {
         setError(`アップロードに失敗しました: ${err.message}`);
-      } else {
-        setError("アップロードに失敗しました: 不明なエラー");
+        return;
       }
+      setError("アップロードに失敗しました: 不明なエラー");
     } finally {
       setIsUploading(false);
     }
@@ -167,11 +167,13 @@ const VideoUploadAndDisplay: React.FC = () => {
         サムネイル画像を選択
       </Button>
       {thumbnailUrl && (
-        <Box sx={{ mt: 2, width: "200px", height: "200px" }}>
-          <img
+        <Box sx={{ mt: 2, width: "200px", height: "200px", position: "relative" }}>
+          <Image
             src={thumbnailUrl}
             alt="Thumbnail"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            fill
+            sizes="200px"
+            style={{ objectFit: "cover" }}
           />
         </Box>
       )}

@@ -1,22 +1,21 @@
-import { Button, CircularProgress, Box, Typography } from "@mui/material";
-import { useState } from "react";
+import { type ChangeEvent, useState } from "react";
+
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 
 import ProfileImage from "./ProfileImage";
 
-import type React from "react";
-
-interface ImageUploadProps {
+type ImageUploadProps = {
   initialImageUrl?: string | null;
   onUpload: (file: File) => Promise<void>;
-}
+};
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ initialImageUrl, onUpload }) => {
+const ImageUpload = ({ initialImageUrl, onUpload }: ImageUploadProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl || null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
       setFile(selectedFile);

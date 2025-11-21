@@ -1,8 +1,8 @@
+import type React from "react";
+
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
-
-import type * as React from "react";
 
 import { Navigator } from "@/components/admin/home/listitems";
 import { APPBARHEIGHT, DRAWERWIDTH } from "@/constants";

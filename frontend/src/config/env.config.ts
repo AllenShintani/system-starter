@@ -12,28 +12,25 @@ const requiredEnvVars = {
   NEXT_PUBLIC_API_HOST: process.env.NEXT_PUBLIC_API_HOST,
 };
 
-// 環境変数の存在を検証
-function validateEnvVarsExist(envVars: Record<string, string | undefined>): void {
-  for (const [key, value] of Object.entries(envVars)) {
+const validateEnvVarsExist = (envVars: Record<string, string | undefined>): void => {
+  Object.entries(envVars).forEach(([key, value]) => {
     if (!value) {
       throw new Error(`Missing required environment variable: ${key}`);
     }
-  }
-}
+  });
+};
 
-// NODE_ENVの検証
-function validateNodeEnv(nodeEnv: string | undefined): "development" | "production" | "test" {
+const validateNodeEnv = (nodeEnv: string | undefined): "development" | "production" | "test" => {
   if (nodeEnv !== "development" && nodeEnv !== "production" && nodeEnv !== "test") {
     throw new Error(`Invalid NEXT_PUBLIC_NODE_ENV: ${nodeEnv}`);
   }
   return nodeEnv;
-}
+};
 
-// 型安全な環境変数の取得
-function getValidatedEnvVars(): {
+const getValidatedEnvVars = (): {
   NEXT_PUBLIC_NODE_ENV: "development" | "production" | "test";
   NEXT_PUBLIC_API_HOST: string;
-} {
+} => {
   validateEnvVarsExist(requiredEnvVars);
   const nodeEnv = validateNodeEnv(requiredEnvVars.NEXT_PUBLIC_NODE_ENV);
 
@@ -48,7 +45,7 @@ function getValidatedEnvVars(): {
     NEXT_PUBLIC_NODE_ENV: nodeEnv,
     NEXT_PUBLIC_API_HOST: apiHost,
   };
-}
+};
 
 const validatedEnvVars = getValidatedEnvVars();
 

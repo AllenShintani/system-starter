@@ -1,15 +1,15 @@
+import type React from "react";
+
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-import type * as React from "react";
-
-interface AppBarProps {
+type AppBarProps = {
   title: string;
   subTitle: string;
-}
+};
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 2,

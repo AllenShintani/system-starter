@@ -6,7 +6,7 @@ import ImageUpload from "@/components/ImageUpload";
 import ProfileImage from "@/components/ProfileImage";
 import { useS3Image } from "@/hooks/useS3Image";
 
-function Profile() {
+const Profile = () => {
   const { UserIconUrl, error, isLoading, uploadImage } = useS3Image();
 
   const handleImageUpload = async (file: File) => {
@@ -52,6 +52,6 @@ function Profile() {
       </Box>
     </div>
   );
-}
+};
 
 export default Profile;

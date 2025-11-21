@@ -7,7 +7,7 @@ import { AdminAppBar } from "@/components/admin/home/AppBar";
 import { Sidebar } from "@/components/admin/home/Sidebar";
 import theme from "@/components/theme/theme";
 
-function Top() {
+const Top = () => {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex", backgroundColor: "#E7FFFF", minHeight: "100vh" }}>
@@ -19,6 +19,6 @@ function Top() {
       </Box>
     </ThemeProvider>
   );
-}
+};
 
 export default Top;

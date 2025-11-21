@@ -1,25 +1,9 @@
-import { httpBatchLink } from "@trpc/client";
-import { createTRPCNext } from "@trpc/next";
+import { createTRPCReact, type CreateTRPCReact } from "@trpc/react-query";
 
 import type { AppRouter } from "@project_name/backend/routers";
 
-import { config } from "@/config/env.config";
+type TRPCReactType = CreateTRPCReact<AppRouter, null, null>;
 
-export const trpc = createTRPCNext<AppRouter>({
-  config() {
-    return {
-      links: [
-        httpBatchLink({
-          url: `${config.API_HOST}/trpc`,
-          fetch(url, options) {
-            return fetch(url, {
-              ...options,
-              credentials: "include",
-            });
-          },
-        }),
-      ],
-    };
-  },
-  ssr: false,
-});
+const createTrpcClient = (): TRPCReactType => createTRPCReact<AppRouter, null>();
+
+export const trpc: TRPCReactType = createTrpcClient();

@@ -20,9 +20,12 @@ export const useS3Image = () => {
   useEffect(() => {
     if (isUserLoading) return;
 
-    if (userData && userData) {
+    if (userData) {
       setImageUrl(userData.profilePicture);
-    } else if (isError) {
+      setIsLoading(false);
+      return;
+    }
+    if (isError) {
       setError("Error fetching user data");
     }
     setIsLoading(false);
@@ -41,22 +44,21 @@ export const useS3Image = () => {
           },
         });
 
-        if (result.success && result.signedUrl && result.profilePictureUrl) {
-          // Upload the file to S3 using the signed URL
-          const uploadResponse = await fetch(result.signedUrl, {
-            method: "PUT",
-            body: file,
-            headers: {
-              "Content-Type": file.type,
-            },
-          });
-          if (!uploadResponse.ok) throw new Error("Failed to upload image to S3");
-
-          setImageUrl(result.profilePictureUrl);
-          await refetch(); // Userの情報を更新
-        } else {
+        if (!(result.success && result.signedUrl && result.profilePictureUrl)) {
           throw new Error(result.success ? "Failed to get upload URL" : "Failed to update user");
         }
+
+        const uploadResponse = await fetch(result.signedUrl, {
+          method: "PUT",
+          body: file,
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+        if (!uploadResponse.ok) throw new Error("Failed to upload image to S3");
+
+        setImageUrl(result.profilePictureUrl);
+        await refetch(); // Userの情報を更新
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unknown error occurred");
       } finally {

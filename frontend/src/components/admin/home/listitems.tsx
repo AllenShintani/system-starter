@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import DnsRoundedIcon from "@mui/icons-material/DnsOutlined";
 import PeopleIcon from "@mui/icons-material/People";
 import PermMediaOutlinedIcon from "@mui/icons-material/PermMediaOutlined";
@@ -14,7 +16,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Link from "next/link";
-import React from "react";
 
 import type { DrawerProps } from "@mui/material/Drawer";
 
@@ -46,7 +47,7 @@ const listItems = [
 
 export const Navigator = (props: DrawerProps) => {
   const { ...other } = props;
-  const [selectedSideItem, setSelectedSideItem] = React.useState(1);
+  const [selectedSideItem, setSelectedSideItem] = useState(1);
 
   const handleListItemClick = (
     _event: React.MouseEvent<HTMLDivElement, MouseEvent>,

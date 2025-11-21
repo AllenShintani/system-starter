@@ -1,13 +1,13 @@
+import type React from "react";
+
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance"; // 仮のロゴとして使用
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
 
-import { ListItems } from "./Listitems";
-
-import type * as React from "react";
-
 import { DRAWERWIDTH } from "@/constants";
+
+import { ListItems } from "./Listitems";
 
 export const Sidebar: React.FC = () => {
   return (

@@ -1,23 +1,17 @@
-import { Avatar, CircularProgress, Typography, Box } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import type React from "react";
+import { Avatar, Box, CircularProgress, Typography } from "@mui/material";
 
 import { useS3Image } from "@/hooks/useS3Image";
 
-interface ProfileImageProps {
+type ProfileImageProps = {
   imageUrl: string | null;
   size?: number;
   onImageLoad?: () => void;
   onImageError?: (error: string) => void;
-}
+};
 
-const ProfileImage: React.FC<ProfileImageProps> = ({
-  imageUrl,
-  size = 100,
-  onImageLoad,
-  onImageError,
-}) => {
+const ProfileImage = ({ imageUrl, size = 100, onImageLoad, onImageError }: ProfileImageProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);

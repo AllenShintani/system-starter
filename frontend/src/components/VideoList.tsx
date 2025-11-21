@@ -1,6 +1,7 @@
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Card, CardContent } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 
 import { trpc } from "../utils/trpc";
@@ -32,14 +33,14 @@ const LessonList = () => {
             className="flex flex-col bg-main cursor-pointer"
             style={{ width: "400px", height: "275px", margin: "0 auto" }}
           >
-            <div
-              className="relative"
-              style={{ height: "200px" }}
-            >
-              <img
+            <div className="relative h-[200px]">
+              <Image
                 src={lesson.thumbnailUrl || "/placeholder-image.jpg"}
                 alt={`${lesson.title} のサムネイル`}
-                className="absolute top-0 left-0 w-full h-full object-cover"
+                fill
+                priority={false}
+                sizes="400px"
+                className="object-cover"
               />
             </div>
             <CardContent
