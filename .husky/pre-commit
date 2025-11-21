@@ -1,11 +1,33 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+set -e
+
+echo "📦 依存関係をクリーンインストール中..."
+npm ci
+
 echo "🔍 Prettierとlintチェックを実行中..."
 npx lint-staged
 
+echo "📄 OpenAPI クライアントを再生成中..."
+ROOT_DIR="$(pwd)"
+npm run generate:openapi --if-present
+
 echo "🔎 フロントエンドの型チェックを実行中..."
-cd frontend && npm run typecheck
+(
+  cd "$ROOT_DIR/frontend"
+  npm run typecheck
+)
 
 echo "🔎 バックエンドの型チェックを実行中..."
-cd ../backend && npm run typecheck
+(
+  cd "$ROOT_DIR/backend"
+  npm run typecheck
+)
+
+echo "🧪 バックエンドのテストカバレッジを実行中..."
+npm run test:coverage --workspace backend --if-present
+
+echo "🔨 本番ビルドを実行中..."
+npm run build:frontend
+npm run build:backend
