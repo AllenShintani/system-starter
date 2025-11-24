@@ -42,4 +42,3 @@ jobs:
 
       - name: Run frontend typecheck
         run: npm run typecheck -w frontend
-
