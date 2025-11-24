@@ -1,0 +1,21 @@
+# .github/settings.yml
+# Probot Settings Appによって読み込まれるリポジトリ設定
+
+branches:
+  - name: main
+    protection:
+      # PRを必須にする
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: false
+      # 必須ステータスチェック
+      required_status_checks:
+        strict: true
+        # 必須CIジョブのリスト（ワークフロー名 / ジョブ名の形式）
+        contexts:
+          - 'Test / test'
+      # マージ前に最新のブランチが必要
+      enforce_admins: false
+      # Merge Queueを必須にする
+      required_merge_queue: true
