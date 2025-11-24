@@ -4,7 +4,12 @@ updates:
     directory: "/backend"
     schedule:
       interval: "weekly"
+      timezone: "Asia/Tokyo"
+      time: "09:00"
+    
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "weekly"
+      timezone: "Asia/Tokyo"
+      time: "09:00"
