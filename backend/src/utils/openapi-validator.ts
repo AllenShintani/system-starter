@@ -91,9 +91,16 @@ export const validateOpenApiDocument = (
 export const validateOpenApiFile = async (filePath: string): Promise<ValidationResult> => {
   try {
     const fs = await import("fs/promises");
-    const yaml = await import("js-yaml");
     const content = await fs.readFile(filePath, "utf-8");
-    const document = yaml.load(content) as OpenAPIV3.Document;
+    
+    let document: OpenAPIV3.Document;
+    if (filePath.endsWith(".json")) {
+      document = JSON.parse(content) as OpenAPIV3.Document;
+    } else {
+      const yaml = await import("js-yaml");
+      document = yaml.load(content) as OpenAPIV3.Document;
+    }
+    
     return validateOpenApiDocument(document);
   } catch (error) {
     return {

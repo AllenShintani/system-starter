@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^18.19.50",
     "concurrently": "^9.2.1",
     "dotenv": "^16.4.5",
