@@ -578,6 +578,212 @@ const decoded = await authenticate(request, reply);
 
 ---
 
+## Swagger UIとは？
+
+**Swagger UI = OpenAPI仕様書を視覚的に表示するツール**
+
+APIの仕様をブラウザで見やすく表示し、実際にAPIを試すことができるツールです。
+
+### 簡単な例
+
+レストランのメニューを想像してください：
+
+```
+普通のメニュー（テキストだけ）
+↓
+「ハンバーガー 500円」
+「コーラ 200円」
+
+Swagger UI（見やすいメニュー）
+↓
+写真付きメニュー + 注文ボタン
+「ハンバーガー 500円 [写真] [注文する]」
+「コーラ 200円 [写真] [注文する]」
+```
+
+Swagger UIは、APIの「見やすいメニュー」のようなものです。
+
+### なぜSwagger UIが必要なのか？
+
+#### 問題点：API仕様書がテキストだけだと...
+
+```markdown
+# API仕様書
+
+## POST /api/signin
+リクエスト: { "clerkUserId": "string" }
+レスポンス: { "success": true, "user": {...} }
+```
+
+**問題**：
+- 実際に試せない
+- エラーメッセージがわからない
+- どんなデータを送ればいいか想像しにくい
+
+#### 解決策：Swagger UIで視覚的に表示
+
+```
+ブラウザで開く
+↓
+http://localhost:3001/api-docs
+↓
+見やすい画面で：
+- 各APIの説明
+- リクエストの例
+- 「Try it out」ボタンで実際に試せる
+- レスポンスの例
+```
+
+### 実際の使い方
+
+#### 1. サーバーを起動
+
+```bash
+cd backend
+npm run dev
+```
+
+#### 2. ブラウザで開く
+
+```
+http://localhost:3001/api-docs
+```
+
+#### 3. Swagger UIの画面
+
+Swagger UIでは、以下のような画面が表示されます：
+
+```
+┌─────────────────────────────────────┐
+│ System Starter API                  │
+│                                     │
+│ [signin] 認証関連                   │
+│   POST /api/signin                  │
+│   POST /api/logout                  │
+│   GET /api/auth/check               │
+│                                     │
+│ [user] ユーザー関連                 │
+│   GET /api/user                     │
+│   PUT /api/user                     │
+│                                     │
+│ [video] ビデオ関連                  │
+│   GET /api/videos                   │
+│   GET /api/videos/:id               │
+│   POST /api/videos                  │
+│   PUT /api/videos/:id               │
+└─────────────────────────────────────┘
+```
+
+#### 4. APIを試す
+
+1. **APIをクリック** → 詳細が表示される
+2. **「Try it out」ボタンをクリック** → 入力欄が表示される
+3. **リクエストデータを入力**
+4. **「Execute」ボタンをクリック** → 実際にAPIを呼び出す
+5. **レスポンスが表示される**
+
+### 実際のコードでの設定
+
+```typescript
+// backend/src/server.ts
+
+// 1. Swaggerプラグインを登録
+server.register(fastifySwagger, {
+  openapi: {
+    openapi: "3.0.0",
+    info: {
+      title: "System Starter API",
+      description: "System Starter API Documentation",
+      version: "1.0.0",
+    },
+    tags: [
+      { name: "signin", description: "認証関連" },
+      { name: "user", description: "ユーザー関連" },
+      { name: "video", description: "ビデオ関連" },
+    ],
+  },
+});
+
+// 2. Swagger UIプラグインを登録
+server.register(fastifySwaggerUi, {
+  routePrefix: "/api-docs", // http://localhost:3001/api-docs でアクセス
+  uiConfig: {
+    docExpansion: "list", // デフォルトで折りたたみ
+    deepLinking: false,
+  },
+});
+```
+
+### Swagger UIでできること
+
+1. **API一覧の確認**
+   - すべてのAPIエンドポイントが一覧表示される
+   - タグで分類されている（signin, user, video）
+
+2. **API詳細の確認**
+   - リクエストの形（DTO）
+   - レスポンスの形（DTO）
+   - エラーレスポンスの形
+
+3. **実際にAPIを試す**
+   - 「Try it out」ボタンで実際にAPIを呼び出せる
+   - リクエストデータを入力して送信
+   - レスポンスを確認
+
+4. **エラーの確認**
+   - 間違ったデータを送ると、エラーメッセージが表示される
+   - どんなエラーが返るか確認できる
+
+### 使用例：サインインAPIを試す
+
+1. **Swagger UIを開く**
+   ```
+   http://localhost:3001/api-docs
+   ```
+
+2. **POST /api/signin をクリック**
+
+3. **「Try it out」ボタンをクリック**
+
+4. **リクエストボディを入力**
+   ```json
+   {
+     "clerkUserId": "user_123"
+   }
+   ```
+
+5. **「Execute」ボタンをクリック**
+
+6. **レスポンスを確認**
+   ```json
+   {
+     "success": true,
+     "user": {
+       "id": "user_123",
+       "email": "test@example.com",
+       "name": "Test User",
+       "avatarUrl": null
+     },
+     "redirect": "/"
+   }
+   ```
+
+### Swagger UIのメリット
+
+1. **視覚的にわかりやすい**: テキストだけの仕様書より理解しやすい
+2. **実際に試せる**: ブラウザから直接APIを呼び出せる
+3. **自動更新**: コードを変更すると、自動で仕様書が更新される
+4. **チーム共有**: フロントエンド開発者も同じ仕様書を見られる
+
+### まとめ
+
+- **Swagger UI**: OpenAPI仕様書を視覚的に表示するツール
+- **アクセス方法**: `http://localhost:PORT/api-docs`
+- **主な機能**: API一覧、詳細確認、実際にAPIを試す
+- **メリット**: 視覚的、実際に試せる、自動更新、チーム共有
+
+---
+
 ## 今後の追加予定
 
 このドキュメントは、開発中にわからない用語や概念が出てきた際に、随時追加していきます。
@@ -586,7 +792,6 @@ const decoded = await authenticate(request, reply);
 
 - OpenAPIスキーマの詳細
 - Fastifyのプラグインシステム
-- Swagger UIの使い方
 - フロントエンドでのAPI呼び出し方法
 - その他、開発中に出てくる用語や概念
 
@@ -598,11 +803,14 @@ const decoded = await authenticate(request, reply);
 ## [用語名]とは？
 
 ### 簡単な説明
+
 [初心者にもわかる簡単な説明]
 
 ### 実際のコード
+
 [実際のコード例]
 
 ### 使用例
+
 [具体的な使用例]
 ```
