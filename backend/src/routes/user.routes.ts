@@ -14,6 +14,7 @@ import { authenticate } from "@/middleware/auth.middleware";
 import { prisma } from "@/prisma/client";
 import s3Client from "@/utils/s3Client";
 import { sendErrorResponse } from "@/utils/errorHandler";
+import { zodToFastifySchema } from "@/utils/zod-to-json-schema";
 
 /**
  * プロフィール画像のアップロードデータを生成
@@ -149,7 +150,7 @@ export const registerUserRoutes = (server: FastifyInstance): void => {
         description: "認証済みユーザー情報を取得",
         tags: ["user"],
         response: {
-          200: getUserResponseSchema,
+          200: zodToFastifySchema(getUserResponseSchema),
           401: {
             type: "object",
             properties: {
@@ -178,9 +179,9 @@ export const registerUserRoutes = (server: FastifyInstance): void => {
         operationId: "putUser",
         description: "ユーザー情報を更新",
         tags: ["user"],
-        body: updateUserRequestSchema,
+        body: zodToFastifySchema(updateUserRequestSchema),
         response: {
-          200: updateUserResponseSchema,
+          200: zodToFastifySchema(updateUserResponseSchema),
           401: {
             type: "object",
             properties: {

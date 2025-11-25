@@ -16,6 +16,7 @@ import { authenticate } from "@/middleware/auth.middleware";
 import { prisma } from "@/prisma/client";
 import { generateFileUpload } from "@/utils/s3/generateFileUpload";
 import { sendErrorResponse } from "@/utils/errorHandler";
+import { zodToFastifySchema } from "@/utils/zod-to-json-schema";
 
 /**
  * ビデオ一覧取得ルート
@@ -226,7 +227,7 @@ export const registerVideoRoutes = (server: FastifyInstance): void => {
         description: "ビデオ一覧を取得",
         tags: ["video"],
         response: {
-          200: getVideosResponseSchema,
+          200: zodToFastifySchema(getVideosResponseSchema),
           401: {
             type: "object",
             properties: {
@@ -259,7 +260,7 @@ export const registerVideoRoutes = (server: FastifyInstance): void => {
           required: ["id"],
         },
         response: {
-          200: getVideoResponseSchema,
+          200: zodToFastifySchema(getVideoResponseSchema),
           401: {
             type: "object",
             properties: {
@@ -288,9 +289,9 @@ export const registerVideoRoutes = (server: FastifyInstance): void => {
         operationId: "postVideo",
         description: "ビデオを作成",
         tags: ["video"],
-        body: createVideoRequestSchema,
+        body: zodToFastifySchema(createVideoRequestSchema),
         response: {
-          201: createVideoResponseSchema,
+          201: zodToFastifySchema(createVideoResponseSchema),
           401: {
             type: "object",
             properties: {
@@ -322,9 +323,9 @@ export const registerVideoRoutes = (server: FastifyInstance): void => {
           },
           required: ["id"],
         },
-        body: createVideoRequestSchema, // updateVideoRequestSchemaからidを除いたもの
+        body: zodToFastifySchema(createVideoRequestSchema), // updateVideoRequestSchemaからidを除いたもの
         response: {
-          200: updateVideoResponseSchema,
+          200: zodToFastifySchema(updateVideoResponseSchema),
           401: {
             type: "object",
             properties: {

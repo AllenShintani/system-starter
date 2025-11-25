@@ -12,6 +12,7 @@ import {
 import { getClerkUser } from "@/lib/clerk";
 import { prisma } from "@/prisma/client";
 import { sendErrorResponse } from "@/utils/errorHandler";
+import { zodToFastifySchema } from "@/utils/zod-to-json-schema";
 
 /**
  * サインインルート
@@ -186,9 +187,9 @@ export const registerSigninRoutes = (server: FastifyInstance): void => {
         operationId: "postSignin",
         description: "Clerkで認証済みのユーザーがサインインする",
         tags: ["signin"],
-        body: signinRequestSchema,
+        body: zodToFastifySchema(signinRequestSchema),
         response: {
-          200: signinResponseSchema,
+          200: zodToFastifySchema(signinResponseSchema),
           400: {
             type: "object",
             properties: {
@@ -218,7 +219,7 @@ export const registerSigninRoutes = (server: FastifyInstance): void => {
         description: "ログアウト処理",
         tags: ["signin"],
         response: {
-          200: logoutResponseSchema,
+          200: zodToFastifySchema(logoutResponseSchema),
         },
       },
     },
@@ -234,7 +235,7 @@ export const registerSigninRoutes = (server: FastifyInstance): void => {
         description: "認証状態の確認",
         tags: ["signin"],
         response: {
-          200: checkAuthResponseSchema,
+          200: zodToFastifySchema(checkAuthResponseSchema),
         },
       },
     },
