@@ -16,6 +16,9 @@ import { registerRoutes } from "@/routes";
 
 const server: FastifyInstance = Fastify();
 
+// サーバーをエクスポート（テスト用）
+export { server };
+
 server.register(fastifyJwt, {
   secret: config.JWT_SECRET,
   sign: {
