@@ -29,7 +29,7 @@ DTOがないと、こんな問題が起きます：
 POST /api/signin
 { "userId": "123" }  // フィールド名が違う！
 
-// 開発者Bが作ったAPI  
+// 開発者Bが作ったAPI
 POST /api/login
 { "clerkUserId": "123" }  // また違う名前！
 
@@ -42,7 +42,7 @@ POST /api/login
 // ✅ 良い例：DTOで形を定義
 // サインインリクエストのDTO
 {
-  clerkUserId: string  // 必ずこの名前、必ず文字列
+  clerkUserId: string; // 必ずこの名前、必ず文字列
 }
 ```
 
@@ -55,26 +55,28 @@ POST /api/login
 
 // 「サインインリクエスト」の形を定義
 export const signinRequestSchema = z.object({
-  clerkUserId: z.string(),  // clerkUserIdは文字列で必須
+  clerkUserId: z.string(), // clerkUserIdは文字列で必須
 });
 ```
 
 **意味**：
+
 - `clerkUserId`というフィールドが**必須**
 - 値は**文字列**でなければならない
 - 数字やnullは**エラー**
 
 **実際の使用例**：
+
 ```typescript
 // ✅ 正しい
-signinRequestSchema.parse({ clerkUserId: "user_123" })
+signinRequestSchema.parse({ clerkUserId: "user_123" });
 // → OK
 
 // ❌ 間違い
-signinRequestSchema.parse({ clerkUserId: 123 })
+signinRequestSchema.parse({ clerkUserId: 123 });
 // → エラー！数字はダメ
 
-signinRequestSchema.parse({})
+signinRequestSchema.parse({});
 // → エラー！clerkUserIdがない
 ```
 
@@ -91,19 +93,21 @@ export type SigninRequestDto = z.infer<typeof signinRequestSchema>;
 ```
 
 **意味**：
+
 - TypeScriptが「この形のデータだよ」と理解する
 - 間違った形のデータを使おうとすると、**コンパイル時にエラー**が出る
 
 **実際の使用例**：
+
 ```typescript
 // ✅ 正しい
 const request: SigninRequestDto = {
-  clerkUserId: "user_123"
+  clerkUserId: "user_123",
 };
 
 // ❌ 間違い（TypeScriptがエラーを出す）
 const request: SigninRequestDto = {
-  userId: "user_123"  // エラー！clerkUserIdじゃないとダメ
+  userId: "user_123", // エラー！clerkUserIdじゃないとダメ
 };
 ```
 
@@ -124,6 +128,7 @@ export const signinRequestOpenApi = {
 ```
 
 **意味**：
+
 - Swagger UI（API仕様書）に表示される
 - フロントエンド開発者が「どんなデータを送ればいいか」を確認できる
 - 自動でAPIドキュメントが生成される
@@ -229,10 +234,10 @@ server.post("/api/signin", {
 
 // 1. Zodスキーマ（バリデーション）
 export const userDtoSchema = z.object({
-  id: z.string(),              // IDは文字列で必須
-  userName: z.string(),        // ユーザー名は文字列で必須
-  email: z.string(),           // メールは文字列で必須
-  profilePicture: z.string().nullable(),  // プロフィール画像は文字列またはnull
+  id: z.string(), // IDは文字列で必須
+  userName: z.string(), // ユーザー名は文字列で必須
+  email: z.string(), // メールは文字列で必須
+  profilePicture: z.string().nullable(), // プロフィール画像は文字列またはnull
 });
 
 // 2. TypeScript型（型安全性）
@@ -265,7 +270,7 @@ const user: UserDto = {
   id: "user_123",
   userName: "田中太郎",
   email: "tanaka@example.com",
-  profilePicture: "https://example.com/avatar.jpg"
+  profilePicture: "https://example.com/avatar.jpg",
 };
 
 // ✅ プロフィール画像がない場合もOK
@@ -273,14 +278,14 @@ const user2: UserDto = {
   id: "user_456",
   userName: "佐藤花子",
   email: "sato@example.com",
-  profilePicture: null  // nullもOK
+  profilePicture: null, // nullもOK
 };
 
 // ❌ 間違ったデータ（TypeScriptがエラー）
 const user3: UserDto = {
   id: "user_789",
   // userNameがない → エラー！
-  email: "yamada@example.com"
+  email: "yamada@example.com",
 };
 ```
 
@@ -310,3 +315,253 @@ const user3: UserDto = {
 
 これらを使って、次は実際のAPIエンドポイント（ルート）を実装します。
 
+## 用語解説：認証ミドルウェアとJWTトークン
+
+### JWTトークンとは？
+
+**JWT = JSON Web Token（JSON形式のトークン）**
+
+ユーザーがログインしたことを証明する「身分証明書」のようなものです。
+
+#### 簡単な例
+
+```
+1. ユーザーがログイン
+   ↓
+2. サーバーが「この人は認証済みです」という証明書（JWTトークン）を発行
+   ↓
+3. ユーザーはこの証明書をCookieに保存
+   ↓
+4. 次回アクセス時に、この証明書を見せて「認証済みです」と証明
+```
+
+#### 実際のコード
+
+```typescript
+// ログイン時にJWTトークンを発行
+const token = request.server.jwt.sign({
+  userId: user.id,
+  userName: user.userName,
+}, {
+  expiresIn: "7d", // 7日間有効
+});
+
+// Cookieに保存
+reply.setCookie("token", token, {
+  httpOnly: true, // JavaScriptからアクセスできない（セキュリティ）
+  secure: true,   // HTTPSのみ
+});
+```
+
+### 認証ミドルウェアとは？
+
+**ミドルウェア = リクエストとレスポンスの間で処理を行う仕組み**
+
+認証ミドルウェアは、「このリクエストは認証済みか？」をチェックする仕組みです。
+
+#### 簡単な例
+
+```
+1. ユーザーがAPIを呼び出す
+   ↓
+2. 認証ミドルウェアが「JWTトークンを持っているか？」をチェック
+   ↓
+3. 持っていない → エラー（401 Unauthorized）
+   持っている → 次の処理に進む
+```
+
+#### 実際のコード
+
+```typescript
+// backend/src/middleware/auth.middleware.ts
+
+export const authenticate = async (
+  request: FastifyRequest,
+  reply: FastifyReply
+): Promise<JwtPayload> => {
+  // 1. CookieからJWTトークンを取得
+  const token = request.cookies.token;
+  
+  // 2. トークンがない → エラー
+  if (!token) {
+    reply.code(401).send({
+      error: "UNAUTHORIZED",
+      message: "認証されていません",
+    });
+    throw new Error("Unauthorized");
+  }
+
+  // 3. トークンを検証（偽造されていないか確認）
+  try {
+    const decoded = request.server.jwt.verify<JwtPayload>(token);
+    return decoded; // 検証成功 → ユーザー情報を返す
+  } catch (error) {
+    // 4. 検証失敗 → エラー
+    reply.code(401).send({
+      error: "UNAUTHORIZED",
+      message: "無効なトークンです",
+    });
+    throw new Error("Invalid token");
+  }
+};
+```
+
+#### 使用例
+
+```typescript
+// 認証が必要なAPIエンドポイント
+const getUserHandler = async (request: FastifyRequest, reply: FastifyReply) => {
+  // 認証ミドルウェアでJWTトークンを検証
+  const decoded = await authenticate(request, reply);
+  
+  // 検証成功 → ユーザーIDが取得できる
+  const userId = decoded.userId;
+  
+  // ユーザー情報を取得
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+  
+  return user;
+};
+```
+
+### tRPCルーターとは？
+
+**tRPC = TypeScript RPC（TypeScript用のリモートプロシージャコール）**
+
+tRPCは、TypeScript専用のAPI通信方法です。型安全性が高いのが特徴です。
+
+#### 現在のtRPCコード（移行前）
+
+```typescript
+// backend/src/routers/user.ts
+
+export const userRouter = t.router({
+  getUser: t.procedure.query(async ({ ctx }) => {
+    // 1. CookieからJWTトークンを取得
+    const token = ctx.request.cookies.token;
+    if (!token) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "認証されていません",
+      });
+    }
+    
+    // 2. JWTトークンを検証
+    const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
+    
+    // 3. ユーザー情報を取得
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+    });
+    
+    return user;
+  }),
+});
+```
+
+**特徴**：
+- `t.procedure.query()` という特殊な書き方
+- エラーハンドリングが `TRPCError` という専用の形式
+- フロントエンドからは `trpc.userRouter.getUser.useQuery()` で呼び出す
+
+### OpenAPIベースのFastifyルートとは？
+
+**OpenAPI = APIの仕様を標準化した形式**
+
+**Fastify = Node.js用のWebフレームワーク**
+
+OpenAPIベースのFastifyルートは、標準的なRESTful APIの形式です。
+
+#### 移行後のOpenAPIコード（移行後）
+
+```typescript
+// backend/src/routes/user.routes.ts
+
+// GET /api/user
+server.get(
+  "/api/user",
+  {
+    schema: {
+      description: "認証済みユーザー情報を取得",
+      tags: ["user"],
+      response: {
+        200: getUserResponseSchema, // レスポンスの形を定義
+      },
+    },
+  },
+  async (request: FastifyRequest, reply: FastifyReply) => {
+    // 1. 認証ミドルウェアでJWTトークンを検証
+    const decoded = await authenticate(request, reply);
+    
+    // 2. ユーザー情報を取得
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+    });
+    
+    // 3. レスポンスを返す
+    reply.code(200).send(user);
+  }
+);
+```
+
+**特徴**：
+- 標準的なHTTPメソッド（GET, POST, PUT, DELETE）
+- OpenAPIスキーマでAPI仕様を定義
+- Swagger UIで自動的にAPIドキュメントが生成される
+- フロントエンドからは `fetch("/api/user")` で呼び出す
+
+### 移行とは？
+
+**移行 = 既存のコードを新しい形式に書き換えること**
+
+#### 移行の流れ
+
+```
+1. tRPCルーター（移行前）
+   ↓
+   - 特殊な書き方（t.procedure.query）
+   - TypeScript専用
+   - フロントエンドもTypeScript必須
+   
+2. OpenAPIベースのFastifyルート（移行後）
+   ↓
+   - 標準的なRESTful API
+   - どの言語からでも呼び出せる
+   - Swagger UIで自動ドキュメント生成
+```
+
+#### 具体的な変更点
+
+**変更前（tRPC）**：
+```typescript
+// 認証チェックを毎回手動で書く
+const token = ctx.request.cookies.token;
+if (!token) {
+  throw new TRPCError({ code: "UNAUTHORIZED" });
+}
+const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
+```
+
+**変更後（OpenAPI + 認証ミドルウェア）**：
+```typescript
+// 認証ミドルウェアを呼び出すだけ
+const decoded = await authenticate(request, reply);
+// 認証失敗の場合は、ミドルウェアが自動でエラーレスポンスを返す
+```
+
+**メリット**：
+- コードがシンプルになる
+- 認証ロジックを1箇所に集約できる
+- 他のエンドポイントでも同じ認証ミドルウェアを再利用できる
+
+### まとめ
+
+1. **JWTトークン**: ユーザーの認証状態を証明する「身分証明書」
+2. **認証ミドルウェア**: JWTトークンをチェックする仕組み
+3. **tRPCルーター**: TypeScript専用のAPI通信方法（移行前）
+4. **OpenAPIベースのFastifyルート**: 標準的なRESTful API（移行後）
+5. **移行**: tRPCからOpenAPIに書き換えること
+
+移行により、コードがシンプルになり、標準的なAPI形式になったため、他のシステムとの連携も容易になります。
