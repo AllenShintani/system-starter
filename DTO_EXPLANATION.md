@@ -1157,7 +1157,7 @@ MySQLのコンテナ = MySQL 8.0が実際に動いている箱
 複数の料理を同時に作るためのツールのようなものです。
 
 ```
-docker-compose.yml = 
+docker-compose.yml =
   - MySQLコンテナを起動
   - 設定をまとめて管理
 ```
@@ -1215,6 +1215,7 @@ docker-compose version
 ```
 
 **出力例**：
+
 ```
 Docker Compose version v2.20.0
 ```
@@ -1230,22 +1231,24 @@ cat docker-compose.yml
 ```
 
 **docker-compose.ymlの内容**：
+
 ```yaml
 services:
   db:
-    image: mysql:8.0          # MySQL 8.0のイメージを使う
+    image: mysql:8.0 # MySQL 8.0のイメージを使う
     container_name: ${MYSQL_DATABASE}
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # パスワード
-      MYSQL_DATABASE: ${MYSQL_DATABASE}            # データベース名
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # パスワード
+      MYSQL_DATABASE: ${MYSQL_DATABASE} # データベース名
     volumes:
-      - ./mysql_data:/var/lib/mysql  # データを保存する場所
+      - ./mysql_data:/var/lib/mysql # データを保存する場所
     ports:
-      - "3306:3306"  # ポート番号3306でアクセスできる
+      - "3306:3306" # ポート番号3306でアクセスできる
 ```
 
 **データベースを起動**：
+
 ```bash
 # データベースを起動（バックグラウンドで実行）
 docker compose up -d
@@ -1255,6 +1258,7 @@ docker compose ps
 ```
 
 **期待される出力**：
+
 ```
 NAME                STATUS              PORTS
 system_starter      Up 2 seconds        0.0.0.0:3306->3306/tcp
@@ -1290,6 +1294,7 @@ Cannot connect to the Docker daemon
 ```
 
 **対処法**：
+
 1. Docker Desktopを起動
 2. メニューバー（macOS）またはシステムトレイ（Windows）でDockerが起動しているか確認
 
@@ -1300,11 +1305,13 @@ Error: bind: address already in use
 ```
 
 **対処法**：
+
 1. 既にMySQLが起動している可能性がある
+
    ```bash
    # 既存のコンテナを確認
    docker ps
-   
+
    # 既存のコンテナを停止
    docker stop <container_id>
    ```
@@ -1318,6 +1325,7 @@ WARNING: The MYSQL_DATABASE variable is not set
 ```
 
 **対処法**：
+
 1. `.env`ファイルが存在するか確認
 2. `.env`ファイルに必要な環境変数が書かれているか確認
 
@@ -1336,6 +1344,7 @@ WARNING: The MYSQL_DATABASE variable is not set
 - **Docker Compose**: 複数のコンテナをまとめて管理
 
 **データベースを起動する手順**：
+
 1. Docker Desktopをインストール・起動
 2. `docker compose up -d` でデータベースを起動
 3. `docker compose ps` で起動確認
