@@ -6,4 +6,6 @@
 
 export * from "./common";
 export * from "./signin";
+export * from "./user";
+export * from "./video";
 
