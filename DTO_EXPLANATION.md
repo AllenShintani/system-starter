@@ -611,10 +611,12 @@ docker-compose up -d
 ```
 
 **意味**：
+
 - `docker-compose up -d`: Dockerコンテナをバックグラウンドで起動
 - MySQLデータベースが起動する
 
 **確認方法**：
+
 ```bash
 # コンテナが起動しているか確認
 docker-compose ps
@@ -663,6 +665,7 @@ CLERK_SECRET_KEY="your-clerk-secret-key"
 ```
 
 **注意**：
+
 - 実際の値に置き換える必要があります
 - `.env`ファイルはGitにコミットしない（機密情報を含むため）
 
@@ -675,6 +678,7 @@ npm install
 ```
 
 **意味**：
+
 - `package.json`に書かれたパッケージをインストール
 - 必要なライブラリをダウンロード
 
@@ -692,6 +696,7 @@ npm run seed
 ```
 
 **意味**：
+
 - `prisma generate`: データベースの型定義を生成
 - `prisma migrate dev`: データベースにテーブルを作成
 - `npm run seed`: テスト用のデータを投入
@@ -707,11 +712,13 @@ npm run dev
 ```
 
 **意味**：
+
 - サーバーが起動する
 - コードを変更すると自動で再起動される（ホットリロード）
 - `http://localhost:3001` でアクセスできる
 
 **実行例**：
+
 ```
 🚀 Server listening on port: http://localhost:3001
 ```
@@ -727,6 +734,7 @@ npm start
 ```
 
 **意味**：
+
 - `npm run build`: TypeScriptコードをJavaScriptに変換
 - `npm start`: ビルドされたJavaScriptを実行
 
@@ -735,6 +743,7 @@ npm start
 #### 確認方法
 
 1. **ターミナルにメッセージが表示される**
+
    ```
    🚀 Server listening on port: http://localhost:3001
    ```
@@ -757,6 +766,7 @@ Error: Port 3001 is already in use.
 ```
 
 **対処法**：
+
 ```bash
 # 1. 既に起動しているサーバーを停止
 # Ctrl+C で停止
@@ -772,6 +782,7 @@ Error: Can't reach database server
 ```
 
 **対処法**：
+
 ```bash
 # 1. データベースが起動しているか確認
 docker-compose ps
@@ -790,6 +801,7 @@ docker-compose up -d
 ```
 
 **対処法**：
+
 ```bash
 # .envファイルが存在するか確認
 ls -la backend/.env
@@ -804,6 +816,7 @@ ls -la backend/.env
 ```
 
 **意味**：
+
 - 実行中のサーバーを停止
 - データベース接続も切断される
 
@@ -816,6 +829,7 @@ ls -la backend/.env
 5. **サーバーを起動**: `npm run dev`
 
 **起動確認**：
+
 - ターミナルに `🚀 Server listening on port: http://localhost:3001` と表示される
 - ブラウザで `http://localhost:3001/api-docs` にアクセスできる
 
@@ -1061,3 +1075,270 @@ server.register(fastifySwaggerUi, {
 
 [具体的な使用例]
 ```
+
+---
+
+## Dockerとは？
+
+**Docker = アプリケーションを動かすための「箱」のようなもの**
+
+プログラムやデータベースを、他の人のパソコンでも同じように動かせるようにするツールです。
+
+### 簡単な例
+
+レストランのキッチンを想像してください：
+
+```
+普通の方法：
+- 料理人Aのキッチン: ガスコンロ、フライパン、調味料など
+- 料理人Bのキッチン: 電気コンロ、鍋、調味料など
+→ 環境が違うと、同じレシピでも味が変わる可能性がある
+
+Dockerを使う方法：
+- すべての料理人が同じ「キッチンセット」を使う
+→ どこでも同じ味の料理が作れる
+```
+
+Dockerは、この「キッチンセット」のようなものです。
+
+### なぜDockerが必要なのか？
+
+#### 問題点：環境が違うと動かない
+
+```
+開発者Aのパソコン:
+- macOS
+- MySQL 8.0
+- Node.js 18
+
+開発者Bのパソコン:
+- Windows
+- MySQL 5.7
+- Node.js 20
+
+→ 同じコードでも、環境が違うと動かない可能性がある
+```
+
+#### 解決策：Dockerで環境を統一
+
+```
+Dockerを使う:
+- すべての開発者が同じ環境を使う
+- 「MySQL 8.0」という箱を用意
+- どこでも同じように動く
+```
+
+### Dockerの基本的な用語
+
+#### 1. イメージ（Image）
+
+**イメージ = アプリケーションの「設計図」**
+
+レシピのようなものです。
+
+```
+MySQL 8.0のイメージ = MySQL 8.0を動かすための設計図
+```
+
+#### 2. コンテナ（Container）
+
+**コンテナ = イメージから作られた「実際に動いている箱」**
+
+レシピから作られた実際の料理のようなものです。
+
+```
+MySQLのコンテナ = MySQL 8.0が実際に動いている箱
+```
+
+#### 3. Docker Compose
+
+**Docker Compose = 複数のコンテナをまとめて管理するツール**
+
+複数の料理を同時に作るためのツールのようなものです。
+
+```
+docker-compose.yml = 
+  - MySQLコンテナを起動
+  - 設定をまとめて管理
+```
+
+### 実際の使い方
+
+#### ステップ1: Dockerのインストール
+
+**macOSの場合**：
+
+1. Docker Desktopをダウンロード
+   - https://www.docker.com/products/docker-desktop/
+   - 「Download for Mac」をクリック
+
+2. インストール
+   - ダウンロードしたファイルを開く
+   - アプリケーションフォルダにDockerをドラッグ&ドロップ
+
+3. 起動
+   - アプリケーションフォルダからDockerを起動
+   - メニューバーにDockerのアイコンが表示される
+
+4. 確認
+   ```bash
+   docker --version
+   # 例: Docker version 24.0.0
+   ```
+
+**Windowsの場合**：
+
+1. Docker Desktopをダウンロード
+   - https://www.docker.com/products/docker-desktop/
+   - 「Download for Windows」をクリック
+
+2. インストール
+   - ダウンロードしたファイルを実行
+   - インストールウィザードに従う
+
+3. 起動
+   - Docker Desktopを起動
+   - システムトレイにDockerのアイコンが表示される
+
+4. 確認
+   ```bash
+   docker --version
+   ```
+
+#### ステップ2: Docker Composeの確認
+
+```bash
+# Docker Composeが使えるか確認
+docker compose version
+# または
+docker-compose version
+```
+
+**出力例**：
+```
+Docker Compose version v2.20.0
+```
+
+#### ステップ3: データベースを起動
+
+```bash
+# backendディレクトリに移動
+cd backend
+
+# docker-compose.ymlファイルを確認
+cat docker-compose.yml
+```
+
+**docker-compose.ymlの内容**：
+```yaml
+services:
+  db:
+    image: mysql:8.0          # MySQL 8.0のイメージを使う
+    container_name: ${MYSQL_DATABASE}
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # パスワード
+      MYSQL_DATABASE: ${MYSQL_DATABASE}            # データベース名
+    volumes:
+      - ./mysql_data:/var/lib/mysql  # データを保存する場所
+    ports:
+      - "3306:3306"  # ポート番号3306でアクセスできる
+```
+
+**データベースを起動**：
+```bash
+# データベースを起動（バックグラウンドで実行）
+docker compose up -d
+
+# 起動確認
+docker compose ps
+```
+
+**期待される出力**：
+```
+NAME                STATUS              PORTS
+system_starter      Up 2 seconds        0.0.0.0:3306->3306/tcp
+```
+
+#### ステップ4: データベースの確認
+
+```bash
+# ログを確認（エラーがないか）
+docker compose logs db
+
+# データベースに接続（オプション）
+docker compose exec db mysql -u root -p
+# パスワードを入力（.envファイルのMYSQL_ROOT_PASSWORD）
+```
+
+#### ステップ5: データベースを停止
+
+```bash
+# データベースを停止
+docker compose down
+
+# データとコンテナを削除（注意：データが消えます）
+docker compose down -v
+```
+
+### よくあるエラーと対処法
+
+#### エラー1: Dockerが起動していない
+
+```
+Cannot connect to the Docker daemon
+```
+
+**対処法**：
+1. Docker Desktopを起動
+2. メニューバー（macOS）またはシステムトレイ（Windows）でDockerが起動しているか確認
+
+#### エラー2: ポートが既に使われている
+
+```
+Error: bind: address already in use
+```
+
+**対処法**：
+1. 既にMySQLが起動している可能性がある
+   ```bash
+   # 既存のコンテナを確認
+   docker ps
+   
+   # 既存のコンテナを停止
+   docker stop <container_id>
+   ```
+
+2. または、docker-compose.ymlでポート番号を変更
+
+#### エラー3: 環境変数が見つからない
+
+```
+WARNING: The MYSQL_DATABASE variable is not set
+```
+
+**対処法**：
+1. `.env`ファイルが存在するか確認
+2. `.env`ファイルに必要な環境変数が書かれているか確認
+
+### Dockerのメリット
+
+1. **環境の統一**: 誰のパソコンでも同じ環境で動く
+2. **簡単なセットアップ**: コマンド1つでデータベースを起動
+3. **クリーンな環境**: 削除すれば完全に消える
+4. **再現性**: 同じ環境を何度でも作れる
+
+### まとめ
+
+- **Docker**: アプリケーションを動かすための「箱」
+- **イメージ**: アプリケーションの「設計図」
+- **コンテナ**: 実際に動いている「箱」
+- **Docker Compose**: 複数のコンテナをまとめて管理
+
+**データベースを起動する手順**：
+1. Docker Desktopをインストール・起動
+2. `docker compose up -d` でデータベースを起動
+3. `docker compose ps` で起動確認
+4. `docker compose down` で停止
+
+---
