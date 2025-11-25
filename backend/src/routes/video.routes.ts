@@ -222,6 +222,7 @@ export const registerVideoRoutes = (server: FastifyInstance): void => {
     "/api/videos",
     {
       schema: {
+        operationId: "getVideos",
         description: "ビデオ一覧を取得",
         tags: ["video"],
         response: {
@@ -244,6 +245,7 @@ export const registerVideoRoutes = (server: FastifyInstance): void => {
     "/api/videos/:id",
     {
       schema: {
+        operationId: "getVideoById",
         description: "ビデオ詳細を取得",
         tags: ["video"],
         params: {
@@ -283,6 +285,7 @@ export const registerVideoRoutes = (server: FastifyInstance): void => {
     "/api/videos",
     {
       schema: {
+        operationId: "postVideo",
         description: "ビデオを作成",
         tags: ["video"],
         body: createVideoRequestSchema,
@@ -306,6 +309,7 @@ export const registerVideoRoutes = (server: FastifyInstance): void => {
     "/api/videos/:id",
     {
       schema: {
+        operationId: "putVideoById",
         description: "ビデオを更新",
         tags: ["video"],
         params: {

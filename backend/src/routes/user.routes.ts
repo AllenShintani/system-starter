@@ -145,6 +145,7 @@ export const registerUserRoutes = (server: FastifyInstance): void => {
     "/api/user",
     {
       schema: {
+        operationId: "getUser",
         description: "認証済みユーザー情報を取得",
         tags: ["user"],
         response: {
@@ -174,6 +175,7 @@ export const registerUserRoutes = (server: FastifyInstance): void => {
     "/api/user",
     {
       schema: {
+        operationId: "putUser",
         description: "ユーザー情報を更新",
         tags: ["user"],
         body: updateUserRequestSchema,

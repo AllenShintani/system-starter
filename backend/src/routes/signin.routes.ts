@@ -183,6 +183,7 @@ export const registerSigninRoutes = (server: FastifyInstance): void => {
     "/api/signin",
     {
       schema: {
+        operationId: "postSignin",
         description: "Clerkで認証済みのユーザーがサインインする",
         tags: ["signin"],
         body: signinRequestSchema,
@@ -213,6 +214,7 @@ export const registerSigninRoutes = (server: FastifyInstance): void => {
     "/api/logout",
     {
       schema: {
+        operationId: "postLogout",
         description: "ログアウト処理",
         tags: ["signin"],
         response: {
@@ -228,6 +230,7 @@ export const registerSigninRoutes = (server: FastifyInstance): void => {
     "/api/auth/check",
     {
       schema: {
+        operationId: "getCheckAuth",
         description: "認証状態の確認",
         tags: ["signin"],
         response: {

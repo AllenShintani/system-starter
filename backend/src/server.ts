@@ -1,6 +1,8 @@
 import fastifyCookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import fastifyJwt from "@fastify/jwt";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
 import Fastify from "fastify";
 
@@ -10,6 +12,7 @@ import type { FastifyInstance } from "fastify";
 import { config } from "@/config/env.config";
 import { prisma } from "@/prisma/client";
 import { appRouter } from "@/routers";
+import { registerRoutes } from "@/routes";
 
 const server: FastifyInstance = Fastify();
 
@@ -26,7 +29,55 @@ server.register(fastifyJwt, {
 
 server.register(fastifyCookie);
 
-// tRPCプラグインを登録
+// OpenAPI/Swagger設定
+server.register(fastifySwagger, {
+  openapi: {
+    openapi: "3.0.0",
+    info: {
+      title: "System Starter API",
+      description: "System Starter API Documentation",
+      version: "1.0.0",
+    },
+    servers: [
+      {
+        url: `http://localhost:${config.PORT}`,
+        description: "Development server",
+      },
+    ],
+    tags: [
+      { name: "signin", description: "認証関連" },
+      { name: "user", description: "ユーザー関連" },
+      { name: "video", description: "ビデオ関連" },
+    ],
+  },
+});
+
+server.register(fastifySwaggerUi, {
+  routePrefix: "/api-docs",
+  uiConfig: {
+    docExpansion: "list",
+    deepLinking: false,
+  },
+  uiHooks: {
+    onRequest: function (request, reply, next) {
+      next();
+    },
+    preHandler: function (request, reply, next) {
+      next();
+    },
+  },
+  staticCSP: true,
+  transformStaticCSP: (header) => header,
+  transformSpecification: (swaggerObject) => {
+    return swaggerObject;
+  },
+  transformSpecificationClone: true,
+});
+
+// OpenAPIルートを登録
+registerRoutes(server);
+
+// tRPCプラグインを登録（段階的移行のため、しばらくは残す）
 server.register(fastifyTRPCPlugin, {
   prefix: "/trpc",
   trpcOptions: {
