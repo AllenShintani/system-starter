@@ -578,6 +578,249 @@ const decoded = await authenticate(request, reply);
 
 ---
 
+## サーバーを起動する方法
+
+### サーバーとは？
+
+**サーバー = APIを提供するプログラム**
+
+フロントエンド（ブラウザ）からのリクエストを受け取り、データベースからデータを取得して返すプログラムです。
+
+### 起動の流れ
+
+```
+1. データベースを起動（MySQL）
+   ↓
+2. 環境変数を設定（.envファイル）
+   ↓
+3. 依存関係をインストール
+   ↓
+4. データベースの準備（Prisma）
+   ↓
+5. サーバーを起動
+```
+
+### ステップ1: データベースを起動
+
+```bash
+# backendディレクトリに移動
+cd backend
+
+# Docker ComposeでMySQLを起動
+docker-compose up -d
+```
+
+**意味**：
+- `docker-compose up -d`: Dockerコンテナをバックグラウンドで起動
+- MySQLデータベースが起動する
+
+**確認方法**：
+```bash
+# コンテナが起動しているか確認
+docker-compose ps
+```
+
+### ステップ2: 環境変数を設定
+
+**環境変数 = サーバーの設定値**
+
+`.env`ファイルに設定を書きます。
+
+```bash
+# backendディレクトリで.envファイルを作成
+cd backend
+cp .env.example .env  # もし.env.exampleがあれば
+```
+
+**必要な環境変数**（`.env`ファイルに書く）：
+
+```env
+# サーバーの設定
+NODE_ENV=development
+PORT=3001
+
+# データベースの設定
+DATABASE_URL="mysql://user:password@localhost:3306/database_name"
+
+# JWT（認証）の設定
+JWT_SECRET="your-secret-key-here"
+
+# CORS（フロントエンドとの通信）の設定
+CORS_ORIGIN="http://localhost:3000"
+
+# AWS（S3）の設定
+AWS_REGION="ap-northeast-1"
+AWS_ACCESS_KEY_ID="your-access-key"
+AWS_SECRET_ACCESS_KEY="your-secret-key"
+S3_BUCKET_NAME="your-bucket-name"
+
+# Stripe（決済）の設定
+STRIPE_SECRET_KEY="your-stripe-secret-key"
+STRIPE_WEBHOOK_SECRET="your-webhook-secret"
+
+# Clerk（認証）の設定
+CLERK_SECRET_KEY="your-clerk-secret-key"
+```
+
+**注意**：
+- 実際の値に置き換える必要があります
+- `.env`ファイルはGitにコミットしない（機密情報を含むため）
+
+### ステップ3: 依存関係をインストール
+
+```bash
+# backendディレクトリで
+cd backend
+npm install
+```
+
+**意味**：
+- `package.json`に書かれたパッケージをインストール
+- 必要なライブラリをダウンロード
+
+### ステップ4: データベースの準備
+
+```bash
+# Prismaクライアントを生成
+npx prisma generate
+
+# データベースのテーブルを作成（マイグレーション）
+npx prisma migrate dev
+
+# 初期データを投入（オプション）
+npm run seed
+```
+
+**意味**：
+- `prisma generate`: データベースの型定義を生成
+- `prisma migrate dev`: データベースにテーブルを作成
+- `npm run seed`: テスト用のデータを投入
+
+### ステップ5: サーバーを起動
+
+#### 開発モード（推奨）
+
+```bash
+# backendディレクトリで
+cd backend
+npm run dev
+```
+
+**意味**：
+- サーバーが起動する
+- コードを変更すると自動で再起動される（ホットリロード）
+- `http://localhost:3001` でアクセスできる
+
+**実行例**：
+```
+🚀 Server listening on port: http://localhost:3001
+```
+
+#### 本番モード
+
+```bash
+# 1. ビルド（TypeScriptをJavaScriptに変換）
+npm run build
+
+# 2. サーバーを起動
+npm start
+```
+
+**意味**：
+- `npm run build`: TypeScriptコードをJavaScriptに変換
+- `npm start`: ビルドされたJavaScriptを実行
+
+### サーバーが起動したら
+
+#### 確認方法
+
+1. **ターミナルにメッセージが表示される**
+   ```
+   🚀 Server listening on port: http://localhost:3001
+   ```
+
+2. **ブラウザでアクセス**
+   - Swagger UI: `http://localhost:3001/api-docs`
+   - APIエンドポイント: `http://localhost:3001/api/signin` など
+
+3. **エラーが出たら**
+   - 環境変数が正しく設定されているか確認
+   - データベースが起動しているか確認
+   - ポート番号が既に使われていないか確認
+
+### よくあるエラーと対処法
+
+#### エラー1: ポートが既に使われている
+
+```
+Error: Port 3001 is already in use.
+```
+
+**対処法**：
+```bash
+# 1. 既に起動しているサーバーを停止
+# Ctrl+C で停止
+
+# 2. または、別のポート番号を使う
+# .envファイルで PORT=3002 に変更
+```
+
+#### エラー2: データベースに接続できない
+
+```
+Error: Can't reach database server
+```
+
+**対処法**：
+```bash
+# 1. データベースが起動しているか確認
+docker-compose ps
+
+# 2. 起動していない場合は起動
+docker-compose up -d
+
+# 3. DATABASE_URLが正しいか確認
+# .envファイルのDATABASE_URLを確認
+```
+
+#### エラー3: 環境変数が見つからない
+
+```
+❌ Missing required environment variable: PORT
+```
+
+**対処法**：
+```bash
+# .envファイルが存在するか確認
+ls -la backend/.env
+
+# .envファイルに必要な環境変数が全て書かれているか確認
+```
+
+### サーバーを停止する方法
+
+```bash
+# ターミナルで Ctrl+C を押す
+```
+
+**意味**：
+- 実行中のサーバーを停止
+- データベース接続も切断される
+
+### まとめ
+
+1. **データベースを起動**: `docker-compose up -d`
+2. **環境変数を設定**: `.env`ファイルを作成
+3. **依存関係をインストール**: `npm install`
+4. **データベースの準備**: `npx prisma generate && npx prisma migrate dev`
+5. **サーバーを起動**: `npm run dev`
+
+**起動確認**：
+- ターミナルに `🚀 Server listening on port: http://localhost:3001` と表示される
+- ブラウザで `http://localhost:3001/api-docs` にアクセスできる
+
+---
+
 ## Swagger UIとは？
 
 **Swagger UI = OpenAPI仕様書を視覚的に表示するツール**
@@ -611,11 +854,13 @@ Swagger UIは、APIの「見やすいメニュー」のようなものです。
 # API仕様書
 
 ## POST /api/signin
+
 リクエスト: { "clerkUserId": "string" }
 レスポンス: { "success": true, "user": {...} }
 ```
 
 **問題**：
+
 - 実際に試せない
 - エラーメッセージがわからない
 - どんなデータを送ればいいか想像しにくい
@@ -737,6 +982,7 @@ server.register(fastifySwaggerUi, {
 ### 使用例：サインインAPIを試す
 
 1. **Swagger UIを開く**
+
    ```
    http://localhost:3001/api-docs
    ```
@@ -746,6 +992,7 @@ server.register(fastifySwaggerUi, {
 3. **「Try it out」ボタンをクリック**
 
 4. **リクエストボディを入力**
+
    ```json
    {
      "clerkUserId": "user_123"
