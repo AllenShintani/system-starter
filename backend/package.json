@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"./src/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"./src/**/*.{ts,tsx}\"",
-    "fix": "npm run lint:fix && npm run format"
+    "fix": "npm run lint:fix && npm run format",
+    "validate:openapi": "tsx src/utils/validate-openapi-cli.ts"
   },
   "exports": {
     "./routers": "./dist/src/routers/index.js",
@@ -32,6 +33,8 @@
     "@fastify/jwt": "^6.7.1",
     "@fastify/oauth2": "^7.8.0",
     "@fastify/session": "^10.7.0",
+    "@fastify/swagger": "^9.6.1",
+    "@fastify/swagger-ui": "^5.2.3",
     "@trpc/client": "^10.45.2",
     "@trpc/server": "^10.45.2",
     "bcrypt": "^5.1.1",
@@ -50,11 +53,14 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-unused-imports": "^4.2.0",
+    "js-yaml": "^4.1.1",
     "nodemon": "^3.1.10",
+    "openapi-types": "^12.1.3",
     "prettier": "^3.6.2",
     "prisma": "^5.12.1",
     "tsc-alias": "^1.8.16",
     "tsc-files": "^1.1.4",
+    "tsx": "^4.20.6",
     "typescript": "^5.6.2",
     "vite-node": "^3.2.4",
     "vite-tsconfig-paths": "^5.1.4"
