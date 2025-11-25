@@ -1,5 +1,7 @@
 # DTO（Data Transfer Object）とは？ - 初心者向け解説
 
+> **注意**: このドキュメントは継続的に更新されます。わからない用語や概念が出てきたら、このドキュメントに追加していきます。
+
 ## DTOとは何か？
 
 **DTO = Data Transfer Object（データ転送オブジェクト）**
@@ -339,17 +341,20 @@ const user3: UserDto = {
 
 ```typescript
 // ログイン時にJWTトークンを発行
-const token = request.server.jwt.sign({
-  userId: user.id,
-  userName: user.userName,
-}, {
-  expiresIn: "7d", // 7日間有効
-});
+const token = request.server.jwt.sign(
+  {
+    userId: user.id,
+    userName: user.userName,
+  },
+  {
+    expiresIn: "7d", // 7日間有効
+  },
+);
 
 // Cookieに保存
 reply.setCookie("token", token, {
   httpOnly: true, // JavaScriptからアクセスできない（セキュリティ）
-  secure: true,   // HTTPSのみ
+  secure: true, // HTTPSのみ
 });
 ```
 
@@ -377,11 +382,11 @@ reply.setCookie("token", token, {
 
 export const authenticate = async (
   request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ): Promise<JwtPayload> => {
   // 1. CookieからJWTトークンを取得
   const token = request.cookies.token;
-  
+
   // 2. トークンがない → エラー
   if (!token) {
     reply.code(401).send({
@@ -413,15 +418,15 @@ export const authenticate = async (
 const getUserHandler = async (request: FastifyRequest, reply: FastifyReply) => {
   // 認証ミドルウェアでJWTトークンを検証
   const decoded = await authenticate(request, reply);
-  
+
   // 検証成功 → ユーザーIDが取得できる
   const userId = decoded.userId;
-  
+
   // ユーザー情報を取得
   const user = await prisma.user.findUnique({
     where: { id: userId },
   });
-  
+
   return user;
 };
 ```
@@ -447,21 +452,22 @@ export const userRouter = t.router({
         message: "認証されていません",
       });
     }
-    
+
     // 2. JWTトークンを検証
     const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
-    
+
     // 3. ユーザー情報を取得
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
     });
-    
+
     return user;
   }),
 });
 ```
 
 **特徴**：
+
 - `t.procedure.query()` という特殊な書き方
 - エラーハンドリングが `TRPCError` という専用の形式
 - フロントエンドからは `trpc.userRouter.getUser.useQuery()` で呼び出す
@@ -494,19 +500,20 @@ server.get(
   async (request: FastifyRequest, reply: FastifyReply) => {
     // 1. 認証ミドルウェアでJWTトークンを検証
     const decoded = await authenticate(request, reply);
-    
+
     // 2. ユーザー情報を取得
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
     });
-    
+
     // 3. レスポンスを返す
     reply.code(200).send(user);
-  }
+  },
 );
 ```
 
 **特徴**：
+
 - 標準的なHTTPメソッド（GET, POST, PUT, DELETE）
 - OpenAPIスキーマでAPI仕様を定義
 - Swagger UIで自動的にAPIドキュメントが生成される
@@ -524,7 +531,7 @@ server.get(
    - 特殊な書き方（t.procedure.query）
    - TypeScript専用
    - フロントエンドもTypeScript必須
-   
+
 2. OpenAPIベースのFastifyルート（移行後）
    ↓
    - 標準的なRESTful API
@@ -535,6 +542,7 @@ server.get(
 #### 具体的な変更点
 
 **変更前（tRPC）**：
+
 ```typescript
 // 認証チェックを毎回手動で書く
 const token = ctx.request.cookies.token;
@@ -545,6 +553,7 @@ const decoded = ctx.fastify.jwt.verify<JwtPayload>(token);
 ```
 
 **変更後（OpenAPI + 認証ミドルウェア）**：
+
 ```typescript
 // 認証ミドルウェアを呼び出すだけ
 const decoded = await authenticate(request, reply);
@@ -552,6 +561,7 @@ const decoded = await authenticate(request, reply);
 ```
 
 **メリット**：
+
 - コードがシンプルになる
 - 認証ロジックを1箇所に集約できる
 - 他のエンドポイントでも同じ認証ミドルウェアを再利用できる
@@ -565,3 +575,34 @@ const decoded = await authenticate(request, reply);
 5. **移行**: tRPCからOpenAPIに書き換えること
 
 移行により、コードがシンプルになり、標準的なAPI形式になったため、他のシステムとの連携も容易になります。
+
+---
+
+## 今後の追加予定
+
+このドキュメントは、開発中にわからない用語や概念が出てきた際に、随時追加していきます。
+
+### 追加される可能性がある項目
+
+- OpenAPIスキーマの詳細
+- Fastifyのプラグインシステム
+- Swagger UIの使い方
+- フロントエンドでのAPI呼び出し方法
+- その他、開発中に出てくる用語や概念
+
+### 追加方法
+
+新しい用語や概念を説明する際は、以下の形式で追加してください：
+
+```markdown
+## [用語名]とは？
+
+### 簡単な説明
+[初心者にもわかる簡単な説明]
+
+### 実際のコード
+[実際のコード例]
+
+### 使用例
+[具体的な使用例]
+```
