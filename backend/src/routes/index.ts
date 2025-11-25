@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 
 import { registerSigninRoutes } from "./signin.routes";
 import { registerUserRoutes } from "./user.routes";
+import { registerVideoRoutes } from "./video.routes";
 
 /**
  * すべてのルートを登録
@@ -9,6 +10,6 @@ import { registerUserRoutes } from "./user.routes";
 export const registerRoutes = (server: FastifyInstance): void => {
   registerSigninRoutes(server);
   registerUserRoutes(server);
-  // TODO: Video Routes を追加
+  registerVideoRoutes(server);
 };
 
